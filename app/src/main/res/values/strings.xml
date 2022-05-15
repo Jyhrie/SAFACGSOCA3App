@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">SAFACGSOCA3 App</string>
+    <string name="title_activity_testing">testingActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <string-array name="ranks">
+        <item>PTE</item>
+        <item>LCP</item>
+        <item>CPL</item>
+        <item>CFC</item>
+        <item>3SG</item>
+        <item>2SG</item>
+        <item>1SG</item>
+        <item>SSG</item>
+        <item>MSG</item>
+        <item>CPL</item>
+        <item>3WO</item>
+        <item>2WO</item>
+        <item>1WO</item>
+        <item>MWO</item>
+        <item>SWO</item>
+        <item>CWO</item>
+        <item>2LT</item>
+        <item>LTA</item>
+        <item>CPT</item>
+        <item>MAJ</item>
+        <item>LTC</item>
+        <item>SLTC</item>
+        <item>COL</item>
+        <item>BG/RADM(1)</item>
+        <item>MG/RADM(2)</item>
+        <item>LG/VADM</item>
+    </string-array>
+
+</resources>
