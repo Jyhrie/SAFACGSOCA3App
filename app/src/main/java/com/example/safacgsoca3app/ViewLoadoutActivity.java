@@ -12,10 +12,12 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -23,11 +25,13 @@ import java.util.HashMap;
 
 public class ViewLoadoutActivity extends AppCompatActivity {
 
-    public static final String TAG_LID="l_id";
-    public static final String TAG_NAME="l_name";
-    public static final String TAG_LAID="la_id";
-    public static final String TAG_LANAME="la_name";
-    public static final String TAG_LAQTY="la_qty";
+    public static final String TAG_LID = "l_id";
+    public static final String TAG_NAME = "l_name";
+    public static final String TAG_LAID = "la_id";
+    public static final String TAG_LANAME = "la_name";
+    public static final String TAG_LAQTY = "la_qty";
+    public static final String TAG_AID = "a_id";
+    public static final String TAG_ANAME = "a_name";
 
 
     @Override
@@ -67,8 +71,8 @@ public class ViewLoadoutActivity extends AppCompatActivity {
                 ViewLoadoutActivity.this, //context
                 ammoList, //hashmapdata
                 R.layout.list_ammunition, //layout of list
-                new String[] { TAG_LID, TAG_NAME}, //from array
-                new int[] {R.id.tvLoadoutID, R.id.tvLoadoutName}); //toarray
+                new String[]{TAG_LID, TAG_NAME}, //from array
+                new int[]{R.id.tvLoadoutID, R.id.tvLoadoutName}); //toarray
         // updating listview
         lv.setAdapter(adapter);
 
@@ -81,8 +85,7 @@ public class ViewLoadoutActivity extends AppCompatActivity {
         });
     }
 
-    public void showViewLoadoutDialog(int o_id, int l_id)
-    {
+    public void showViewLoadoutDialog(int o_id, int l_id) {
 
 
         Dialog DialogFragment = new Dialog(ViewLoadoutActivity.this, android.R.style.Theme_Black_NoTitleBar);
@@ -100,7 +103,7 @@ public class ViewLoadoutActivity extends AppCompatActivity {
         db.execSQL("CREATE TABLE IF NOT EXISTS loadout_ammunition (la_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, l_id varchar(255) NOT NULL, a_id integer NOT NULL, la_qty number NOT NULL)");
         Cursor c1 = db.rawQuery("select la_id, a_id, la_qty from loadout_ammunition where l_id = " + l_id, null);
 
-        ArrayList<HashMap<String, String>> ammoList = new ArrayList<HashMap<String, String>>();
+        ArrayList<HashMap<String, String>> loadoutList = new ArrayList<HashMap<String, String>>();
         while (c1.moveToNext()) {
             HashMap<String, String> map = new HashMap<String, String>();
             String line_id = c1.getString(0);
@@ -110,21 +113,47 @@ public class ViewLoadoutActivity extends AppCompatActivity {
             map.put(TAG_LAID, line_id);
             map.put(TAG_LANAME, line_name);
             map.put(TAG_LAQTY, line_qty);
+            loadoutList.add(map);
+        }
+        db.close();
+
+        ListView lv = DialogFragment.findViewById(R.id.lv_view_loadout_ammunition_list);
+        ;
+        ListAdapter adapter = new SimpleAdapter(
+                ViewLoadoutActivity.this, //context
+                loadoutList, //hashmapdata
+                R.layout.list_ammunition, //layout of list
+                new String[]{TAG_LID, TAG_NAME}, //from array
+                new int[]{R.id.tvLoadoutID, R.id.tvLoadoutName}); //toarray
+        // updating listview
+        lv.setAdapter(adapter);
+
+        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+        db.execSQL("CREATE TABLE IF NOT EXISTS Ammunition (a_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, a_description varchar(255) NOT NULL, a_qty float NOT NULL)");
+        c1 = db.rawQuery("select * from Ammunition", null);
+        ArrayList<HashMap<String, String>> ammoList = new ArrayList<HashMap<String, String>>();
+        while (c1.moveToNext()) {
+            HashMap<String, String> map = new HashMap<String, String>();
+            String line_id = c1.getString(0);
+            String line_name = c1.getString(1);
+
+            map.put(TAG_AID, line_id);
+            map.put(TAG_ANAME, line_name);
 
             ammoList.add(map);
         }
         db.close();
 
-        ListView lv = DialogFragment.findViewById(R.id.lv_view_loadout_ammunition_list);;
-        ListAdapter adapter = new SimpleAdapter(
-                ViewLoadoutActivity.this, //context
-                ammoList, //hashmapdata
-                R.layout.list_ammunition, //layout of list
-                new String[] { TAG_LID, TAG_NAME}, //from array
-                new int[] {R.id.tvLoadoutID, R.id.tvLoadoutName}); //toarray
-        // updating listview
-        lv.setAdapter(adapter);
+        for (int i = 0; i < lv_view_loadout_ammunition_list.getCount(); i++) {
+            View v = lv_view_loadout_ammunition_list.getChildAt(i);
 
-        
+            Spinner ddl_view_loadout_ammunition_type = (Spinner) v.findViewById(R.id.ddl_view_loudout_ammunition_type);
+            SimpleAdapter arrayAdapter = new SimpleAdapter(ViewLoadoutActivity.this,
+                    ammoList,
+                    android.R.layout.simple_spinner_dropdown_item,
+                    new String[]{TAG_ANAME},
+                    new int[]{android.R.id.text1});
+            ddl_view_loadout_ammunition_type.setAdapter(arrayAdapter);
+        }
     }
 }
