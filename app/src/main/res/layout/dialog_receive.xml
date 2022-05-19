@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginBottom="0dp"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn_SelectPersonnel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/SelectPersonnel" />
+
+        <Button
+            android:id="@+id/btn_ScanQRCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ScanQRCode" />
+    </LinearLayout>
+</RelativeLayout>
