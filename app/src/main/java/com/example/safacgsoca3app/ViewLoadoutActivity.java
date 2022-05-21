@@ -1,5 +1,6 @@
 package com.example.safacgsoca3app;
 
+import static java.lang.Float.parseFloat;
 import static java.lang.Integer.parseInt;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -79,17 +81,13 @@ public class ViewLoadoutActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 int selected_loadout_id = parseInt(((TextView) view.findViewById(R.id.tvLoadoutID)).getText().toString());
-                showViewLoadoutDialog(o_id, selected_loadout_id);
+                showViewLoadoutDialog(selected_loadout_id);
             }
         });
     }
 
-    public void showCreateLoadoutDialog(int o_id, int l_id)
-    {
 
-    }
-
-    public void showViewLoadoutDialog(int o_id, int l_id) {
+    public void showViewLoadoutDialog(int l_id) {
 
         Dialog DialogFragment = new Dialog(ViewLoadoutActivity.this, android.R.style.Theme_Black_NoTitleBar);
         DialogFragment.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
@@ -181,15 +179,49 @@ public class ViewLoadoutActivity extends AppCompatActivity {
             ddl_view_loadout_ammunition_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    ((TextView) v.findViewById(R.id.tv_loadout_ammo_ammo_id)).setText(ddl_view_loadout_ammunition_type.getSelectedItem());
+                    ((TextView) v.findViewById(R.id.tv_loadout_ammo_ammo_id)).setText(ammoList.get(i).get(TAG_AID));
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> adapterView) {
+                    //ignore
 
                 }
             });
         }
+
+        btn_view_loadout_save_changes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                for (int i = 0; i < lv_view_loadout_ammunition_list.getCount(); i++) {
+                    View v = lv_view_loadout_ammunition_list.getChildAt(i);
+                    TextView tv_loadout_ammo_id = (TextView) v.findViewById(R.id.tv_loadout_ammo_id);
+                    TextView tv_loadout_ammo_ammo_id = (TextView) v.findViewById(R.id.tv_loadout_ammo_ammo_id);
+
+                    EditText et_view_loadout_ammunition_qty = (EditText) v.findViewById(R.id.et_view_loadout_ammunition_qty);
+                    Spinner ddl_view_loadout_ammunition_type = (Spinner) v.findViewById(R.id.ddl_view_loudout_ammunition_type);
+
+                    int loadout_ammo_id = parseInt(tv_loadout_ammo_id.getText().toString());
+                    int loadout_ammo_ammo_id = parseInt(tv_loadout_ammo_ammo_id.getText().toString());
+                    float loadout_ammunition_qty = parseFloat(et_view_loadout_ammunition_qty.getText().toString());
+
+                    if (loadout_ammo_id == -1)
+                    {
+                        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+                        db.execSQL("CREATE TABLE IF NOT EXISTS Ammunition (a_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, a_description varchar(255) NOT NULL, a_qty float NOT NULL)");
+                        c1 = db.rawQuery("select * from Ammunition", null);
+                        db.close()
+                    }
+                    else
+                    {
+                        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+                        db.execSQL("CREATE TABLE IF NOT EXISTS Ammunition (a_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, a_description varchar(255) NOT NULL, a_qty float NOT NULL)");
+                        c1 = db.rawQuery("select * from Ammunition", null);
+                    }
+
+                }
+            }
+        });
 
 
 
