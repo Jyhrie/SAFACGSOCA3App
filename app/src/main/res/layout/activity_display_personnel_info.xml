@@ -73,11 +73,10 @@
         android:id="@+id/tv_Display_Personnel_Info_Issue_Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
         android:text="@string/Issue"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/tv_Display_Personnel_Info_Ammunition_Text"
-        app:layout_constraintTop_toBottomOf="@+id/tv_Display_Personnel_Info_Ammunition_Text" />
+        app:layout_constraintTop_toBottomOf="@+id/lv_Personnel_Ammunition" />
 
     <TextView
         android:id="@+id/tv_Display_Personnel_Info_Issue_Remark"
@@ -112,8 +111,7 @@
     <ListView
         android:id="@+id/lv_Personnel_Ammunition"
         android:layout_width="0dp"
-        android:layout_height="149dp"
-        android:layout_marginTop="1dp"
+        android:layout_height="300dp"
         app:layout_constraintEnd_toStartOf="@+id/gl_right"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/gl_left"

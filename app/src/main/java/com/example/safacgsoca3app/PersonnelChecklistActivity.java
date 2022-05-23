@@ -1,5 +1,7 @@
 package com.example.safacgsoca3app;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,56 +19,67 @@ import java.util.HashMap;
 
 public class PersonnelChecklistActivity extends AppCompatActivity {
 
-    public static final String TAG_ID_1 = "a_id";
-    public static final String TAG_ID_2 = "b_id";
-    int personnelselected = 0;
+    public static final String TAG_ID = "p_id";
+    public static final String TAG_RANK = "p_rank";
+    public static final String TAG_NAME = "p_name";
+    public static final String TAG_REMARKS = "p_remarks";
+    int initialisationvalue = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personnel_checklist);
 
+        SQLiteDatabase db;
+        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+        db.execSQL("CREATE TABLE IF NOT EXISTS Personnel (p_id integer NOT NULL PRIMARY KEY AUTOINCREMENT,p_rank varchar(10) NOT NULL, p_name varchar(255) NOT NULL, p_remarks TEXT NOT NULL)");
+        Cursor c1 = db.rawQuery("select * from Personnel", null);
+
         ArrayList<HashMap<String, String>> PersonnelList = new ArrayList<HashMap<String, String>>();
-        //Defines an array of hashmaps. Each hashmap contains multiple values associated to one key each
-        //PersonnelList is the array of hashmaps
-
-        for (int i = 0; i < 3; i++) {
+        while (c1.moveToNext()) {
             HashMap<String, String> map = new HashMap<String, String>();
-            String Personnel_Name = "ME3 TEO KWEE TECK";
-            String Personnel_Remarks = "No remarks";
-            //In reality, the number of entries is not defined by the for loop but by database entries
-            //For this example, we will manually create 2 entries containing a hardcoded string
+            String line_id = c1.getString(0);
+            String line_rank = c1.getString(1);
+            String line_name = c1.getString(2);
+            String line_remarks = c1.getString(3);
 
-            map.put("initialisationvalue", "false");
-            map.put(TAG_ID_1, Personnel_Name);
-            map.put(TAG_ID_2, Personnel_Remarks);
-            //Puts key and data into hashmap
+            map.put("initialvalue","false");
+            map.put(TAG_ID, line_id);
+            map.put(TAG_RANK, line_rank);
+            map.put(TAG_NAME, line_name);
+            map.put(TAG_REMARKS, line_remarks);
+
             PersonnelList.add(map);
-            //Adds a hashmap into the array
         }
+        db.close();
 
         ListView lv = findViewById(R.id.lv_Personnel_Checklist);
         ListAdapter adapter = new SimpleAdapter(
                 PersonnelChecklistActivity.this, //context
                 PersonnelList, //hashmapdata
                 R.layout.list_personnel_checklist, //layout of list
-                new String[]{"initialisationvalue",TAG_ID_1,TAG_ID_2}, //from array
-                new int[]{R.id.tvPersonnel_Selected_Status,R.id.Personnel_Name_Checklist, R.id.Personnel_Remarks_Checklist}); //toarray
+                new String[]{"initialvalue",TAG_ID,TAG_RANK,TAG_NAME,TAG_REMARKS}, //from array
+                new int[]{R.id.tv_Personnel_Selected_Status,
+                          R.id.tv_Personnel_ID_Checklist,
+                          R.id.tv_Personnel_Rank_Checklist,
+                          R.id.tv_Personnel_Name_Checklist,
+                          R.id.tv_Personnel_Remarks_Checklist});//toarray
+
         // updating listview
         lv.setAdapter(adapter);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                ConstraintLayout layout = ((ConstraintLayout) view.findViewById(R.id.abc));
-                TextView sel = (TextView) view.findViewById(R.id.tvPersonnel_Selected_Status);
-                Log.i("xd", sel.getText().toString());
-                if(sel.getText().toString() == "false")
+                ConstraintLayout layout = ((ConstraintLayout) view.findViewById(R.id.ConstraintLayout));
+                TextView select = (TextView) view.findViewById(R.id.tv_Personnel_Selected_Status);
+                Log.i("xd", select.getText().toString());
+                if(select.getText().toString() == "false")
                 {
-                    sel.setText("true");
+                    select.setText("true");
                     layout.setBackgroundResource(R.color.teal);
                 }else {
-                    sel.setText("false");
+                    select.setText("false");
                     layout.setBackgroundResource(R.color.white);
                 }
 

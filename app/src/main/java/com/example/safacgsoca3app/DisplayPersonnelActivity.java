@@ -93,7 +93,10 @@ public class DisplayPersonnelActivity extends AppCompatActivity {
                 PersonnelList, //hashmapdata
                 R.layout.list_display_personnel, //layout of list
                 new String[]{TAG_ID,TAG_RANK,TAG_NAME,TAG_REMARKS}, //from array
-                new int[]{R.id.Personnel_ID_Checklist, R.id.Personnel_Rank_Checklist, R.id.Personnel_Name_Checklist, R.id.Personnel_Remarks_Checklist}); //toarray
+                new int[]{R.id.tv_Personnel_ID_Checklist,
+                        R.id.tv_Personnel_Rank_Checklist,
+                        R.id.tv_Personnel_Name_Checklist,
+                        R.id.tv_Personnel_Remarks_Checklist}); //toarray
         // updating listview
         lv.setAdapter(adapter);
 
