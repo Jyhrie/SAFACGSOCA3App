@@ -23,7 +23,7 @@
     <ListView
         android:id="@+id/lv_Personnel_Checklist"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="620dp"
         android:layout_marginTop="5dp"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
@@ -48,4 +48,20 @@
         android:orientation="vertical"
         app:layout_constraintGuide_begin="15dp"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="730dp" />
+
+    <Button
+        android:id="@+id/btn_Proceed_Declare_Issue_Expend"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/Proceed"
+        app:layout_constraintBottom_toTopOf="@+id/guideline5"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintStart_toStartOf="@+id/guideline3" />
 </androidx.constraintlayout.widget.ConstraintLayout>

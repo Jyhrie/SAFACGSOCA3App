@@ -55,6 +55,8 @@
     <string name="SelectPersonnel">Select Personnel</string>
     <string name="ScanQRCode">Scan QR Code</string>
 
+    <string name="Proceed">Proceed</string>
+
     <!-- Strings used for fragments for navigation -->
 
 </resources>
