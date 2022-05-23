@@ -1,6 +1,7 @@
 package com.example.safacgsoca3app;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import android.app.Dialog;
 import android.content.ContentValues;
@@ -136,27 +137,29 @@ public class DisplayPersonnelActivity extends AppCompatActivity {
 
     private void showReceiveDialog()
     {
-        Dialog DialogFragment = new Dialog(DisplayPersonnelActivity.this, android.R.style.Theme_Black_NoTitleBar);
-        DialogFragment.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100,0,0,0)));
-        DialogFragment.setContentView(R.layout.dialog_receive);
-        DialogFragment.setCancelable(true);
-        DialogFragment.show();
+        Dialog ReceiveDialog = new Dialog(DisplayPersonnelActivity.this, android.R.style.Theme_Black_NoTitleBar);
+        ReceiveDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100,0,0,0)));
+        ReceiveDialog.setContentView(R.layout.dialog_receive);
+        ReceiveDialog.setCancelable(true);
+        ReceiveDialog.show();
 
 
-        Button btn_SelectPersonnel = (Button) DialogFragment.findViewById(R.id.btn_SelectPersonnel);
+        Button btn_SelectPersonnel = (Button) ReceiveDialog.findViewById(R.id.btn_SelectPersonnel);
         btn_SelectPersonnel.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(DisplayPersonnelActivity.this, PersonnelChecklistActivity.class);
                 DisplayPersonnelActivity.this.startActivity(i);
+                ReceiveDialog.dismiss();
             }
         });
 
-        Button btn_ScanQRCode = (Button) DialogFragment.findViewById(R.id.btn_ScanQRCode);
+        Button btn_ScanQRCode = (Button) ReceiveDialog.findViewById(R.id.btn_ScanQRCode);
         btn_ScanQRCode.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
+                ReceiveDialog.dismiss();
             }
         });
 
     }
+
 }
