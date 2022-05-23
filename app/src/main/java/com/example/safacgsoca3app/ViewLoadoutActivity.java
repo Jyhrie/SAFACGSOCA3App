@@ -207,16 +207,18 @@ public class ViewLoadoutActivity extends AppCompatActivity {
 
                     if (loadout_ammo_id == -1)
                     {
-                        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+
+                        SQLiteDatabase db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
                         db.execSQL("CREATE TABLE IF NOT EXISTS Ammunition (a_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, a_description varchar(255) NOT NULL, a_qty float NOT NULL)");
-                        c1 = db.rawQuery("select * from Ammunition", null);
-                        db.close()
+                        Cursor c1 = db.rawQuery("select * from Ammunition", null);
+                        db.close();
                     }
                     else
                     {
-                        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+
+                        SQLiteDatabase db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
                         db.execSQL("CREATE TABLE IF NOT EXISTS Ammunition (a_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, a_description varchar(255) NOT NULL, a_qty float NOT NULL)");
-                        c1 = db.rawQuery("select * from Ammunition", null);
+                        Cursor c1 = db.rawQuery("select * from Ammunition", null);
                     }
 
                 }
