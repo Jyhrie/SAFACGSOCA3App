@@ -3,6 +3,7 @@ package com.example.safacgsoca3app;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -36,7 +37,18 @@ public class DisplayPersonnelActivity extends AppCompatActivity {
 
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS Personnel (p_id integer NOT NULL PRIMARY KEY AUTOINCREMENT,p_rank varchar(10) NOT NULL, p_name varchar(255) NOT NULL, p_remarks TEXT NOT NULL)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS personnel (p_id integer NOT NULL PRIMARY KEY AUTOINCREMENT,p_rank varchar(10) NOT NULL, p_name varchar(255) NOT NULL, p_remarks TEXT NOT NULL)");
+
+        //use this to insert values
+        ContentValues content = new ContentValues();
+
+        content.put("p_rank", "LCP");
+        content.put("p_name", "ZACKERMAX SEE");
+        content.put("p_remarks", "ISO ROOM LOCKED SADGE");
+
+        db.insert("personnel", null, content);
+        //end
+
         Cursor c1 = db.rawQuery("select * from Personnel", null);
 
         ArrayList<HashMap<String, String>> PersonnelList = new ArrayList<HashMap<String, String>>();
