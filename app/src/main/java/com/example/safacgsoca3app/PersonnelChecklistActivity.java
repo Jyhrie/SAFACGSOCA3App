@@ -1,11 +1,13 @@
 package com.example.safacgsoca3app;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -85,6 +87,14 @@ public class PersonnelChecklistActivity extends AppCompatActivity {
 
             }
 
+        });
+
+        Button btnProceed = (Button) findViewById(R.id.btn_Proceed_Declare_Issue_Expend);
+        btnProceed.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent i = new Intent(PersonnelChecklistActivity.this, DeclareIssueInfoActivity.class);
+                PersonnelChecklistActivity.this.startActivity(i);
+            }
         });
     }
 }

@@ -30,6 +30,9 @@
             android:exported="true">
         </activity>
         <activity
+            android:name=".DeclareIssueInfoActivity"
+            android:exported="false" />
+        <activity
             android:name="com.example.safacgsoca3app.PersonnelChecklistActivity"
             android:exported="false" />
         <activity

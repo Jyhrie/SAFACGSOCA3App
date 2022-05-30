@@ -40,15 +40,16 @@ public class DisplayPersonnelActivity extends AppCompatActivity {
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
         db.execSQL("CREATE TABLE IF NOT EXISTS personnel (p_id integer NOT NULL PRIMARY KEY AUTOINCREMENT,p_rank varchar(10) NOT NULL, p_name varchar(255) NOT NULL, p_remarks TEXT NOT NULL)");
 
+        /*
         //use this to insert values
         ContentValues content = new ContentValues();
-
         content.put("p_rank", "LCP");
         content.put("p_name", "ZACKERMAX SEE");
         content.put("p_remarks", "ISO ROOM LOCKED SADGE");
 
         db.insert("personnel", null, content);
         //end
+        */
 
         Cursor c1 = db.rawQuery("select * from Personnel", null);
 
@@ -69,24 +70,7 @@ public class DisplayPersonnelActivity extends AppCompatActivity {
         }
         db.close();
 
-        /*
-        ArrayList<HashMap<String, String>> PersonnelList = new ArrayList<HashMap<String, String>>();
-        //Defines an array of hashmaps. Each hashmap contains multiple values associated to one key each
-        //PersonnelList is the array of hashmaps
 
-        for (int i = 0; i < 3; i++) {
-            HashMap<String, String> map = new HashMap<String, String>();
-            String Personnel_Name = "ME3 TEO KWEE TECK";
-            String Personnel_Remarks = "No remarks";
-            //In reality, the number of entries is not defined by the for loop but by database entries
-            //For this example, we will manually create 2 entries containing a hardcoded string
-
-            map.put(TAG_ID_1, Personnel_Name);
-            map.put(TAG_ID_2, Personnel_Remarks);
-            //Puts key and data into hashmap
-            PersonnelList.add(map);
-            //Adds a hashmap into the array
-        }*/
 
         ListView lv = findViewById(R.id.lv_Issue_Detail_Info);
         ListAdapter adapter = new SimpleAdapter(

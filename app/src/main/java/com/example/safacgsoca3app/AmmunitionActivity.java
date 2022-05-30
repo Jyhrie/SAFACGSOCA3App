@@ -110,7 +110,7 @@ public class AmmunitionActivity extends AppCompatActivity {
         super.onResume();
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS Ammunition (a_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, a_description varchar(255) NOT NULL, a_qty float NOT NULL)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS Ammunition (a_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, a_name text NOT NULL, a_description varchar(255) NOT NULL, a_qty float NOT NULL)");
         Cursor c1 = db.rawQuery("select * from Ammunition", null);
 
         ArrayList<HashMap<String, String>> ammoList = new ArrayList<HashMap<String, String>>();
@@ -139,6 +139,4 @@ public class AmmunitionActivity extends AppCompatActivity {
         lv.setAdapter(adapter);
 
     }
-
-
 }
