@@ -6,6 +6,7 @@ import static java.lang.Integer.parseInt;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -209,16 +210,26 @@ public class ViewLoadoutActivity extends AppCompatActivity {
                     {
 
                         SQLiteDatabase db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-                        db.execSQL("CREATE TABLE IF NOT EXISTS Ammunition (a_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, a_description varchar(255) NOT NULL, a_qty float NOT NULL)");
-                        Cursor c1 = db.rawQuery("select * from Ammunition", null);
+                        db.execSQL("CREATE TABLE IF NOT EXISTS loadout_ammunition (la_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, l_id varchar(255) NOT NULL, a_id integer NOT NULL, la_qty number NOT NULL)");
+
+                        ContentValues content = new ContentValues();
+                        content.put(TAG_AID, loadout_ammo_ammo_id);
+                        content.put(TAG_LAQTY, loadout_ammunition_qty);
+                        content.put(TAG_LID, l_id);
+                        db.insert("loadout_ammunition", null, content);
                         db.close();
                     }
                     else
                     {
 
                         SQLiteDatabase db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-                        db.execSQL("CREATE TABLE IF NOT EXISTS Ammunition (a_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, a_description varchar(255) NOT NULL, a_qty float NOT NULL)");
-                        Cursor c1 = db.rawQuery("select * from Ammunition", null);
+                        db.execSQL("CREATE TABLE IF NOT EXISTS loadout_ammunition (la_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, l_id varchar(255) NOT NULL, a_id integer NOT NULL, la_qty number NOT NULL)");
+                        ContentValues content = new ContentValues();
+                        content.put(TAG_AID, loadout_ammo_ammo_id);
+                        content.put(TAG_LAQTY, loadout_ammunition_qty);
+                        content.put(TAG_LID, l_id);
+                        db.update("loadout_ammunition", content, "la_id", new String[]{String.valueOf(loadout_ammo_id)});
+
                     }
 
                 }

@@ -1,8 +1,13 @@
 package com.example.safacgsoca3app;
 
+import static com.example.safacgsoca3app.ViewLoadoutActivity.TAG_AID;
+import static java.lang.Float.parseFloat;
+import static java.lang.Integer.parseInt;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -24,12 +29,13 @@ import java.util.HashMap;
 
 public class ViewOperationActivity extends AppCompatActivity {
 
-    private static final String TAG_ID = "e_id";
+    private static final String TAG_ID = "o_id";
     private static final String TAG_PID ="p_id";
     private static final String TAG_NAME = "e_name";
     private static final String TAG_PNAME = "p_name";
     private static final String TAG_PRANK = "p_rank";
-    private static final String TAG_KAH = "e_kah";
+    private static final String TAG_KAH = "o_kah";
+    private static final String TAG_ANAME = "a_name";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,8 +99,7 @@ public class ViewOperationActivity extends AppCompatActivity {
 
     }
 
-    private void showAddDetailDialog(View view)
-    {
+    private void showAddDetailDialog(View view) {
         EditText etDetailName;
         EditText etDetailAmmmoQuantity;
         Spinner dropdownDetailAmmunition;
@@ -109,21 +114,87 @@ public class ViewOperationActivity extends AppCompatActivity {
 
         etDetailName = (EditText) DialogFragment.findViewById(R.id.etDetailName);
 
-        /*
-        etDetailAmmmoQuantity = (EditText) DialogFragment.findViewById(R.id.etDetailAmmoQuantity);
-        dropdownDetailAmmunition = (Spinner) DialogFragment.findViewById(R.id.dropdownDetailAmmunition);
-        */
-
         btnCreateDetail = (Button) DialogFragment.findViewById(R.id.btnCreateDetail);
-        btnSelectPersonnel =(Button) DialogFragment.findViewById(R.id.btnSelectPersonnel);
+        btnSelectPersonnel = (Button) DialogFragment.findViewById(R.id.btnSelectPersonnel);
 
         String DetailName = String.valueOf(etDetailName);
 
+        ListView lv_add_issuing_detail_ammunition;
+        lv_add_issuing_detail_ammunition = (ListView) DialogFragment.findViewById(R.id.lv_view_loadout_ammunition_list);
+
+        //add new entry to listview after initial listview added
+
+
+        //populate ddl with items
+
+        SQLiteDatabase db;
+        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+        db.execSQL("CREATE TABLE IF NOT EXISTS Ammunition (a_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, a_description varchar(255) NOT NULL, a_qty float NOT NULL)");
+        Cursor c1 = db.rawQuery("select * from Ammunition", null);
+        ArrayList<HashMap<String, String>> ammoList = new ArrayList<HashMap<String, String>>();
+        while (c1.moveToNext()) {
+            HashMap<String, String> map = new HashMap<String, String>();
+            String line_id = c1.getString(0);
+            String line_name = c1.getString(1);
+
+            map.put(TAG_AID, line_id);
+            map.put(TAG_ANAME, line_name);
+
+            ammoList.add(map);
+        }
+        db.close();
+
+
+        SimpleAdapter arrayAdapter = new SimpleAdapter(ViewOperationActivity.this,
+                ammoList,
+                android.R.layout.simple_spinner_dropdown_item,
+                new String[]{TAG_ANAME},
+                new int[]{android.R.id.text1});
+
+        for(int i =0; i< lv_add_issuing_detail_ammunition.getCount(); i++) {
+            View v = lv_add_issuing_detail_ammunition.getChildAt(i);
+            if(((TextView) v.findViewById(R.id.tv_issuing_detail_ammo_id)).getText().toString().isEmpty());
+            {
+                Spinner ddl_issuing_detail_ammo_description;
+                ddl_issuing_detail_ammo_description = (Spinner) v.findViewById(R.id.ddl_issuing_detail_ammo_description);
+                ddl_issuing_detail_ammo_description.setAdapter(arrayAdapter);
+
+
+                ///
+                ddl_issuing_detail_ammo_description.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        ((TextView) v.findViewById(R.id.tv_issuing_detail_ammo_id)).setText(ammoList.get(i).get(TAG_AID));
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+                        //ignore
+
+                    }
+                });
+            }
+        }
 
 
         btnCreateDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                for (int i = 0; i < lv_add_issuing_detail_ammunition.getCount(); i++) {
+                    View v = lv_add_issuing_detail_ammunition.getChildAt(i);
+
+                    EditText et_issuing_detail_list_qty;
+                    Spinner ddl_issuing_detail_ammo_description;
+
+                    et_issuing_detail_list_qty = (EditText) v.findViewById(R.id.et_view_loadout_ammunition_qty);
+                    ddl_issuing_detail_ammo_description = (Spinner) v.findViewById(R.id.ddl_issuing_detail_ammo_description);
+
+                    ddl_issuing_detail_ammo_description.getSelectedItemPosition();
+
+
+
+                }
 
             }
         });
@@ -134,6 +205,8 @@ public class ViewOperationActivity extends AppCompatActivity {
             showSelectPersonnelDialog();
             }
         });
+
+
     }
 
     private void showSelectPersonnelDialog()
