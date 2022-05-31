@@ -255,6 +255,56 @@ public class ViewOperationActivity extends AppCompatActivity {
 
                 }
         });
+
+        Button btnIssue= (Button) findViewById(R.id.btn_Issue);
+        btnIssue.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent i = new Intent(ViewOperationActivity.this, PersonnelChecklistActivity.class);
+                ViewOperationActivity.this.startActivity(i);
+            }
+        });
+
+        Button btnReturn= (Button) findViewById(R.id.btn_Return);
+        btnReturn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent i = new Intent(ViewOperationActivity.this, PersonnelChecklistActivity.class);
+                ViewOperationActivity.this.startActivity(i);
+            }
+        });
+
+        Button btnReceive= (Button) findViewById(R.id.btn_Receive);
+        btnReceive.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                showReceiveDialog();
+            }
+        });
+    }
+
+    private void showReceiveDialog()
+    {
+        Dialog ReceiveDialog = new Dialog(ViewOperationActivity.this, android.R.style.Theme_Black_NoTitleBar);
+        ReceiveDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100,0,0,0)));
+        ReceiveDialog.setContentView(R.layout.dialog_receive);
+        ReceiveDialog.setCancelable(true);
+        ReceiveDialog.show();
+
+
+        Button btn_SelectPersonnel = (Button) ReceiveDialog.findViewById(R.id.btn_SelectPersonnel);
+        btn_SelectPersonnel.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent i = new Intent(ViewOperationActivity.this, PersonnelChecklistActivity.class);
+                ViewOperationActivity.this.startActivity(i);
+                ReceiveDialog.dismiss();
+            }
+        });
+
+        Button btn_ScanQRCode = (Button) ReceiveDialog.findViewById(R.id.btn_ScanQRCode);
+        btn_ScanQRCode.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                ReceiveDialog.dismiss();
+            }
+        });
+
     }
 
 }
