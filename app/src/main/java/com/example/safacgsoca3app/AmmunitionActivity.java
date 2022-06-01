@@ -1,5 +1,7 @@
 package com.example.safacgsoca3app;
 
+import static com.example.safacgsoca3app.ViewLoadoutActivity.TAG_ANAME;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
@@ -9,6 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -83,12 +86,18 @@ public class AmmunitionActivity extends AppCompatActivity {
                 ContentValues content = new ContentValues();
 
                 content.put(TAG_DESC, String.valueOf(tvAmmoDescription.getText()));
+                content.put(TAG_ANAME, String.valueOf(tvAmmoDescription.getText()));
                 content.put(TAG_QTY, String.valueOf(tvAmmoQty.getText()));
 
                 SQLiteDatabase db;
+                Log.i("test", "test");
                 db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+                db.execSQL("CREATE TABLE IF NOT EXISTS Ammunition (a_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, a_name text NOT NULL, a_description varchar(255) NOT NULL, a_qty float NOT NULL)");
                 db.insert("Ammunition", null, content);
                 db.close();
+
+                DialogFragment.dismiss();
+                onResume();
             }
         });
     }

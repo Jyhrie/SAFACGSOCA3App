@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -18,6 +19,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -121,26 +123,34 @@ public class MainActivity extends AppCompatActivity {
 
                 SQLiteDatabase db;
                 db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-                db.execSQL("CREATE TABLE IF NOT EXISTS operations (o_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_name varchar(255) NOT NULL, o_kah text NOT NULL)");
+                db.execSQL("CREATE TABLE IF NOT EXISTS operation (o_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_name varchar(255) NOT NULL, o_kah text NOT NULL)");
 
                 ContentValues content = new ContentValues();
 
                 content.put(TAG_NAME, String.valueOf(etAddExerciseName.getText()));
                 content.put(TAG_KAH, String.valueOf(etAddExerciseKAH.getText()));
 
-                db.insert("exercises", null, content);
+                db.insert("operation", null, content);
+                db.close();
+
+                db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
 
                 //get newest id
-                Cursor cursor = db.rawQuery("SELECT o_id FROM operations ORDER BY o_id DESC LIMIT 1", null);
-                cursor.moveToLast();
-                int insertedID = cursor.getInt(0);
+                int insertedID = -1;
+                Cursor cursor = db.rawQuery("SELECT o_id FROM operation ORDER BY o_id DESC LIMIT 1 ", null);
+                while(cursor.moveToNext())
+                {
+                    insertedID = cursor.getInt(0);
+                    Log.i("data has entry", String.valueOf(insertedID));
+                }
+
 
                 db.close();
 
                 //start new intent on exercise page
                 Intent i = new Intent(getApplicationContext(), ViewOperationActivity.class);
                 //push id to next page
-                i.putExtra(TAG_ID, insertedID);
+                i.putExtra(TAG_ID, String.valueOf(insertedID));
                 startActivity(i);
 
                 DialogFragment.dismiss();

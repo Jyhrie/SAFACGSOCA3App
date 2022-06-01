@@ -95,24 +95,24 @@ public class DisplayPersonnelActivity extends AppCompatActivity {
 
         });
 
-        Button btnIssue= (Button) findViewById(R.id.btn_Issue);
-        btnIssue.setOnClickListener(new View.OnClickListener() {
+        Button btnIssue3= (Button) findViewById(R.id.btn_Issue);
+        btnIssue3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(DisplayPersonnelActivity.this, PersonnelChecklistActivity.class);
                 DisplayPersonnelActivity.this.startActivity(i);
             }
         });
 
-        Button btnReturn= (Button) findViewById(R.id.btn_Return);
-        btnReturn.setOnClickListener(new View.OnClickListener() {
+        Button btnReturn3= (Button) findViewById(R.id.btn_Return);
+        btnReturn3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(DisplayPersonnelActivity.this, PersonnelChecklistActivity.class);
                 DisplayPersonnelActivity.this.startActivity(i);
             }
         });
 
-        Button btnReceive= (Button) findViewById(R.id.btn_Receive);
-        btnReceive.setOnClickListener(new View.OnClickListener() {
+        Button btnReceive3= (Button) findViewById(R.id.btn_Receive);
+        btnReceive3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 showReceiveDialog();
             }

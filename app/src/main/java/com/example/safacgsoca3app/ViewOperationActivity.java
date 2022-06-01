@@ -14,6 +14,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -36,6 +37,7 @@ public class ViewOperationActivity extends AppCompatActivity {
     private static final String TAG_PRANK = "p_rank";
     private static final String TAG_KAH = "o_kah";
     private static final String TAG_ANAME = "a_name";
+    private static final String TAG_PREMARKS = "p_remarks";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,7 @@ public class ViewOperationActivity extends AppCompatActivity {
         //get id
         Intent intent = getIntent();
         String o_id = intent.getStringExtra(TAG_ID);
+        Log.i("test" + o_id, "test");
 
         TextView tvOperationName;
         TextView tvDateLocation;
@@ -58,27 +61,31 @@ public class ViewOperationActivity extends AppCompatActivity {
         btnViewNominalRoll = (Button) findViewById(R.id.btnViewNominalRoll);
         btnViewAmmunition = (Button) findViewById(R.id.btnViewAmmunition);
 
+        showlvIssueDetail();
+
         //pull data from db
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
         db.execSQL("CREATE TABLE IF NOT EXISTS operation (o_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_name varchar(255) NOT NULL, o_unit varchar(255) NOT NULL, o_date text NOT NULL, o_location text NOT NULL, o_kah text NOT NULL)");
+        Log.i("querying for", o_id);
         Cursor c1 = db.rawQuery("SELECT * FROM operation WHERE o_id = " + o_id, null);
 
         //dump data into thing
         ArrayList<HashMap<String, String>> ammoList = new ArrayList<HashMap<String, String>>();
-        c1.moveToLast();
-        String line_id = c1.getString(0);
-        String line_name = c1.getString(1);
-        String line_unit = c1.getString(2);
-        String line_date = c1.getString(3);
-        String line_location = c1.getString(4);
-        String line_kah = c1.getString(5);
+        while(c1.moveToNext()) {
+            Log.i("entry found", o_id);
+            String line_id = c1.getString(0);
+            String line_name = c1.getString(1);
+            //String line_unit = c1.getString(2);
+            //String line_date = c1.getString(3);
+            //String line_location = c1.getString(4);
+            String line_kah = c1.getString(2);
 
+            tvOperationName.setText(line_name);
+            tvDateLocation.setText("test date");
+            tvKAH.setText(line_kah);
+        }
         db.close();
-
-        tvOperationName.setText(line_unit + " - " + line_name);
-        tvDateLocation.setText(line_date + " @ " + line_location);
-        tvKAH.setText(line_kah);
 
         btnViewNominalRoll.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v)
@@ -305,6 +312,55 @@ public class ViewOperationActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void showlvIssueDetail()
+    {
+        SQLiteDatabase db;
+        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+        db.execSQL("CREATE TABLE IF NOT EXISTS personnel (p_id integer NOT NULL PRIMARY KEY AUTOINCREMENT,p_rank varchar(10) NOT NULL, p_name varchar(255) NOT NULL, p_remarks TEXT NOT NULL)");
+
+        Cursor c1 = db.rawQuery("select * from Personnel", null);
+
+        ArrayList<HashMap<String, String>> PersonnelList = new ArrayList<HashMap<String, String>>();
+        while (c1.moveToNext()) {
+            HashMap<String, String> map = new HashMap<String, String>();
+            String line_id = c1.getString(0);
+            String line_rank = c1.getString(1);
+            String line_name = c1.getString(2);
+            String line_remarks = c1.getString(3);
+
+            map.put(TAG_PID, line_id);
+            map.put(TAG_PRANK, line_rank);
+            map.put(TAG_PNAME, line_name);
+            map.put(TAG_PREMARKS, line_remarks);
+
+            PersonnelList.add(map);
+        }
+        db.close();
+
+        ListView lv = findViewById(R.id.lv_Issue_Detail_Info);
+        ListAdapter adapter = new SimpleAdapter(
+                ViewOperationActivity.this, //context
+                PersonnelList, //hashmapdata
+                R.layout.list_display_personnel, //layout of list
+                new String[]{TAG_PID, TAG_PRANK, TAG_PNAME, TAG_PREMARKS}, //from array
+                new int[]{R.id.tv_Personnel_ID_Checklist,
+                        R.id.tv_Personnel_Rank_Checklist,
+                        R.id.tv_Personnel_Name_Checklist,
+                        R.id.tv_Personnel_Remarks_Checklist}); //toarray
+        // updating listview
+        lv.setAdapter(adapter);
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getApplicationContext(), DisplayPersonnelInfoActivity.class);
+                intent.putExtra("detail_id", i);//replace with detail id from sql
+                startActivity(intent);
+            }
+
+        });
     }
 
 }
