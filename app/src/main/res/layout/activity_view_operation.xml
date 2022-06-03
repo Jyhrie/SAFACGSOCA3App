@@ -68,10 +68,15 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
             <ListView
                 android:id="@+id/lv_Issue_Detail_Info"
                 android:layout_width="match_parent"
-                android:layout_height="680dp"
+                android:layout_height="500dp"
                 android:layout_marginTop="5dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline9"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -84,7 +89,7 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/btn_Issue3"
+                    android:id="@+id/btn_Issue"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
@@ -94,7 +99,7 @@
                     app:layout_constraintStart_toStartOf="@+id/guideline4" />
 
                 <Button
-                    android:id="@+id/btn_Return3"
+                    android:id="@+id/btn_Return"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -104,7 +109,7 @@
                     app:layout_constraintStart_toEndOf="@+id/btn_Issue" />
 
                 <Button
-                    android:id="@+id/btn_Receive3"
+                    android:id="@+id/btn_Receive"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"

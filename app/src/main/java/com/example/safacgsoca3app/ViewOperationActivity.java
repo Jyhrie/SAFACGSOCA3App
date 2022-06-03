@@ -102,8 +102,29 @@ public class ViewOperationActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+        
+        Button btnIssue= (Button) findViewById(R.id.btn_Issue);
+        btnIssue.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent i = new Intent(ViewOperationActivity.this, PersonnelChecklistActivity.class);
+                ViewOperationActivity.this.startActivity(i);
+            }
+        });
 
+        Button btnReturn= (Button) findViewById(R.id.btn_Return);
+        btnReturn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent i = new Intent(ViewOperationActivity.this, PersonnelChecklistActivity.class);
+                ViewOperationActivity.this.startActivity(i);
+            }
+        });
 
+        Button btnReceive= (Button) findViewById(R.id.btn_Receive);
+        btnReceive.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                showReceiveDialog();
+            }
+        });
     }
 
     private void showAddDetailDialog(View view) {
@@ -261,29 +282,6 @@ public class ViewOperationActivity extends AppCompatActivity {
                     //toggle and add id to array;
 
                 }
-        });
-
-        Button btnIssue= (Button) findViewById(R.id.btn_Issue);
-        btnIssue.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent i = new Intent(ViewOperationActivity.this, PersonnelChecklistActivity.class);
-                ViewOperationActivity.this.startActivity(i);
-            }
-        });
-
-        Button btnReturn= (Button) findViewById(R.id.btn_Return);
-        btnReturn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent i = new Intent(ViewOperationActivity.this, PersonnelChecklistActivity.class);
-                ViewOperationActivity.this.startActivity(i);
-            }
-        });
-
-        Button btnReceive= (Button) findViewById(R.id.btn_Receive);
-        btnReceive.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                showReceiveDialog();
-            }
         });
     }
 
