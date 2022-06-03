@@ -45,6 +45,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/Issued" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -71,6 +72,8 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="30dp"
+                android:layout_marginRight="30dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -85,6 +88,30 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/Returned" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/Spoilt_Quantity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginRight="30dp"
+                    android:gravity="center"
+                    android:text="Quantity" />
+
+                <TextView
+                    android:id="@+id/Ammo_Spoilt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginRight="30dp"
+                    android:gravity="center"
+                    android:text="@string/Spoilt" />
             </LinearLayout>
         </LinearLayout>
 

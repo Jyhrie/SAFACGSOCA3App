@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -30,7 +29,7 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_declare_issue_info);
+        setContentView(R.layout.activity_declare_issue_return_receive_info);
 
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
@@ -42,8 +41,8 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
         ContentValues content = new ContentValues();
         content.put("a_id", "0");
         content.put("a_name", "5.56 BALL");
-        content.put("a_description", "Pew pew");
-        content.put("a_qty", "6969");
+        content.put("a_description", "NIL");
+        content.put("a_qty", "30");
 
         db.insert("Ammunition", null, content);
         //end
@@ -72,11 +71,11 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
         ListAdapter adapter = new SimpleAdapter(
                 DeclareIssueInfoActivity.this, //context
                 IssueAmmoList, //hashmapdata
-                R.layout.list_issue_ammunition, //layout of list
+                R.layout.list_issue_return_receive_ammunition, //layout of list
                 new String[]{TAG_ID,TAG_NAME,TAG_QTY}, //from array
                 new int[]{R.id.tv_Ammunition_Id,
                         R.id.tv_Ammunition_Name,
-                        R.id.tv_Ammunition_Quantity}); //toarray
+                        R.id.tv_Issued_Qty}); //toarray
         // updating listview
         lv.setAdapter(adapter);
 
@@ -92,11 +91,11 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
     {
         Dialog EditIssueDialog = new Dialog(DeclareIssueInfoActivity.this, android.R.style.Theme_Black_NoTitleBar);
         EditIssueDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100,0,0,0)));
-        EditIssueDialog.setContentView(R.layout.dialog_edit_issue_ammunition);
+        EditIssueDialog.setContentView(R.layout.dialog_edit_issue_return_receive_ammunition);
         EditIssueDialog.setCancelable(true);
         EditIssueDialog.show();
 
-        Button btn_EditQty = (Button) EditIssueDialog.findViewById(R.id.btn_Edit_Qty);
+        Button btn_EditQty = (Button) EditIssueDialog.findViewById(R.id.btn_Confirm);
         btn_EditQty.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 EditIssueDialog.dismiss();

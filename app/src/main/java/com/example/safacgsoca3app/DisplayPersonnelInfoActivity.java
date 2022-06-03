@@ -18,6 +18,7 @@ public class DisplayPersonnelInfoActivity extends AppCompatActivity {
     public static final String TAG_ID_2 = "b_id";
     public static final String TAG_ID_3 = "c_id";
     public static final String TAG_ID_4 = "d_id";
+    public static final String TAG_ID_5 = "e_id";
 
     //Defines a key for the data. TAG_ID variable is for ease of changing the key
     //In hashmap, key is column name, index is row
@@ -73,9 +74,10 @@ public class DisplayPersonnelInfoActivity extends AppCompatActivity {
         for (int i = 0; i < 2; i++) {
             HashMap<String, String> map = new HashMap<String, String>();
             String Ammunition_Text = "Ammunition Type";
-            String Issued_Quantity = "1";
+            String Issued_Quantity = "0";
             String Expended_Quantity = "0";
             String Returned_Quantity = "0";
+            String Spoilt_Quantity = "0";
 
             //In reality, the number of entries is not defined by the for loop but by database entries
             //For this example, we will manually create 2 entries containing a hardcoded string
@@ -84,6 +86,7 @@ public class DisplayPersonnelInfoActivity extends AppCompatActivity {
             map.put(TAG_ID_2, Issued_Quantity);
             map.put(TAG_ID_3, Expended_Quantity);
             map.put(TAG_ID_4, Returned_Quantity);
+            map.put(TAG_ID_5, Spoilt_Quantity);
             //Puts key and data into hashmap
             Personnel_Ammo_List.add(map);
             //Adds a hashmap into the array
@@ -94,8 +97,8 @@ public class DisplayPersonnelInfoActivity extends AppCompatActivity {
                 DisplayPersonnelInfoActivity.this, //context
                 Personnel_Ammo_List, //hashmapdata
                 R.layout.list_display_personnel_ammunition, //layout of list
-                new String[]{TAG_ID_1,TAG_ID_2,TAG_ID_3,TAG_ID_4}, //from array
-                new int[]{R.id.Personnel_Ammunition,R.id.Issued_Quantity,R.id.Expended_Quantity,R.id.Returned_Quantity}); //toarray
+                new String[]{TAG_ID_1,TAG_ID_2,TAG_ID_3,TAG_ID_4,TAG_ID_5}, //from array
+                new int[]{R.id.Personnel_Ammunition,R.id.Issued_Quantity,R.id.Expended_Quantity,R.id.Returned_Quantity,R.id.Spoilt_Quantity}); //toarray
         // updating listview
         lv.setAdapter(adapter);
 
