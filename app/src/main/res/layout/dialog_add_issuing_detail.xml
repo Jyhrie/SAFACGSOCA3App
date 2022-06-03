@@ -18,7 +18,7 @@
             android:hint="Detail Name"/>
 
         <ListView
-            android:id="@+id/lv_add_issuing_detail_ammunition"
+            android:id="@+id/lv_edit_issuing_detail_personnel"
             android:layout_width="match_parent"
             android:layout_height="201dp" />
 
