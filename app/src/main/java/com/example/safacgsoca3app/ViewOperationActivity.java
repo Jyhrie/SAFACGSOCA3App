@@ -102,7 +102,7 @@ public class ViewOperationActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-        
+
         Button btnIssue= (Button) findViewById(R.id.btn_Issue);
         btnIssue.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

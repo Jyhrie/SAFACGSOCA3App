@@ -6,6 +6,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toStartOf="@+id/guideline10"
+        app:layout_constraintStart_toStartOf="@+id/guideline7"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_Issue_Return_Receive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:text="Is/Ret/Rec: "
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/tv_Detail_Name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:text="Detail Name"
+            android:textSize="24sp" />
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/tv_Ammunition"
         android:layout_width="wrap_content"
@@ -17,25 +45,14 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_Personnel_Name" />
 
     <TextView
-        android:id="@+id/tv_Issue_Detail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Issuing: Detail Name"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
         android:id="@+id/tv_Personnel_Name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:text="Personnel Name"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="@+id/guideline7"
-        app:layout_constraintTop_toBottomOf="@+id/tv_Issue_Detail" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline6"
@@ -94,16 +111,6 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline6"
         app:layout_constraintEnd_toStartOf="@+id/guideline10"
         app:layout_constraintStart_toStartOf="@+id/guideline7" />
-
-    <TextView
-        android:id="@+id/tv_To_Be_Issued"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="To be Issued:"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/lv_Issue_Ammunition"
-        app:layout_constraintEnd_toStartOf="@+id/guideline10"
-        app:layout_constraintTop_toBottomOf="@+id/tv_Personnel_Name" />
 
     <View
         android:id="@+id/view_Signature_Pad"
