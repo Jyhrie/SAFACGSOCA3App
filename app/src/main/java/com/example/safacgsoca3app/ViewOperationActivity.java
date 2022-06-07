@@ -114,6 +114,8 @@ public class ViewOperationActivity extends AppCompatActivity {
         btnIssue.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(ViewOperationActivity.this, PersonnelChecklistActivity.class);
+                String Function = "Issue";
+                intent.putExtra("Function", Function);
                 ViewOperationActivity.this.startActivity(i);
             }
         });
@@ -122,6 +124,8 @@ public class ViewOperationActivity extends AppCompatActivity {
         btnReturn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(ViewOperationActivity.this, PersonnelChecklistActivity.class);
+                String Function = "Return";
+                intent.putExtra("Function", Function);
                 ViewOperationActivity.this.startActivity(i);
             }
         });
@@ -267,6 +271,7 @@ public class ViewOperationActivity extends AppCompatActivity {
 
     private void showReceiveDialog()
     {
+        Intent intent = getIntent();
         Dialog ReceiveDialog = new Dialog(ViewOperationActivity.this, android.R.style.Theme_Black_NoTitleBar);
         ReceiveDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100,0,0,0)));
         ReceiveDialog.setContentView(R.layout.dialog_receive);
@@ -278,6 +283,8 @@ public class ViewOperationActivity extends AppCompatActivity {
         btn_SelectPersonnel.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(ViewOperationActivity.this, PersonnelChecklistActivity.class);
+                String Function = "Return";
+                intent.putExtra("Function", Function);
                 ViewOperationActivity.this.startActivity(i);
                 ReceiveDialog.dismiss();
             }

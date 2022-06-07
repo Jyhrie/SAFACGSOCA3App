@@ -2,6 +2,7 @@ package com.example.safacgsoca3app;
 
 import android.app.Dialog;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -13,8 +14,11 @@ import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,11 +35,29 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_declare_issue_return_receive_info);
 
+        Intent intent = getIntent();
+        String Function = intent.getStringExtra("Function");
+
+        TextView tv_Issue_Return_Receive;
+        TextView tv_Detail_Name;
+        TextView tv_Personnel_Name;
+        Button btn_ClearPad;
+        Button btn_Validate;
+
+        tv_Issue_Return_Receive = (TextView) findViewById(R.id.tv_Issue_Return_Receive);
+        tv_Detail_Name = (TextView) findViewById(R.id.tv_Detail_Name);
+        tv_Personnel_Name = (TextView) findViewById(R.id.tv_Personnel_Name);
+        btn_ClearPad = (Button) findViewById(R.id.btn_ClearPad);
+        btn_Validate = (Button) findViewById(R.id.btn_Validate);
+
+        tv_Issue_Return_Receive.setText(Function);
+        tv_Detail_Name.setText("Detail Name");
+        tv_Personnel_Name.setText("Personnel Name");
+
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
         db.execSQL("DROP TABLE Ammunition");
         db.execSQL("CREATE TABLE IF NOT EXISTS Ammunition (a_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, a_name text NOT NULL, a_description varchar(255) NOT NULL, a_qty float NOT NULL)");
-
 
         //use this to insert values
         ContentValues content = new ContentValues();
@@ -46,7 +68,6 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
 
         db.insert("Ammunition", null, content);
         //end
-
 
         Cursor c1 = db.rawQuery("select * from Ammunition", null);
 
@@ -103,4 +124,5 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
         });
 
     }
+
 }
