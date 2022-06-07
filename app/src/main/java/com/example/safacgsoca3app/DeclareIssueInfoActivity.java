@@ -36,7 +36,7 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_declare_issue_return_receive_info);
 
         Intent intent = getIntent();
-        String Function = intent.getStringExtra("Function");
+        String Function4 = intent.getStringExtra("Function3");
 
         TextView tv_Issue_Return_Receive;
         TextView tv_Detail_Name;
@@ -50,7 +50,7 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
         btn_ClearPad = (Button) findViewById(R.id.btn_ClearPad);
         btn_Validate = (Button) findViewById(R.id.btn_Validate);
 
-        tv_Issue_Return_Receive.setText(Function);
+        tv_Issue_Return_Receive.setText(Function4);
         tv_Detail_Name.setText("Detail Name");
         tv_Personnel_Name.setText("Personnel Name");
 

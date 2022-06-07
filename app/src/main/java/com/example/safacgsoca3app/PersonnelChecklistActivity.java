@@ -32,6 +32,9 @@ public class PersonnelChecklistActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personnel_checklist);
 
+        Intent intent = getIntent();
+        String Function2 = intent.getStringExtra("Function");
+
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
         db.execSQL("CREATE TABLE IF NOT EXISTS Personnel (p_id integer NOT NULL PRIMARY KEY AUTOINCREMENT,p_rank varchar(10) NOT NULL, p_name varchar(255) NOT NULL, p_remarks TEXT NOT NULL)");
@@ -92,8 +95,11 @@ public class PersonnelChecklistActivity extends AppCompatActivity {
         Button btnProceed = (Button) findViewById(R.id.btn_Proceed_Declare_Issue_Expend);
         btnProceed.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent i = new Intent(PersonnelChecklistActivity.this, DeclareIssueInfoActivity.class);
-                PersonnelChecklistActivity.this.startActivity(i);
+
+                Intent intent = new Intent(PersonnelChecklistActivity.this, DeclareIssueInfoActivity.class);
+                String Function3 = Function2;
+                intent.putExtra("Function3", Function3);
+                PersonnelChecklistActivity.this.startActivity(intent);
             }
         });
     }

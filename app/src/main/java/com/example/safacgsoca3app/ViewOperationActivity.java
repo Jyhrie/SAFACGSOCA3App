@@ -113,20 +113,20 @@ public class ViewOperationActivity extends AppCompatActivity {
         Button btnIssue= (Button) findViewById(R.id.btn_Issue);
         btnIssue.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent i = new Intent(ViewOperationActivity.this, PersonnelChecklistActivity.class);
-                String Function = "Issue";
+                Intent intent = new Intent(ViewOperationActivity.this, PersonnelChecklistActivity.class);
+                String Function = "Issuing: ";
                 intent.putExtra("Function", Function);
-                ViewOperationActivity.this.startActivity(i);
+                ViewOperationActivity.this.startActivity(intent);
             }
         });
 
         Button btnReturn= (Button) findViewById(R.id.btn_Return);
         btnReturn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent i = new Intent(ViewOperationActivity.this, PersonnelChecklistActivity.class);
-                String Function = "Return";
+                Intent intent = new Intent(ViewOperationActivity.this, PersonnelChecklistActivity.class);
+                String Function = "Returning: ";
                 intent.putExtra("Function", Function);
-                ViewOperationActivity.this.startActivity(i);
+                ViewOperationActivity.this.startActivity(intent);
             }
         });
 
@@ -271,7 +271,6 @@ public class ViewOperationActivity extends AppCompatActivity {
 
     private void showReceiveDialog()
     {
-        Intent intent = getIntent();
         Dialog ReceiveDialog = new Dialog(ViewOperationActivity.this, android.R.style.Theme_Black_NoTitleBar);
         ReceiveDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100,0,0,0)));
         ReceiveDialog.setContentView(R.layout.dialog_receive);
@@ -282,10 +281,10 @@ public class ViewOperationActivity extends AppCompatActivity {
         Button btn_SelectPersonnel = (Button) ReceiveDialog.findViewById(R.id.btn_SelectPersonnel);
         btn_SelectPersonnel.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent i = new Intent(ViewOperationActivity.this, PersonnelChecklistActivity.class);
-                String Function = "Return";
+                Intent intent = new Intent(ViewOperationActivity.this, PersonnelChecklistActivity.class);
+                String Function = "Receiving: ";
                 intent.putExtra("Function", Function);
-                ViewOperationActivity.this.startActivity(i);
+                ViewOperationActivity.this.startActivity(intent);
                 ReceiveDialog.dismiss();
             }
         });
