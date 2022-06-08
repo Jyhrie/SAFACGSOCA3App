@@ -20,7 +20,7 @@
             android:orientation="horizontal"></LinearLayout>
 
         <Button
-            android:id="@+id/btnAddIssuingDetail"
+            android:id="@+id/btn_add_issue_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Add Issuing Detail" />
@@ -31,14 +31,14 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btnViewNominalRoll"
+                android:id="@+id/btn_view_operation_nominal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Nominal Roll" />
 
             <Button
-                android:id="@+id/btnViewAmmunition"
+                android:id="@+id/btn_view_ammunition"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -46,19 +46,19 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/tvOperationName"
+            android:id="@+id/tv_operation_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Operation Name" />
 
         <TextView
-            android:id="@+id/tvDateLocation"
+            android:id="@+id/tv_date_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Date Location" />
 
         <TextView
-            android:id="@+id/tvKAH"
+            android:id="@+id/tv_kah"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Key Appointment Holder" />

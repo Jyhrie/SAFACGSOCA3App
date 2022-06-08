@@ -29,6 +29,12 @@
 
         </LinearLayout>
 
+        <Button
+            android:id="@+id/btn_view_nominal_roll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Button" />
+
         <ListView
             android:id="@+id/lvOperations"
             android:layout_width="match_parent"

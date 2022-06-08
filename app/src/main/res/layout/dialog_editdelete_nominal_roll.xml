@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content" />
 
             <EditText
-                android:id="@+id/etName"
+                android:id="@+id/et_personnel_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -37,7 +37,7 @@
                 tools:ignore="MissingConstraints" />
 
             <EditText
-                android:id="@+id/etRemarks"
+                android:id="@+id/et_personnel_nric"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"

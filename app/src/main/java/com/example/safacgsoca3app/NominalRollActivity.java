@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -28,9 +29,14 @@ public class NominalRollActivity extends AppCompatActivity {
     public static final String TAG_RANK = "p_rank";
     public static final String TAG_NAME = "p_name";
     public static final String TAG_REMARKS = "p_remarks";
+    public static final String TAG_P_NRIC = "P_NRIC";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        Intent intent = getIntent();
+        String o_id = intent.getStringExtra(TAG_ID);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nominal_roll);
 
@@ -63,53 +69,53 @@ public class NominalRollActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dropdownRank.setAdapter(adapter);
 
-        Button btnInsertNominalRoll = (Button) DialogFragment.findViewById(R.id.btnInsertNominalRoll);
-        EditText etName = (EditText) DialogFragment.findViewById(R.id.etName);
-        EditText etRemarks = (EditText) DialogFragment.findViewById(R.id.etRemarks);
+        Button btnInsertNominalRoll = (Button) DialogFragment.findViewById(R.id.btn_insert_personnel_close);
+        EditText etName = (EditText) DialogFragment.findViewById(R.id.et_personnel_name);
+        EditText etRemarks = (EditText) DialogFragment.findViewById(R.id.et_personnel_nric);
 
         btnInsertNominalRoll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String rank = dropdownRank.getSelectedItem().toString();
                 String name = etName.getText().toString();
-                String remarks = etRemarks.getText().toString();
+                String nric = etRemarks.getText().toString();
 
                 SQLiteDatabase db;
                 db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-                db.execSQL("CREATE TABLE IF NOT EXISTS Personnel (p_id integer NOT NULL PRIMARY KEY AUTOINCREMENT,p_rank varchar(10) NOT NULL, p_name varchar(255) NOT NULL, p_remarks TEXT NOT NULL)");
 
                 ContentValues content = new ContentValues();
-                content.put(TAG_NAME, name);
                 content.put(TAG_RANK, rank);
-                content.put(TAG_REMARKS, remarks);
+                content.put(TAG_NAME, name);
+                content.put(TAG_P_NRIC, nric);
 
                 db.insert("Personnel", null, content);
                 DialogFragment.dismiss();
             }
         });
 
-        Button btnInsertNominalRollNoClose = (Button) DialogFragment.findViewById(R.id.btnInsertNominalRollNoClose);
+        Button btnInsertNominalRollNoClose = (Button) DialogFragment.findViewById(R.id.btn_insert_personnel_stay_open);
 
         btnInsertNominalRollNoClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String rank = dropdownRank.getSelectedItem().toString();
                 String name = etName.getText().toString();
-                String remarks = etRemarks.getText().toString();
+                String nric = etRemarks.getText().toString();
 
                 SQLiteDatabase db;
                 db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-                db.execSQL("CREATE TABLE IF NOT EXISTS Personnel (p_id integer NOT NULL PRIMARY KEY AUTOINCREMENT,p_rank varchar(10) NOT NULL, p_name varchar(255) NOT NULL, p_remarks TEXT NOT NULL)");
 
                 ContentValues content = new ContentValues();
-                content.put(TAG_NAME, name);
                 content.put(TAG_RANK, rank);
-                content.put(TAG_REMARKS, remarks);
+                content.put(TAG_NAME, name);
+                content.put(TAG_P_NRIC, nric);
 
                 db.insert("Personnel", null, content);
 
                 etName.setText("");
                 etRemarks.setText("");
+
+                db.close();
             }
         });
 
@@ -132,8 +138,8 @@ public class NominalRollActivity extends AppCompatActivity {
         dropdownRank.setAdapter(adapter);
 
         Button btnEditNominalRoll = (Button) DialogFragment.findViewById(R.id.btnEditNominalRoll);
-        EditText etName = (EditText) DialogFragment.findViewById(R.id.etName);
-        EditText etRemarks = (EditText) DialogFragment.findViewById(R.id.etRemarks);
+        EditText etName = (EditText) DialogFragment.findViewById(R.id.et_personnel_name);
+        EditText etRemarks = (EditText) DialogFragment.findViewById(R.id.et_personnel_nric);
 
         String rank = dropdownRank.getSelectedItem().toString();
         String name = etName.getText().toString();
@@ -147,9 +153,10 @@ public class NominalRollActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         SQLiteDatabase db;
+
+
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS Personnel (p_id integer NOT NULL PRIMARY KEY AUTOINCREMENT,p_rank varchar(10) NOT NULL, p_name varchar(255) NOT NULL, p_remarks TEXT NOT NULL)");
-        Cursor c1 = db.rawQuery("select * from Personnel", null);
+        Cursor c1 = db.rawQuery("SELECT * FROM personnel", null);
 
         ArrayList<HashMap<String, String>> ammoList = new ArrayList<HashMap<String, String>>();
         while (c1.moveToNext()) {
@@ -157,12 +164,11 @@ public class NominalRollActivity extends AppCompatActivity {
             String line_id = c1.getString(0);
             String line_rank = c1.getString(1);
             String line_name = c1.getString(2);
-            String line_remarks = c1.getString(3);
+            String line_nric = c1.getString(3);
 
             map.put(TAG_ID, line_id);
-            map.put(TAG_RANK, line_rank);
-            map.put(TAG_NAME, line_name);
-            map.put(TAG_REMARKS, line_remarks);
+            map.put(TAG_NAME, line_rank + " " + line_name);
+            map.put(TAG_P_NRIC, line_nric);
 
             ammoList.add(map);
         }
@@ -173,11 +179,10 @@ public class NominalRollActivity extends AppCompatActivity {
                 NominalRollActivity.this, //context
                 ammoList, //hashmapdata
                 R.layout.list_nominalroll, //layout of list
-                new String[] { TAG_ID, TAG_RANK, TAG_NAME, TAG_REMARKS}, //from array
-                new int[] {R.id.tvPersonnelId, R.id.tvPersonnelRank, R.id.tvPersonnelName, R.id.tvPersonnelRemarks}); //toarray
+                new String[] { TAG_ID, TAG_NAME, TAG_P_NRIC}, //from array
+                new int[] {R.id.tvPersonnelId, R.id.tvPersonnelName, R.id.tvPersonnelRemarks});  //toarray
         // updating listview
         lv.setAdapter(adapter);
-
     }
 
 

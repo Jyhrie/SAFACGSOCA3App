@@ -37,16 +37,19 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        initialize_database(false);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         ListView lvExercises;
-
         FloatingActionButton btnFloatingAddExercise;
+        Button btnViewNominalRoll;
 
         lvExercises = (ListView) findViewById(R.id.lvOperations);
-
         btnFloatingAddExercise = (FloatingActionButton) findViewById(R.id.btnFloatingAddExercise);
+        btnViewNominalRoll = (Button) findViewById(R.id.btn_view_nominal_roll);
 
 
         btnFloatingAddExercise.setOnClickListener(new View.OnClickListener() {
@@ -64,6 +67,15 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        btnViewNominalRoll.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v)
+            {
+                Intent i = new Intent(getApplicationContext(), NominalRollActivity.class);
+                startActivity(i);
+            }
+        });
+
 
 
     }
@@ -115,8 +127,14 @@ public class MainActivity extends AppCompatActivity {
         EditText etAddExerciseKAH;
 
         btnInsertExercise = (Button) DialogFragment.findViewById(R.id.btnInsertExercise);
+
         etAddExerciseName = (EditText) DialogFragment.findViewById(R.id.etAddExerciseName);
         etAddExerciseKAH = (EditText) DialogFragment.findViewById(R.id.etAddExerciseKAH);
+
+
+
+
+
 
         btnInsertExercise.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,7 +142,6 @@ public class MainActivity extends AppCompatActivity {
 
                 SQLiteDatabase db;
                 db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-                db.execSQL("CREATE TABLE IF NOT EXISTS operation (o_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_name varchar(255) NOT NULL, o_kah text NOT NULL)");
 
                 ContentValues content = new ContentValues();
 
@@ -159,31 +176,43 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void initialize_database(int reset)
+    public void initialize_database(boolean reset)
     {
         SQLiteDatabase db;
-        db = openOrCreateDatabase("A3App", MODE_PRIVATE, null);
-        if(reset == 0);
+        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+        if(reset == true)
         {
+            Log.i("purging data", "all databases");
             Cursor c = db.rawQuery("SELECT name FROM sqlite_master WHERE type ='table'", null);
             List<String> tables = new ArrayList<>();
             while(c.moveToNext())
             {
-                tables.add(c.getString(0));
+                if(!(c.getString(0).equals("sqlite_sequence"))) {
+
+                    tables.add(c.getString(0));
+                }
             }
 
             for(String table : tables)
             {
-                String dropQuery = "DROP TABLE IF EXISTS" + table;
+                String deleteQuery = "DELETE FROM " + table;
+                String dropQuery = "DROP TABLE IF EXISTS " + table;
+                db.execSQL(deleteQuery);
                 db.execSQL(dropQuery);
             }
+
+            db.execSQL("DELETE FROM sqlite_sequence");
         }
-        db.execSQL("CREATE TABLE IF NOT EXISTS personnel (p_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, p_name varchar(255) NOT NULL)");
+
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS personnel (p_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, p_rank varchar(255) NOT NULL, p_name varchar(255) NOT NULL, p_nric text)");
         db.execSQL("CREATE TABLE IF NOT EXISTS operation (o_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_name varchar(255) NOT NULL, o_kah text NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS operation_personnel (op_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, p_id integer NOT NULL, o_id integer NOT NULL, d_id integer NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS ammunition (a_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_id integer NOT NULL, a_name varchar(255) NOT NULL, a_qty number NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS detail (d_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_id integer NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS personnel_ammunition (pa_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, op_id integer NOT NULL, a_id integer NOT NULL, pa_issue_qty number NOT NULL, pa_issued number, pa_returned number, pa_expende number, pa_spoiled number)");
+
+        db.close();
     }
 
 }

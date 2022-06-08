@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content" />
 
             <EditText
-                android:id="@+id/etName"
+                android:id="@+id/et_personnel_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -37,11 +37,11 @@
                 tools:ignore="MissingConstraints" />
 
             <EditText
-                android:id="@+id/etRemarks"
+                android:id="@+id/et_personnel_nric"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Remarks"
+                android:hint="NRIC"
                 android:inputType="textPersonName"
                 android:text=""
                 tools:ignore="MissingConstraints" />
@@ -52,14 +52,14 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/btnInsertNominalRoll"
+                    android:id="@+id/btn_insert_personnel_close"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Add Personnel" />
 
                 <Button
-                    android:id="@+id/btnInsertNominalRollNoClose"
+                    android:id="@+id/btn_insert_personnel_stay_open"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

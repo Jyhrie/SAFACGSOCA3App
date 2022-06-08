@@ -13,9 +13,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint="Detail Name"
             android:inputType="textPersonName"
-            android:text=""
-            android:hint="Detail Name"/>
+            android:text="" />
 
         <ListView
             android:id="@+id/lv_edit_issuing_detail_personnel"

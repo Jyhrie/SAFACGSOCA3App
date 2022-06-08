@@ -1,27 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_list_add_operation_personnel"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tvPersonnelId"
+    <CheckBox
+        android:id="@+id/cb_add_operation_personnel_isselected"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:visibility="gone"
+        android:checked="false"
+        android:text="CheckBox"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_add_operation_personnel_list_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:text="TextView" />
 
     <TextView
-        android:id="@+id/tvPersonnelName"
+        android:id="@+id/tv_add_operation_personnel_nric"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="TextView" />
 
     <TextView
-        android:id="@+id/tvPersonnelRemarks"
+        android:id="@+id/tv_add_operation_personnel_list_p_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="TextView" />
+        android:text="TextView"
+        android:visibility="gone" />
 </LinearLayout>

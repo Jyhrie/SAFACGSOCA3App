@@ -4,24 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NominalRollActivity">
-
+    tools:context=".OperationNominalRollActivity">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/btnAddNominalRoll"
+            android:id="@+id/btn_operation_nominal_add_personnel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Button"
             tools:ignore="MissingConstraints" />
 
         <ListView
-            android:id="@+id/lvNominalRoll"
-            android:layout_width="409dp"
-            android:layout_height="729dp"
+            android:id="@+id/lv_operation_nominal_roll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="1dp"
             tools:ignore="MissingConstraints">
 
