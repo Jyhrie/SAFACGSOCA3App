@@ -25,6 +25,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -157,6 +158,34 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void initialize_database(int reset)
+    {
+        SQLiteDatabase db;
+        db = openOrCreateDatabase("A3App", MODE_PRIVATE, null);
+        if(reset == 0);
+        {
+            Cursor c = db.rawQuery("SELECT name FROM sqlite_master WHERE type ='table'", null);
+            List<String> tables = new ArrayList<>();
+            while(c.moveToNext())
+            {
+                tables.add(c.getString(0));
+            }
+
+            for(String table : tables)
+            {
+                String dropQuery = "DROP TABLE IF EXISTS" + table;
+                db.execSQL(dropQuery);
+            }
+        }
+        db.execSQL("CREATE TABLE IF NOT EXISTS personnel (p_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, p_name varchar(255) NOT NULL)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS operation (o_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_name varchar(255) NOT NULL, o_kah text NOT NULL)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS operation_personnel (op_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, p_id integer NOT NULL, o_id integer NOT NULL, d_id integer NOT NULL)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS ammunition (a_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_id integer NOT NULL, a_name varchar(255) NOT NULL, a_qty number NOT NULL)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS detail (d_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_id integer NOT NULL)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS personnel_ammunition (pa_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, op_id integer NOT NULL, a_id integer NOT NULL, pa_issue_qty number NOT NULL, pa_issued number, pa_returned number, pa_expende number, pa_spoiled number)");
+    }
+
 }
 
 
