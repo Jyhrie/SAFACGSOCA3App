@@ -37,7 +37,7 @@ public class PersonnelChecklistActivity extends AppCompatActivity {
 
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS Personnel (p_id integer NOT NULL PRIMARY KEY AUTOINCREMENT,p_rank varchar(10) NOT NULL, p_name varchar(255) NOT NULL, p_remarks TEXT NOT NULL)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS personnel (p_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, p_rank varchar(255) NOT NULL, p_name varchar(255) NOT NULL, p_nric text)");
         Cursor c1 = db.rawQuery("select * from Personnel", null);
 
         ArrayList<HashMap<String, String>> PersonnelList = new ArrayList<HashMap<String, String>>();

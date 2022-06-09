@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="#FFFFFF"
-        android:paddingTop="10dp" >
+        android:paddingTop="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -19,17 +19,19 @@
 
             <TextView
                 android:id="@+id/tvOperationListName"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:text="Operation"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/tvOperationListKAH"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:text="Conducting"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/tvOperationListId"

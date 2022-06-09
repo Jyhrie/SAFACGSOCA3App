@@ -33,7 +33,31 @@
             android:id="@+id/btn_view_nominal_roll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:text="@string/NominalRoll"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_Operation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Operation"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tv_Conducting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Conducting"
+                android:textSize="20sp" />
+        </LinearLayout>
 
         <ListView
             android:id="@+id/lvOperations"
