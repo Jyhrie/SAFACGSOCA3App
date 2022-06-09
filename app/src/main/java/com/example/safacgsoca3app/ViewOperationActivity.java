@@ -255,17 +255,18 @@ public class ViewOperationActivity extends AppCompatActivity {
 
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-        Cursor c1 = db.rawQuery("select * from operation_personnel", null);
+        Cursor c1 = db.rawQuery("select op.op_id, p.p_rank, p.p_name from operation_personnel op, personnel p where p.p_id = op.p_id", null);
 
         ArrayList<HashMap<String, String>> personnelList = new ArrayList<HashMap<String, String>>();
         while (c1.moveToNext()) {
+            Log.i("data found", "test");
             HashMap<String, String> map = new HashMap<String, String>();
             String line_id = c1.getString(0);
             String line_rank = c1.getString(1);
             String line_name = c1.getString(2);
 
-            map.put(TAG_PID, line_id);
-            map.put(TAG_NAME, line_rank + " " + line_name);
+            map.put(TAG_OP_ID, line_id);
+            map.put(TAG_P_NAME, line_rank + " " + line_name);
 
             personnelList.add(map);
         }
@@ -276,8 +277,8 @@ public class ViewOperationActivity extends AppCompatActivity {
                 ViewOperationActivity.this, //context
                 personnelList, //hashmapdata
                 R.layout.list_select_personnel, //layout of list
-                new String[] { TAG_PID, TAG_PNAME}, //from array
-                new int[] {R.id.tvListPersonnelId, R.id.tvListPersonnelName}); //toarray
+                new String[] { TAG_OP_ID, TAG_P_NAME}, //from array
+                new int[] {R.id.tv_assign_detail_personnel_id, R.id.tv_assign_detail_personnel_name}); //toarray
         // updating listview
         lv.setAdapter(adapter);
 
@@ -285,7 +286,7 @@ public class ViewOperationActivity extends AppCompatActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    TextView tvListPersonnelId = (TextView) view.findViewById(R.id.tvListPersonnelId);
+                    TextView tvListPersonnelId = (TextView) view.findViewById(R.id.tv_assign_detail_personnel_id);
                     //toggle and add id to array;
 
                 }
@@ -400,6 +401,19 @@ public class ViewOperationActivity extends AppCompatActivity {
 
         //get all op_id currently
 
+        //HELP
+
+        //
+        
+
+        Button btn_assign_personnel_ammunition_add_entry;
+        btn_assign_personnel_ammunition_add_entry = (Button) DialogFragment.findViewById(R.id.btn_assign_personnel_ammunition_add_entry);
+        btn_assign_personnel_ammunition_add_entry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
         //foreach item in list
 

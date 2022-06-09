@@ -72,7 +72,10 @@ public class AmmunitionActivity extends AppCompatActivity {
         btnShowLoadout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent i = new Intent(getApplicationContext(), ViewLoadoutActivity.class);
+                //push id to next page
+                i.putExtra(TAG_O_ID, String.valueOf(o_id));
+                startActivity(i);
             }
         });
 
@@ -115,7 +118,7 @@ public class AmmunitionActivity extends AppCompatActivity {
                 SQLiteDatabase db;
                 Log.i("test", "test");
                 db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-                db.insert("Ammunition", null, content);
+                db.insert("ammunition", null, content);
                 db.close();
 
                 DialogFragment.dismiss();

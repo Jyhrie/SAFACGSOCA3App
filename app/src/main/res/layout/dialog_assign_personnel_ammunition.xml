@@ -8,11 +8,23 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btn_save_assigned_ammunition"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_save_assigned_ammunition"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="save_assigned_ammunition" />
+
+            <Button
+                android:id="@+id/btn_assign_personnel_ammunition_add_entry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ammunition_add_entry" />
+        </LinearLayout>
 
         <ListView
             android:id="@+id/lv_assign_personnel_ammunition"

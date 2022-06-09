@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -69,10 +70,11 @@ public class OperationNominalRollActivity extends AppCompatActivity {
 
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-        Cursor c1 = db.rawQuery("select op.o_id, p.p_rank, p.p_name, p.p_nric from operation_personnel op, personnel p WHERE op.o_id = " + o_id, null);
+        Cursor c1 = db.rawQuery("SELECT op.op_id, p.p_rank, p.p_name, p.p_nric FROM personnel p, operation_personnel op WHERE op.p_id = p.p_id AND op.o_id = " + o_id , null);
 
         ArrayList<HashMap<String, String>> ammoList = new ArrayList<HashMap<String, String>>();
         while (c1.moveToNext()) {
+            Log.i(c1.getString(0),"test2");
             HashMap<String, String> map = new HashMap<String, String>();
             String line_id = c1.getString(0);
             String line_rank = c1.getString(1);
@@ -119,9 +121,10 @@ public class OperationNominalRollActivity extends AppCompatActivity {
         //Defines an array of hashmaps. Each hashmap contains multiple values associated to one key each
         //PersonnelList is the array of hashmaps
 
+
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-        Cursor c1 = db.rawQuery("SELECT * FROM personnel", null);
+        Cursor c1 = db.rawQuery("SELECT p.p_id, p.p_rank, p.p_name, p.p_nric FROM personnel p WHERE p.p_id NOT IN (SELECT p.p_id FROM personnel p, operation_personnel op WHERE op.p_id = p.p_id AND op.o_id = "+ o_id+")", null);
         while (c1.moveToNext()) {
 
             HashMap<String, String> map = new HashMap<String, String>();
