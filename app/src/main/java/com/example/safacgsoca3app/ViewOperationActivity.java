@@ -120,6 +120,7 @@ public class ViewOperationActivity extends AppCompatActivity {
             public void onClick(View v)
             {
                 Intent i = new Intent(getApplicationContext(), AmmunitionActivity.class);
+                i.putExtra(TAG_O_ID, "1");
                 startActivity(i);
             }
         });

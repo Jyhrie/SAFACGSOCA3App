@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
 
         db.execSQL("CREATE TABLE IF NOT EXISTS personnel (p_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, p_rank varchar(255) NOT NULL, p_name varchar(255) NOT NULL, p_nric text)");
         db.execSQL("CREATE TABLE IF NOT EXISTS operation (o_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_name varchar(255) NOT NULL, o_kah text NOT NULL)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS operation_personnel (op_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, p_id integer NOT NULL, o_id integer NOT NULL, d_id integer NOT NULL)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS operation_personnel (op_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, p_id integer NOT NULL, o_id integer NOT NULL, d_id integer)");
         db.execSQL("CREATE TABLE IF NOT EXISTS ammunition (a_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_id integer NOT NULL, a_name varchar(255) NOT NULL, a_qty number NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS detail (d_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_id integer NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS personnel_ammunition (pa_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, op_id integer NOT NULL, a_id integer NOT NULL, pa_issue_qty number NOT NULL, pa_issued number, pa_returned number, pa_expende number, pa_spoiled number)");

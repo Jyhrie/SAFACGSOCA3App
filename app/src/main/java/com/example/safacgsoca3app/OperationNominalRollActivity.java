@@ -2,8 +2,10 @@ package com.example.safacgsoca3app;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -18,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,24 +54,18 @@ public class OperationNominalRollActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_operation_nominal_roll);
 
+        Intent intent = getIntent();
+        String o_id = intent.getStringExtra(TAG_O_ID);
+
         Button btn_operation_nominal_add_personnel;
         btn_operation_nominal_add_personnel = findViewById(R.id.btn_operation_nominal_add_personnel);
 
         btn_operation_nominal_add_personnel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                show_add_operation_personnel_dialog();
+                show_add_operation_personnel_dialog(o_id);
             }
         });
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        Intent intent = getIntent();
-        String o_id = intent.getStringExtra(TAG_O_ID);
 
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
@@ -85,6 +82,7 @@ public class OperationNominalRollActivity extends AppCompatActivity {
             map.put(TAG_OP_ID, line_id);
             map.put(TAG_P_NAME, line_rank + " " + line_name);
             map.put(TAG_P_NRIC, line_nric);
+            map.put(TAG_D_ID, "1");
 
             ammoList.add(map);
         }
@@ -95,13 +93,21 @@ public class OperationNominalRollActivity extends AppCompatActivity {
                 OperationNominalRollActivity.this, //context
                 ammoList, //hashmapdata
                 R.layout.list_operation_nominal_roll, //layout of list
-                new String[]{TAG_OP_ID, TAG_P_NAME, TAG_P_NRIC}, //from array
+                new String[]{TAG_OP_ID, TAG_P_NAME, TAG_P_NRIC, TAG_D_ID}, //from array
                 new int[]{R.id.tv_personnel_o_id_list_operation_nominal_roll, R.id.tv_personnel_name_list_operation_nominal_roll, R.id.tv_personnel_nric_list_operation_nominal_roll, R.id.tv_personnel_detail_list_operation_nominal_roll});
         // updating listview
         lv.setAdapter(adapter);
+
     }
 
-    private void show_add_operation_personnel_dialog() {
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
+    }
+
+    private void show_add_operation_personnel_dialog(String o_id) {
         Dialog DialogFragment = new Dialog(OperationNominalRollActivity.this, android.R.style.Theme_Black_NoTitleBar);
         DialogFragment.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
         DialogFragment.setContentView(R.layout.dialog_add_operation_personnel);
@@ -132,6 +138,7 @@ public class OperationNominalRollActivity extends AppCompatActivity {
             //Adds a hashmap into the array
         }
 
+
         ListView lv = DialogFragment.findViewById(R.id.lv_add_operation_personnel);
         ListAdapter adapter = new SimpleAdapter(
                 OperationNominalRollActivity.this, //context
@@ -158,6 +165,32 @@ public class OperationNominalRollActivity extends AppCompatActivity {
                 }
             }
 
+        });
+
+        Button btn_add_operation_personnel_submit;
+        btn_add_operation_personnel_submit = DialogFragment.findViewById(R.id.btn_add_operation_personnel_submit);
+        btn_add_operation_personnel_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SQLiteDatabase db;
+                db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+
+                for(int i = 0; i<lv.getCount(); i++)
+                {
+                    View v = lv.getChildAt(i);
+                    if(((CheckBox) v.findViewById(R.id.cb_add_operation_personnel_isselected)).isChecked())
+                    {
+                        String line_p_id = (((TextView) v.findViewById(R.id.tv_add_operation_personnel_list_p_id)).getText().toString());
+
+                        ContentValues content = new ContentValues();
+                        content.put(TAG_P_ID, line_p_id);
+                        content.put(TAG_O_ID, o_id);
+
+                        db.insert("operation_personnel", null, content);
+                    }
+                }
+                db.close();
+            }
         });
     }
 }
