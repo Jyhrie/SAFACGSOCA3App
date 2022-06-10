@@ -189,21 +189,18 @@ public class MainActivity extends AppCompatActivity {
     {
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-        if(reset == true)
-        {
+        if(reset == true) {
             Log.i("purging data", "all databases");
             Cursor c = db.rawQuery("SELECT name FROM sqlite_master WHERE type ='table'", null);
             List<String> tables = new ArrayList<>();
-            while(c.moveToNext())
-            {
-                if(!(c.getString(0).equals("sqlite_sequence"))) {
+            while (c.moveToNext()) {
+                if (!(c.getString(0).equals("sqlite_sequence"))) {
 
                     tables.add(c.getString(0));
                 }
             }
 
-            for(String table : tables)
-            {
+            for (String table : tables) {
                 String deleteQuery = "DELETE FROM " + table;
                 String dropQuery = "DROP TABLE IF EXISTS " + table;
                 db.execSQL(deleteQuery);
@@ -213,23 +210,19 @@ public class MainActivity extends AppCompatActivity {
             db.execSQL("DELETE FROM sqlite_sequence");
         }
 
-        db.execSQL("DROP TABLE personnel");
-        db.execSQL("DROP TABLE operation");
-        db.execSQL("DROP TABLE operation_personnel");
-        db.execSQL("DROP TABLE ammunition");
-        db.execSQL("DROP TABLE detail");
-        db.execSQL("DROP TABLE personnel_ammunition");
-
         db.execSQL("CREATE TABLE IF NOT EXISTS personnel (p_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, p_rank varchar(255) NOT NULL, p_name varchar(255) NOT NULL, p_nric text)");
         db.execSQL("CREATE TABLE IF NOT EXISTS operation (o_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_name varchar(255) NOT NULL, o_kah text NOT NULL)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS operation_personnel (op_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, p_id integer NOT NULL, o_id integer NOT NULL, d_id integer NOT NULL)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS operation_personnel (op_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, p_id integer NOT NULL, o_id integer NOT NULL, d_id integer)");
         db.execSQL("CREATE TABLE IF NOT EXISTS ammunition (a_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_id integer NOT NULL, a_name varchar(255) NOT NULL, a_qty number NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS detail (d_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_id integer NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS personnel_ammunition (pa_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, op_id integer NOT NULL, a_id integer NOT NULL, pa_issue_qty number NOT NULL, pa_issued number, pa_returned number, pa_expended number, pa_spoiled number)");
 
-        addexamplepersonnel();
-        addexampleOperation();
-        addexampleAmmunition();
+        if(reset == true) {
+            addexamplepersonnel();
+            addexampleOperation();
+            addexampleAmmunition();
+        }
+
 
         db.close();
     }

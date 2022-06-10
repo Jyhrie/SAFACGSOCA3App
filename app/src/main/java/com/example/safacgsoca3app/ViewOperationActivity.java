@@ -17,7 +17,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -68,7 +70,7 @@ public class ViewOperationActivity extends AppCompatActivity {
         //get id
         Intent intent = getIntent();
         String o_id = intent.getStringExtra(TAG_ID);
-        Log.i("test" + o_id, "test");
+        Log.i("o_id = " + o_id, "view_operation_activity");
 
         TextView tvOperationName;
         TextView tvDateLocation;
@@ -111,7 +113,7 @@ public class ViewOperationActivity extends AppCompatActivity {
             public void onClick(View v)
             {
                 Intent i = new Intent(getApplicationContext(), OperationNominalRollActivity.class);
-                i.putExtra(TAG_O_ID, "1");
+                i.putExtra(TAG_O_ID, o_id);
                 startActivity(i);
             }
         });
@@ -120,7 +122,7 @@ public class ViewOperationActivity extends AppCompatActivity {
             public void onClick(View v)
             {
                 Intent i = new Intent(getApplicationContext(), AmmunitionActivity.class);
-                i.putExtra(TAG_O_ID, "1");
+                i.putExtra(TAG_O_ID, o_id);
                 startActivity(i);
             }
         });
@@ -128,7 +130,7 @@ public class ViewOperationActivity extends AppCompatActivity {
         btnAddIssueDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showAddEditDetailDialog(view, -1);
+                showAddEditDetailDialog(view, -1, o_id);
             }
         });
         
@@ -160,7 +162,7 @@ public class ViewOperationActivity extends AppCompatActivity {
         });
     }
 
-    private void showAddEditDetailDialog(View view, int context)
+    private void showAddEditDetailDialog(View view, int context, String o_id)
     {
         EditText etDetailName;
         Button btnSaveDetail;
@@ -186,7 +188,11 @@ public class ViewOperationActivity extends AppCompatActivity {
 
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-        Cursor c1 = db.rawQuery("select * from operation_personnel", null);
+
+        //wipe prev selected stuff
+        //db.execSQL("UPDATE operation_personnel SET d_id = 0 WHERE d_id = -1");
+
+        Cursor c1 = db.rawQuery("select * from operation_personnel where d_id = -1", null);
         ArrayList<HashMap<String, String>> op_list = new ArrayList<HashMap<String, String>>();
         while (c1.moveToNext()) {
             HashMap<String, String> map = new HashMap<String, String>();
@@ -239,23 +245,27 @@ public class ViewOperationActivity extends AppCompatActivity {
         btnSelectPersonnel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showSelectPersonnelDialog();
+                showSelectPersonnelDialog(o_id);
             }
         });
 
     }
 
-    private void showSelectPersonnelDialog()
+    private void showSelectPersonnelDialog(String o_id)
     {
         Dialog DialogFragment = new Dialog(ViewOperationActivity.this, android.R.style.Theme_Black_NoTitleBar);
         DialogFragment.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
-        DialogFragment.setContentView(R.layout.dialog_select_personnel);
+        DialogFragment.setContentView(R.layout.dialog_assign_detail_personnel);
         DialogFragment.setCancelable(true);
         DialogFragment.show();
 
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-        Cursor c1 = db.rawQuery("select op.op_id, p.p_rank, p.p_name from operation_personnel op, personnel p where p.p_id = op.p_id", null);
+
+        //wipe all previously selected personnel
+        //db.execSQL("UPDATE operation_personnel SET d_id = 0 WHERE d_id = -1");
+
+        Cursor c1 = db.rawQuery("select op.op_id, p.p_rank, p.p_name from operation_personnel op, personnel p where op.d_id != -1 and p.p_id = op.p_id and op.o_id = "+ o_id , null);
 
         ArrayList<HashMap<String, String>> personnelList = new ArrayList<HashMap<String, String>>();
         while (c1.moveToNext()) {
@@ -272,25 +282,63 @@ public class ViewOperationActivity extends AppCompatActivity {
         }
         db.close();
 
-        ListView lv = DialogFragment.findViewById(R.id.lvSelectPersonnel);
+        ListView lv = DialogFragment.findViewById(R.id.lv_assign_personnel_to_detail);
         ListAdapter adapter = new SimpleAdapter(
                 ViewOperationActivity.this, //context
                 personnelList, //hashmapdata
-                R.layout.list_select_personnel, //layout of list
+                R.layout.list_assign_detail_personnel, //layout of list
                 new String[] { TAG_OP_ID, TAG_P_NAME}, //from array
                 new int[] {R.id.tv_assign_detail_personnel_id, R.id.tv_assign_detail_personnel_name}); //toarray
         // updating listview
         lv.setAdapter(adapter);
-
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     TextView tvListPersonnelId = (TextView) view.findViewById(R.id.tv_assign_detail_personnel_id);
                     //toggle and add id to array;
+                    CheckBox cb = view.findViewById(R.id.cb_assign_detail_personnel_bool);
+                    cb.setChecked(!cb.isChecked());
 
-                }
+                    LinearLayout layout = view.findViewById(R.id.layout_list_assign_detail_personnel);
+                    if(cb.isChecked()) {
+                        layout.setBackgroundResource(R.color.teal_200);
+                    }
+                    else
+                    {
+                        layout.setBackgroundResource(R.color.white);
+                    }
+
+                    }
         });
+
+        Button btn_assign_detail_personnel_submit;
+        btn_assign_detail_personnel_submit = DialogFragment.findViewById(R.id.btn_assign_detail_personnel_submit);
+        btn_assign_detail_personnel_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SQLiteDatabase db;
+                db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+
+                for(int i = 0; i<lv.getCount(); i++)
+                {
+                    View v = lv.getChildAt(i);
+                    if(((CheckBox) v.findViewById(R.id.cb_assign_detail_personnel_bool)).isChecked())
+                    {
+                        String op_id = ((TextView) v.findViewById(R.id.tv_assign_detail_personnel_id)).getText().toString();
+
+                        ContentValues content = new ContentValues();
+                        content.put(TAG_D_ID, -1);
+
+                        //update detail
+                        //assign d_id as -1 as temp value
+                        db.update("operation_personnel", content, TAG_OP_ID + " = ?", new String[]{op_id});
+                    }
+                }
+                db.close();
+            }
+        });
+
     }
 
     private void showReceiveDialog()
@@ -499,297 +547,3 @@ public class ViewOperationActivity extends AppCompatActivity {
 }
 
 
-/*private void showAddEditDetailDialog(View view, int context) {
-        EditText etDetailName;
-        Button btnSaveDetail;
-        Button btnSelectPersonnel;
-
-        Dialog DialogFragment = new Dialog(ViewOperationActivity.this, android.R.style.Theme_Black_NoTitleBar);
-        DialogFragment.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
-        DialogFragment.setContentView(R.layout.dialog_add_issuing_detail);
-        DialogFragment.setCancelable(true);
-        DialogFragment.show();
-
-        etDetailName = (EditText) DialogFragment.findViewById(R.id.etDetailName);
-        btnSaveDetail = (Button) DialogFragment.findViewById(R.id.btnCreateDetail);
-        btnSelectPersonnel = (Button) DialogFragment.findViewById(R.id.btnSelectPersonnel);
-
-        String DetailName = String.valueOf(etDetailName);
-
-        ListView lv_add_issuing_detail_personnel;
-        lv_add_issuing_detail_personnel = (ListView) DialogFragment.findViewById(R.id.lv_edit_issuing_detail_personnel);
-
-
-        //grab operation_personnel from db
-
-        SQLiteDatabase db;
-        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-        Cursor c1 = db.rawQuery("select * from operation_personnel", null);
-        ArrayList<HashMap<String, String>> op_list = new ArrayList<HashMap<String, String>>();
-        while (c1.moveToNext()) {
-            HashMap<String, String> map = new HashMap<String, String>();
-            String line_id = c1.getString(0);
-            String line_name = c1.getString(1);
-
-            map.put(TAG_OPID, line_id);
-            map.put(TAG_PNAME, line_name);
-
-            op_list.add(map);
-        }
-        db.close();
-
-        ListView lv = findViewById(R.id.lv_edit_issuing_detail_personnel);
-        ListAdapter adapter = new SimpleAdapter(
-                ViewOperationActivity.this, //context
-                op_list, //hashmapdata
-                R.layout.list_view_detail_personnel, //layout of list
-                new String[] { TAG_OPID, TAG_PNAME}, //from array
-                new int[] {R.id.tv_edit_detail_personnel_id, R.id.tv_edit_detail_personnel_name}); //toarray
-        // updating listview
-        lv.setAdapter(adapter);
-
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                showAssignPersonnelAmmo(parseInt(((TextView) view.findViewById(R.id.tv_edit_detail_personnel_id)).getText().toString()));
-            }
-        });
-
-
-
-
-
-        btnSaveDetail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                for (int i = 0; i < lv_add_issuing_detail_personnel.getCount(); i++) {
-                    View v = lv_add_issuing_detail_personnel.getChildAt(i);
-
-                    EditText et_issuing_detail_list_qty;
-
-                    et_issuing_detail_list_qty = (EditText) v.findViewById(R.id.et_view_loadout_ammunition_qty);
-
-
-                }
-
-            }
-        });
-
-        btnSelectPersonnel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showSelectPersonnelDialog();
-            }
-        });
-
-    }*/
-
-    /*private void showSelectPersonnelDialog()
-    {
-        Dialog DialogFragment = new Dialog(ViewOperationActivity.this, android.R.style.Theme_Black_NoTitleBar);
-        DialogFragment.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
-        DialogFragment.setContentView(R.layout.dialog_select_personnel);
-        DialogFragment.setCancelable(true);
-        DialogFragment.show();
-
-        SQLiteDatabase db;
-        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-        Cursor c1 = db.rawQuery("select * from operation_personnel", null);
-
-        ArrayList<HashMap<String, String>> personnelList = new ArrayList<HashMap<String, String>>();
-        while (c1.moveToNext()) {
-            HashMap<String, String> map = new HashMap<String, String>();
-            String line_id = c1.getString(0);
-            String line_rank = c1.getString(1);
-            String line_name = c1.getString(2);
-
-            map.put(TAG_PID, line_id);
-            map.put(TAG_NAME, line_rank + " " + line_name);
-
-            personnelList.add(map);
-        }
-        db.close();
-
-        ListView lv = findViewById(R.id.lvSelectPersonnel);
-        ListAdapter adapter = new SimpleAdapter(
-                ViewOperationActivity.this, //context
-                personnelList, //hashmapdata
-                R.layout.list_select_personnel, //layout of list
-                new String[] { TAG_PID, TAG_PNAME}, //from array
-                new int[] {R.id.tvListPersonnelId, R.id.tvListPersonnelName}); //toarray
-        // updating listview
-        lv.setAdapter(adapter);
-
-
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    TextView tvListPersonnelId = (TextView) view.findViewById(R.id.tvListPersonnelId);
-                    //toggle and add id to array;
-
-                }
-        });
-    }
-    */
-
-
-    /*
-    private void showReceiveDialog()
-
-    {
-        Dialog ReceiveDialog = new Dialog(ViewOperationActivity.this, android.R.style.Theme_Black_NoTitleBar);
-        ReceiveDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100,0,0,0)));
-        ReceiveDialog.setContentView(R.layout.dialog_receive);
-        ReceiveDialog.setCancelable(true);
-        ReceiveDialog.show();
-
-
-        Button btn_SelectPersonnel = (Button) ReceiveDialog.findViewById(R.id.btn_SelectPersonnel);
-        btn_SelectPersonnel.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(ViewOperationActivity.this, PersonnelChecklistActivity.class);
-                String Function = "Receiving: ";
-                intent.putExtra("Function", Function);
-                ViewOperationActivity.this.startActivity(intent);
-                ReceiveDialog.dismiss();
-            }
-        });
-
-        Button btn_ScanQRCode = (Button) ReceiveDialog.findViewById(R.id.btn_ScanQRCode);
-        btn_ScanQRCode.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                ReceiveDialog.dismiss();
-            }
-        });
-
-    }
-
-     */
-
-
-
-    /*
-    private void showlvIssueDetail()
-    {
-        SQLiteDatabase db;
-        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS personnel (p_id integer NOT NULL PRIMARY KEY AUTOINCREMENT,p_rank varchar(10) NOT NULL, p_name varchar(255) NOT NULL, p_remarks TEXT NOT NULL)");
-
-        Cursor c1 = db.rawQuery("select * from Personnel", null);
-
-        ArrayList<HashMap<String, String>> PersonnelList = new ArrayList<HashMap<String, String>>();
-        while (c1.moveToNext()) {
-            HashMap<String, String> map = new HashMap<String, String>();
-            String line_id = c1.getString(0);
-            String line_rank = c1.getString(1);
-            String line_name = c1.getString(2);
-            String line_remarks = c1.getString(3);
-
-            map.put(TAG_PID, line_id);
-            map.put(TAG_PRANK, line_rank);
-            map.put(TAG_PNAME, line_name);
-            map.put(TAG_PREMARKS, line_remarks);
-
-            PersonnelList.add(map);
-        }
-        db.close();
-
-        ListView lv = findViewById(R.id.lv_Issue_Detail_Info);
-        ListAdapter adapter = new SimpleAdapter(
-                ViewOperationActivity.this, //context
-                PersonnelList, //hashmapdata
-                R.layout.list_display_personnel, //layout of list
-                new String[]{TAG_PID, TAG_PRANK, TAG_PNAME, TAG_PREMARKS}, //from array
-                new int[]{R.id.tv_Personnel_ID_Checklist,
-                        R.id.tv_Personnel_Rank_Checklist,
-                        R.id.tv_Personnel_Name_Checklist,
-                        R.id.tv_Personnel_Remarks_Checklist}); //toarray
-        // updating listview
-        lv.setAdapter(adapter);
-
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getApplicationContext(), DisplayPersonnelInfoActivity.class);
-                intent.putExtra("detail_id", i);//replace with detail id from sql
-                startActivity(intent);
-            }
-
-        });
-    }
-
-     */
-
-    /*
-    private void showAssignPersonnelAmmo(int index)
-    {
-        Dialog DialogFragment = new Dialog(ViewOperationActivity.this, android.R.style.Theme_Black_NoTitleBar);
-        DialogFragment.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
-        DialogFragment.setContentView(R.layout.dialog_assign_personnel_ammunition);
-        DialogFragment.setCancelable(true);
-        DialogFragment.show();
-
-        ListView lv_assign_personnel_ammunition;
-        lv_assign_personnel_ammunition = (ListView) DialogFragment.findViewById(R.id.lv_assign_personnel_ammunition);
-
-        //get all operation ammunition data
-        SQLiteDatabase db;
-        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-        Cursor c1 = db.rawQuery("select * from ammunition", null);
-        ArrayList<HashMap<String, String>> ammo_list = new ArrayList<HashMap<String, String>>();
-        while (c1.moveToNext()) {
-            HashMap<String, String> map = new HashMap<String, String>();
-            String line_id = c1.getString(0);
-            String line_name = c1.getString(1);
-
-            map.put(TAG_OPID, line_id);
-            map.put(TAG_PNAME, line_name);
-
-            ammo_list.add(map);
-        }
-        db.close();
-
-        //ammo dropdownlist adapter
-        SimpleAdapter ddlAdapter = new SimpleAdapter(ViewOperationActivity.this,
-                ammo_list,
-                android.R.layout.simple_spinner_dropdown_item,
-                new String[]{TAG_PNAME},
-                new int[]{android.R.id.text1});
-
-        //get all op_id currently
-
-
-        //foreach item in list
-
-        for (int i = 0; i < lv_assign_personnel_ammunition.getCount(); i++) {
-            View v = lv_assign_personnel_ammunition.getChildAt(i);
-            if (((TextView) v.findViewById(R.id.tv_issuing_detail_ammo_id)).getText().toString().isEmpty());
-            {
-                //get & assign spinner data
-                Spinner ddl_assign_personnel_ammunition;
-                ddl_assign_personnel_ammunition = (Spinner) v.findViewById(R.id.ddl_assign_personnel_ammunition);
-
-
-
-
-
-
-                //active update id of operation personnel
-                ddl_assign_personnel_ammunition.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        ((TextView) v.findViewById(R.id.tv_issuing_detail_op_id)).setText(ammo_list.get(i).get(TAG_AID));
-
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
-                        //ignore
-
-                    }
-                });
-            }
-
-        }
-    }*/

@@ -183,8 +183,9 @@ public class OperationNominalRollActivity extends AppCompatActivity {
                     View v = lv.getChildAt(i);
                     if(((CheckBox) v.findViewById(R.id.cb_add_operation_personnel_isselected)).isChecked())
                     {
-                        String line_p_id = (((TextView) v.findViewById(R.id.tv_add_operation_personnel_list_p_id)).getText().toString());
 
+                        String line_p_id = (((TextView) v.findViewById(R.id.tv_add_operation_personnel_list_p_id)).getText().toString());
+                        Log.i("CHECKED", line_p_id);
                         ContentValues content = new ContentValues();
                         content.put(TAG_P_ID, line_p_id);
                         content.put(TAG_O_ID, o_id);
