@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         btnInsertExercise = (Button) DialogFragment.findViewById(R.id.btnInsertExercise);
 
         etAddExerciseName = (EditText) DialogFragment.findViewById(R.id.etAddExerciseName);
-        etAddExerciseKAH = (EditText) DialogFragment.findViewById(R.id.etAddExerciseKAH);
+        etAddExerciseKAH = (EditText) DialogFragment.findViewById(R.id.etName);
 
 
 
@@ -213,21 +213,22 @@ public class MainActivity extends AppCompatActivity {
             db.execSQL("DELETE FROM sqlite_sequence");
         }
 
-
-        //db.execSQL("DROP TABLE personnel");
-        //db.execSQL("DROP TABLE operation");
-        //db.execSQL("DROP TABLE operation_personnel");
-        //db.execSQL("DROP TABLE ammunition");
-        //db.execSQL("DROP TABLE detail");
-        //db.execSQL("DROP TABLE personnel_ammunition");
-
+        db.execSQL("DROP TABLE personnel");
+        db.execSQL("DROP TABLE operation");
+        db.execSQL("DROP TABLE operation_personnel");
+        db.execSQL("DROP TABLE ammunition");
+        db.execSQL("DROP TABLE detail");
+        db.execSQL("DROP TABLE personnel_ammunition");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS personnel (p_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, p_rank varchar(255) NOT NULL, p_name varchar(255) NOT NULL, p_nric text)");
         db.execSQL("CREATE TABLE IF NOT EXISTS operation (o_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_name varchar(255) NOT NULL, o_kah text NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS operation_personnel (op_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, p_id integer NOT NULL, o_id integer NOT NULL, d_id integer NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS ammunition (a_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_id integer NOT NULL, a_name varchar(255) NOT NULL, a_qty number NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS detail (d_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_id integer NOT NULL)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS personnel_ammunition (pa_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, op_id integer NOT NULL, a_id integer NOT NULL, pa_issue_qty number NOT NULL, pa_issued number, pa_returned number, pa_expende number, pa_spoiled number)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS personnel_ammunition (pa_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, op_id integer NOT NULL, a_id integer NOT NULL, pa_issue_qty number NOT NULL, pa_issued number, pa_returned number, pa_expended number, pa_spoiled number)");
+
+        addexamplepersonnel();
+        addexampleOperation();
 
         db.close();
     }
@@ -235,9 +236,24 @@ public class MainActivity extends AppCompatActivity {
     private void DeleteDialog(String oid) {
         Dialog DialogFragment = new Dialog(MainActivity.this, android.R.style.Theme_Black_NoTitleBar);
         DialogFragment.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
-        DialogFragment.setContentView(R.layout.dialog_delete_operation);
+        DialogFragment.setContentView(R.layout.dialog_delete_exercise);
         DialogFragment.setCancelable(true);
         DialogFragment.show();
+
+        String OperationName = null;
+
+        SQLiteDatabase db;
+        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+        db.execSQL("CREATE TABLE IF NOT EXISTS operation (o_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_name varchar(255) NOT NULL, o_kah text NOT NULL)");
+        Cursor cursor = db.rawQuery("SELECT o_name FROM operation WHERE o_id = " + oid, null);
+        while(cursor.moveToNext())
+        {
+            OperationName = cursor.getString(0);
+        }
+        db.close();
+
+        TextView tv_OperationName = (TextView) DialogFragment.findViewById(R.id.tv_ExerciseName);
+        tv_OperationName.setText(OperationName + "?");
 
         Button btn_confirm = (Button) DialogFragment.findViewById(R.id.btn_confirm);
         btn_confirm.setOnClickListener(new View.OnClickListener() {
@@ -251,6 +267,59 @@ public class MainActivity extends AppCompatActivity {
                 onResume();
             }
         });
+    }
+
+    private void addexamplepersonnel(){
+        ContentValues content = new ContentValues();
+        SQLiteDatabase db;
+        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+
+        content.put("p_rank", "LCP");
+        content.put("p_name", "Zackermax See");
+        content.put("p_nric", "220I");
+        db.insert("personnel", null, content);
+
+        content.put("p_rank", "LCP");
+        content.put("p_name", "Do Le");
+        content.put("p_nric", "485H");
+        db.insert("personnel", null, content);
+
+        content.put("p_rank", "PTE");
+        content.put("p_name", "Jun Hao");
+        content.put("p_nric", "420F");
+        db.insert("personnel", null, content);
+
+        content.put("p_rank", "CFC");
+        content.put("p_name", "Gabriel");
+        content.put("p_nric", "488J");
+        db.insert("personnel", null, content);
+
+        content.put("p_rank", "3SG");
+        content.put("p_name", "Slipped Disk");
+        content.put("p_nric", "Ouch");
+        db.insert("personnel", null, content);
+
+        db.close();
+    }
+
+    private void addexampleOperation(){
+        ContentValues content = new ContentValues();
+        SQLiteDatabase db;
+        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+
+        content.put("o_name", "OPS GLUON");
+        content.put("o_kah", "Conducting: ME4 Yuen Weng Kin\nSupervising: ME3 Teo Kwee Teck\nSafety: ME3 Raymond Tan\nLocation: Changi Naval Base\nDate: 12/09/2022");
+        db.insert("operation", null, content);
+
+        content.put("o_name", "OPS GUARDIAN ANGEL");
+        content.put("o_kah", "Conducting: ME4 Khoo Wei Liang\nSupervising: ME2 Fung Xue Ming\nSafety: ME1 Melvin\nLocation: Nee Soon Camp\nDate: 18/07/2022");
+        db.insert("operation", null, content);
+
+        content.put("o_name", "RANGE: TEKONG");
+        content.put("o_kah", "Conducting: ME2 Fung Xue Ming\nSupervising: ME1 Melvin\nSafety: ME1 Lincoln\nLocation: Pulau Tekong\nDate: 20/04/2023");
+        db.insert("operation", null, content);
+
+        db.close();
     }
 }
 
