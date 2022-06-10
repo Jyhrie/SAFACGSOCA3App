@@ -229,6 +229,7 @@ public class MainActivity extends AppCompatActivity {
 
         addexamplepersonnel();
         addexampleOperation();
+        addexampleAmmunition();
 
         db.close();
     }
@@ -318,6 +319,34 @@ public class MainActivity extends AppCompatActivity {
         content.put("o_name", "RANGE: TEKONG");
         content.put("o_kah", "Conducting: ME2 Fung Xue Ming\nSupervising: ME1 Melvin\nSafety: ME1 Lincoln\nLocation: Pulau Tekong\nDate: 20/04/2023");
         db.insert("operation", null, content);
+
+        db.close();
+    }
+
+    private void addexampleAmmunition(){
+        ContentValues content = new ContentValues();
+        SQLiteDatabase db;
+        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+
+        content.put("o_id", "1");
+        content.put("a_name", "5.56 Ball");
+        content.put("a_qty", "1000");
+        db.insert("ammunition", null, content);
+
+        content.put("o_id", "1");
+        content.put("a_name", "7.62 Ball");
+        content.put("a_qty", "1250");
+        db.insert("ammunition", null, content);
+
+        content.put("o_id", "1");
+        content.put("a_name", "SFG 87");
+        content.put("a_qty", "48");
+        db.insert("ammunition", null, content);
+
+        content.put("o_id", "1");
+        content.put("a_name", "GREN HAND SMK RED");
+        content.put("a_qty", "96");
+        db.insert("ammunition", null, content);
 
         db.close();
     }
