@@ -28,7 +28,7 @@ public class AddExerciseActivity extends AppCompatActivity {
 
         btnInsertExercise = (Button) findViewById(R.id.btnInsertExercise);
         etAddExerciseName = (EditText) findViewById(R.id.etAddExerciseName);
-        etAddExerciseKAH = (EditText) findViewById(R.id.etAddExerciseKAH);
+        etAddExerciseKAH = (EditText) findViewById(R.id.etName);
 
         btnInsertExercise.setOnClickListener(new View.OnClickListener() {
             @Override

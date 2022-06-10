@@ -12,6 +12,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +20,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,6 +50,24 @@ public class NominalRollActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 openAddNominalRollDialog(view);
+            }
+        });
+
+        Button btnDeletePersonnel;
+        btnDeletePersonnel = (Button) findViewById(R.id.btnDeletePersonnel);
+
+        btnDeletePersonnel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /*
+                String pid = ((TextView) view.findViewById(R.id.tvPersonnelId)).getText().toString();
+                SQLiteDatabase db;
+                db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+                db.execSQL("CREATE TABLE IF NOT EXISTS personnel (p_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, p_rank varchar(255) NOT NULL, p_name varchar(255) NOT NULL, p_nric text)");
+                db.execSQL("DELETE FROM operation WHERE p_id = " + pid);
+                db.close();
+                onResume();
+                */
             }
         });
 
@@ -90,6 +110,7 @@ public class NominalRollActivity extends AppCompatActivity {
 
                 db.insert("Personnel", null, content);
                 DialogFragment.dismiss();
+                onResume();
             }
         });
 
@@ -116,6 +137,7 @@ public class NominalRollActivity extends AppCompatActivity {
                 etRemarks.setText("");
 
                 db.close();
+                onResume();
             }
         });
 

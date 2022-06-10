@@ -8,29 +8,95 @@
 
     <LinearLayout
         android:layout_width="409dp"
-        android:layout_height="729dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
+        tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="1dp"
-        tools:ignore="MissingConstraints">
+        tools:layout_editor_absoluteY="1dp">
 
         <EditText
             android:id="@+id/etAddExerciseName"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:ems="10"
+            android:hint="Exercise Name"
             android:inputType="textPersonName"
-            android:text=""
-            android:hint="Exercise Name"/>
+            android:text="" />
 
-        <EditText
-            android:id="@+id/etAddExerciseKAH"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text=""
-            android:hint="Key Appointment Holder Temp"/>
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/etRole"
+                android:layout_width="150dp"
+                android:layout_height="48dp"
+                android:ems="10"
+                android:hint="Role"
+                android:inputType="textPersonName"
+                android:text="" />
+
+            <EditText
+                android:id="@+id/etName"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:ems="10"
+                android:hint="Name"
+                android:inputType="textPersonName"
+                android:text="" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_Location"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text=" Location:"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/etLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Location" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_Date"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text=" Date:"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/etDate"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Date" />
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/btnInsertExercise"

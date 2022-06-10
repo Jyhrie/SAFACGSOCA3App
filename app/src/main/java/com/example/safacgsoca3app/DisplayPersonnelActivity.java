@@ -1,10 +1,8 @@
 package com.example.safacgsoca3app;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 
 import android.app.Dialog;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -81,7 +79,7 @@ public class DisplayPersonnelActivity extends AppCompatActivity {
                 new int[]{R.id.tv_Personnel_ID_Checklist,
                         R.id.tv_Personnel_Rank_Checklist,
                         R.id.tv_Personnel_Name_Checklist,
-                        R.id.tv_Personnel_Remarks_Checklist}); //toarray
+                        R.id.tv_Personnel_NRIC_Checklist}); //toarray
         // updating listview
         lv.setAdapter(adapter);
 

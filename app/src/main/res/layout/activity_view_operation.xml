@@ -76,7 +76,7 @@
             <ListView
                 android:id="@+id/lv_Issue_Detail_Info"
                 android:layout_width="match_parent"
-                android:layout_height="500dp"
+                android:layout_height="400dp"
                 android:layout_marginTop="5dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline9"
                 app:layout_constraintHorizontal_bias="0.0"

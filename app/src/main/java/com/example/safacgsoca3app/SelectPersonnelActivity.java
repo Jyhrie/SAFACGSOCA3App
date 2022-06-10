@@ -49,7 +49,7 @@ public class SelectPersonnelActivity extends AppCompatActivity {
                 PersonnelList, //hashmapdata
                 R.layout.list_display_personnel, //layout of list
                 new String[]{TAG_ID_1, TAG_ID_2}, //from array
-                new int[]{R.id.tv_Personnel_Name_Checklist, R.id.tv_Personnel_Remarks_Checklist}); //toarray
+                new int[]{R.id.tv_Personnel_Name_Checklist, R.id.tv_Personnel_NRIC_Checklist}); //toarray
         // updating listview
         lv.setAdapter(adapter);
 

@@ -330,10 +330,12 @@ public class ViewOperationActivity extends AppCompatActivity {
         while (c1.moveToNext()) {
             HashMap<String, String> map = new HashMap<String, String>();
             String line_id = c1.getString(0);
-            String line_name = c1.getString(1);
-            String line_nric = c1.getString(2);
+            String line_rank = c1.getString(1);
+            String line_name = c1.getString(2);
+            String line_nric = c1.getString(3);
 
             map.put(TAG_PID, line_id);
+            map.put(TAG_PRANK, line_rank);
             map.put(TAG_PNAME, line_name);
             map.put(TAG_P_NRIC, line_nric);
 
@@ -346,10 +348,11 @@ public class ViewOperationActivity extends AppCompatActivity {
                 ViewOperationActivity.this, //context
                 PersonnelList, //hashmapdata
                 R.layout.list_display_personnel, //layout of list
-                new String[]{TAG_PID, TAG_PNAME, TAG_P_NRIC}, //from array
+                new String[]{TAG_PID, TAG_PRANK, TAG_PNAME, TAG_P_NRIC}, //from array
                 new int[]{R.id.tv_Personnel_ID_Checklist,
+                        R.id.tv_Personnel_Rank_Checklist,
                         R.id.tv_Personnel_Name_Checklist,
-                        R.id.tv_Personnel_Remarks_Checklist}); //toarray
+                        R.id.tv_Personnel_NRIC_Checklist}); //toarray
         // updating listview
         lv.setAdapter(adapter);
 

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/mainLyt"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
 
     <RelativeLayout
@@ -19,10 +19,11 @@
 
             <TextView
                 android:id="@+id/tvOperationListName"
-                android:layout_width="match_parent"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Operation"
+                android:textAlignment="center"
                 android:textSize="16sp" />
 
             <TextView
@@ -30,7 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Conducting"
+                android:text="Key Appointment Holders"
                 android:textSize="16sp" />
 
             <TextView

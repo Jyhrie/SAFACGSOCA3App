@@ -55,7 +55,7 @@
             android:visibility="gone"/>
 
         <TextView
-            android:id="@+id/tv_Personnel_Remarks_Checklist"
+            android:id="@+id/tv_Personnel_NRIC_Checklist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="2dp"
