@@ -130,7 +130,7 @@ public class ViewOperationActivity extends AppCompatActivity {
         btnAddIssueDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showAddEditDetailDialog(view, -1, o_id);
+                showAddEditDetailDialog(-1, o_id, true);
             }
         });
         
@@ -162,7 +162,7 @@ public class ViewOperationActivity extends AppCompatActivity {
         });
     }
 
-    private void showAddEditDetailDialog(View view, int context, String o_id)
+    private void showAddEditDetailDialog(int context, String o_id, boolean reset)
     {
         EditText etDetailName;
         Button btnSaveDetail;
@@ -190,7 +190,9 @@ public class ViewOperationActivity extends AppCompatActivity {
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
 
         //wipe prev selected stuff
-        //db.execSQL("UPDATE operation_personnel SET d_id = 0 WHERE d_id = -1");
+        if(reset == true) {
+            db.execSQL("UPDATE operation_personnel SET d_id = 0 WHERE d_id = -1");
+        }
 
         Cursor c1 = db.rawQuery("select * from operation_personnel where d_id = -1", null);
         ArrayList<HashMap<String, String>> op_list = new ArrayList<HashMap<String, String>>();
@@ -223,18 +225,12 @@ public class ViewOperationActivity extends AppCompatActivity {
             }
         });
 
-
-
         btnSaveDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 for (int i = 0; i < lv_add_issuing_detail_personnel.getCount(); i++) {
                     View v = lv_add_issuing_detail_personnel.getChildAt(i);
-
-                    EditText et_issuing_detail_list_qty;
-
-                    et_issuing_detail_list_qty = (EditText) v.findViewById(R.id.et_view_loadout_ammunition_qty);
 
 
                 }
@@ -245,13 +241,14 @@ public class ViewOperationActivity extends AppCompatActivity {
         btnSelectPersonnel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showSelectPersonnelDialog(o_id);
+                showSelectPersonnelDialog(o_id, DialogFragment, context);
             }
         });
 
+
     }
 
-    private void showSelectPersonnelDialog(String o_id)
+    private void showSelectPersonnelDialog(String o_id, Dialog prevDialog, int context)
     {
         Dialog DialogFragment = new Dialog(ViewOperationActivity.this, android.R.style.Theme_Black_NoTitleBar);
         DialogFragment.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
@@ -336,6 +333,10 @@ public class ViewOperationActivity extends AppCompatActivity {
                     }
                 }
                 db.close();
+
+                prevDialog.dismiss();
+                DialogFragment.dismiss();
+                showAddEditDetailDialog(context, o_id, false);
             }
         });
 
