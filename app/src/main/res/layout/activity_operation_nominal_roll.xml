@@ -14,7 +14,7 @@
             android:id="@+id/btn_operation_nominal_add_personnel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Button"
+            android:text="Import Personnel"
             tools:ignore="MissingConstraints" />
 
         <ListView

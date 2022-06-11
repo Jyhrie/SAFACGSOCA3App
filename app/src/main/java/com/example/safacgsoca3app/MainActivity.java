@@ -331,12 +331,12 @@ public class MainActivity extends AppCompatActivity {
         content.put("a_qty", "1250");
         db.insert("ammunition", null, content);
 
-        content.put("o_id", "1");
+        content.put("o_id", "2");
         content.put("a_name", "SFG 87");
         content.put("a_qty", "48");
         db.insert("ammunition", null, content);
 
-        content.put("o_id", "1");
+        content.put("o_id", "3");
         content.put("a_name", "GREN HAND SMK RED");
         content.put("a_qty", "96");
         db.insert("ammunition", null, content);
