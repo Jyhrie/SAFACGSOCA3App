@@ -114,10 +114,7 @@ public class AssignPersonnelAmmunitionAdapter extends RecyclerView.Adapter<Assig
             @Override
             public void afterTextChanged(Editable editable) {
 
-                String line_ammo_qty = holder.et_assign_personnel_ammunition_qty.getText().toString();
-                HashMap<String, String> prevData = new HashMap<String,String>(data.get(gpos));
-                prevData.replace(TAG_PA_ISSUE_QTY, line_ammo_qty);
-                data.set(gpos, prevData);
+                data.get(gpos).replace(TAG_PA_ISSUE_QTY,holder.et_assign_personnel_ammunition_qty.getText().toString());
                 Log.i("TEXT CHANGED", String.valueOf(gpos));
             }
         });

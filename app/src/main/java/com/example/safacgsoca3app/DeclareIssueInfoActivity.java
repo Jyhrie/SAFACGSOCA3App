@@ -63,29 +63,31 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
         db.execSQL("CREATE TABLE IF NOT EXISTS personnel_ammunition (pa_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, op_id integer NOT NULL, a_id integer NOT NULL, pa_issue_qty number NOT NULL, pa_issued number, pa_returned number, pa_expended number, pa_spoiled number)");
 
-        Cursor c1 = db.rawQuery("SELECT a.a_name pa.pa_id, pa.op_id, pa.a_id, pa.pa_issue_qty, pa.pa_issued, pa.pa_returned, pa.pa_expended, pa.pa_spoiled FROM personnel_ammunition pa, ammunition a WHERE a.a_id = pa.a_id and pa.op_id = 1", null);
+        Cursor c1 = db.rawQuery("SELECT a.a_name, pa.pa_id, pa.op_id, pa.a_id, pa.pa_issue_qty, pa.pa_issued, pa.pa_returned, pa.pa_expended, pa.pa_spoiled FROM personnel_ammunition pa, ammunition a WHERE a.a_id = pa.a_id and pa.op_id = 1", null);
 
         ArrayList<HashMap<String, String>> IssueAmmoList = new ArrayList<HashMap<String, String>>();
         while (c1.moveToNext()) {
             HashMap<String, String> map = new HashMap<String, String>();
-            String line_paid = c1.getString(0);
-            String line_opid = c1.getString(1);
-            String line_aid = c1.getString(2);
+            String line_aname = c1.getString(0);
+            String line_paid = c1.getString(1);
+            String line_opid = c1.getString(2);
+            String line_aid = c1.getString(3);
 
             String line_issue_issued = null;
             String line_toissue_issued_desc = null;
             if (Function4.equals("Issuing: ")) {
-                line_issue_issued = c1.getString(3);
+                line_issue_issued = c1.getString(4);
                 line_toissue_issued_desc = "To Issue";
             } else {
-                line_issue_issued = c1.getString(4);
+                line_issue_issued = c1.getString(5);
                 line_toissue_issued_desc = "Issued";
             }
 
-            String line_returned = c1.getString(5);
-            String line_expended = c1.getString(6);
-            String line_spoiled = c1.getString(7);
+            String line_returned = c1.getString(6);
+            String line_expended = c1.getString(7);
+            String line_spoiled = c1.getString(8);
 
+            map.put(TAG_ANAME, line_aname);
             map.put(TAG_PAID, line_paid);
             map.put(TAG_OPID, line_opid);
             map.put(TAG_AID, line_aid);
@@ -104,8 +106,9 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
                 DeclareIssueInfoActivity.this, //context
                 IssueAmmoList, //hashmapdata
                 R.layout.list_issue_return_receive_ammunition, //layout of list
-                new String[]{TAG_PAID, TAG_OPID, TAG_AID, TAG_TOISSUE_ISSUED_DESC, TAG_TOISSUE_ISSUED, TAG_RETURNED, TAG_EXPENDED, TAG_SPOILED}, //from array
-                new int[]{R.id.tv_PAID,
+                new String[]{TAG_ANAME, TAG_PAID, TAG_OPID, TAG_AID, TAG_TOISSUE_ISSUED_DESC, TAG_TOISSUE_ISSUED, TAG_RETURNED, TAG_EXPENDED, TAG_SPOILED}, //from array
+                new int[]{R.id.tv_Ammunition_Name,
+                        R.id.tv_PAID,
                         R.id.tv_OPID,
                         R.id.tv_AID,
                         R.id.tv_ToIssueOrIssued_Text,
