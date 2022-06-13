@@ -458,6 +458,7 @@ public class ViewOperationActivity extends AppCompatActivity {
         if(!search_for_detail_id.isEmpty()) {
             SQLiteDatabase db;
             db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+            Log.i("select p.p_id, p.p_rank, p.p_name, p.p_nric from personnel p, operation_personnel op where op.p_id = p.p_id and op.o_id = " + o_id + " and op.d_id = " + search_for_detail_id, "query");
             Cursor c1 = db.rawQuery("select p.p_id, p.p_rank, p.p_name, p.p_nric from personnel p, operation_personnel op where op.p_id = p.p_id and op.o_id = " + o_id + " and op.d_id = " + search_for_detail_id, null);
 
             ArrayList<HashMap<String, String>> PersonnelList = new ArrayList<HashMap<String, String>>();
@@ -650,20 +651,21 @@ public class ViewOperationActivity extends AppCompatActivity {
 
                 for (int i = 0; i < lv_assign_personnel_ammunition.getCount(); i++) {
                     Log.i(Integer.toString(lv_assign_personnel_ammunition.getCount()), "count");
-                    View v = lv_assign_personnel_ammunition.getChildAt(i);
+                    //View v = lv_assign_personnel_ammunition.findFocus()
 
+
+                    //((EditText) vs.findViewById(R.id.et_assign_personnel_ammunition_qty)).setText("1234");
                     //get & assign spinner data
-                    Spinner ddl_assign_personnel_ammunition;
+                    /*Spinner ddl_assign_personnel_ammunition;
+                    ((EditText) v.findViewById(R.id.et_assign_personnel_ammunition_qty)).setText("1234");
 
-                    //((EditText) v.findViewById(R.id.et_assign_personnel_ammunition_qty)).setText("1234");
-
-                    /*ddl_assign_personnel_ammunition = (Spinner) v.findViewById(R.id.ddl_assign_personnel_ammunition);
+                    ddl_assign_personnel_ammunition = (Spinner) v.findViewById(R.id.ddl_assign_personnel_ammunition);
 
                     ddl_assign_personnel_ammunition.setAdapter(ddl_adapter);
-                    */
+
                     //set value based on existing data
 
-                    /*if(!((TextView) v.findViewById(R.id.tv_selected_ammo_id)).getText().toString().isEmpty())
+                    if(!((TextView) v.findViewById(R.id.tv_selected_ammo_id)).getText().toString().isEmpty())
                     {
                         for(int j = 0; j < ammo_list.size(); j++)
                         {
@@ -675,7 +677,7 @@ public class ViewOperationActivity extends AppCompatActivity {
                             }
 
                         }
-                    }*/
+                    }
 
                     //declare onclick listener update id of operation personnel
                     /*ddl_assign_personnel_ammunition.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
