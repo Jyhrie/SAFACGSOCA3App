@@ -7,7 +7,25 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/tv_Ammunition_Id"
+        android:id="@+id/tv_PAID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_OPID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_AID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
@@ -39,7 +57,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_Issued_Qty"
+                    android:id="@+id/tv_ToIssueOrIssued_Qty"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="0"
@@ -50,7 +68,7 @@
                     android:id="@+id/tv_Issued"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/Issued"
+                    android:text="To Issue Or Issued"
                     android:textAlignment="center"
                     android:textSize="20sp" />
             </LinearLayout>

@@ -1,7 +1,6 @@
 package com.example.safacgsoca3app;
 
 import android.app.Dialog;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -18,17 +17,19 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DeclareIssueInfoActivity extends AppCompatActivity {
 
-    private static final String TAG_ID = "a_id";
-    private static final String TAG_NAME = "a_name";
-    private static final String TAG_DESC = "a_description";
-    private static final String TAG_QTY = "a_qty";
+    private static final String TAG_PAID = "pa_id";
+    private static final String TAG_OPID = "op_id";
+    private static final String TAG_AID = "a_id";
+    private static final String TAG_TOISSUE = "pa_issue_qty";
+    private static final String TAG_ISSUED = "pa_issued";
+    private static final String TAG_RETURNED = "pa_returned";
+    private static final String TAG_EXPENDED = "pa_expended";
+    private static final String TAG_SPOILED = "pa_spoiled";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +38,13 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String Function4 = intent.getStringExtra("Function3");
+        String ToIssueOrIssuedText;
+        String ToIssueOrIssuedQty;
 
         TextView tv_Issue_Return_Receive;
         TextView tv_Detail_Name;
         TextView tv_Personnel_Name;
+        TextView tv_Issued;
         Button btn_ClearPad;
         Button btn_Validate;
 
@@ -49,6 +53,7 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
         tv_Personnel_Name = (TextView) findViewById(R.id.tv_Personnel_Name);
         btn_ClearPad = (Button) findViewById(R.id.btn_ClearPad);
         btn_Validate = (Button) findViewById(R.id.btn_Validate);
+        tv_Issued = (TextView) findViewById(R.id.tv_Issued);
 
         tv_Issue_Return_Receive.setText(Function4);
         tv_Detail_Name.setText("Detail Name");
@@ -56,46 +61,62 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
 
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS ammunition (a_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_id integer NOT NULL, a_name varchar(255) NOT NULL, a_qty number NOT NULL)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS personnel_ammunition (pa_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, op_id integer NOT NULL, a_id integer NOT NULL, pa_issue_qty number NOT NULL, pa_issued number, pa_returned number, pa_expended number, pa_spoiled number)");
 
-        //use this to insert values
-        ContentValues content = new ContentValues();
-        content.put("a_id", "0");
-        content.put("a_name", "5.56 BALL");
-        content.put("a_description", "NIL");
-        content.put("a_qty", "30");
-
-        db.insert("Ammunition", null, content);
-        //end
-
-        Cursor c1 = db.rawQuery("select * from Ammunition", null);
+        Cursor c1 = db.rawQuery("select * from Personnel_Ammunition where op_id = 1", null);
 
         ArrayList<HashMap<String, String>> IssueAmmoList = new ArrayList<HashMap<String, String>>();
         while (c1.moveToNext()) {
             HashMap<String, String> map = new HashMap<String, String>();
-            String line_id = c1.getString(0);
-            String line_name = c1.getString(1);
-            String line_desc = c1.getString(2);
-            String line_qty = c1.getString(3);
+            String line_paid = c1.getString(0);
+            String line_opid = c1.getString(1);
+            String line_aid = c1.getString(2);
+            String line_toissue = c1.getString(3);
+            String line_issued = c1.getString(4);
+            String line_returned = c1.getString(5);
+            String line_expended = c1.getString(6);
+            String line_spoiled = c1.getString(7);
 
-            map.put(TAG_ID, line_id);
-            map.put(TAG_NAME, line_name);
-            map.put(TAG_DESC, line_desc);
-            map.put(TAG_QTY, line_qty);
+            map.put(TAG_PAID, line_paid);
+            map.put(TAG_OPID, line_opid);
+            map.put(TAG_AID, line_aid);
+            map.put(TAG_TOISSUE, line_toissue);
+            map.put(TAG_ISSUED, line_issued);
+            map.put(TAG_RETURNED, line_returned);
+            map.put(TAG_EXPENDED, line_expended);
+            map.put(TAG_SPOILED, line_spoiled);
 
             IssueAmmoList.add(map);
         }
         db.close();
+
+        if (Function4.equals(Function4))
+        {
+            ToIssueOrIssuedText = "To Issue";
+            ToIssueOrIssuedQty = TAG_TOISSUE;
+        }
+        else
+        {
+            ToIssueOrIssuedText = "Issued";
+            ToIssueOrIssuedQty = TAG_ISSUED;
+        }
 
         ListView lv = findViewById(R.id.lv_Issue_Ammunition);
         ListAdapter adapter = new SimpleAdapter(
                 DeclareIssueInfoActivity.this, //context
                 IssueAmmoList, //hashmapdata
                 R.layout.list_issue_return_receive_ammunition, //layout of list
-                new String[]{TAG_ID,TAG_NAME,TAG_QTY}, //from array
-                new int[]{R.id.tv_Ammunition_Id,
-                        R.id.tv_Ammunition_Name,
-                        R.id.tv_Issued_Qty}); //toarray
+                new String[]{TAG_PAID, TAG_OPID, TAG_AID, ToIssueOrIssuedText, ToIssueOrIssuedQty, TAG_RETURNED, TAG_EXPENDED, TAG_SPOILED}, //from array
+                new int[]{//R.id.tv_Ammunition_Name,
+                        R.id.tv_PAID,
+                        R.id.tv_OPID,
+                        R.id.tv_AID,
+                        R.id.tv_Issued,
+                        R.id.tv_ToIssueOrIssued_Qty,
+                        R.id.tv_Returned_Qty,
+                        R.id.tv_Expended_Qty,
+                        R.id.tv_Spoilt_Qty
+                }); //toarray
         // updating listview
         lv.setAdapter(adapter);
 

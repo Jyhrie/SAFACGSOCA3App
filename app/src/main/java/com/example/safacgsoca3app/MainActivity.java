@@ -442,7 +442,7 @@ public class MainActivity extends AppCompatActivity {
         content.put("pa_returned", "0");
         content.put("pa_expended", "0");
         content.put("pa_spoiled", "0");
-        db.insert("ammunition", null, content);
+        db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "1");
         content.put("a_id", "3");
@@ -451,7 +451,7 @@ public class MainActivity extends AppCompatActivity {
         content.put("pa_returned", "0");
         content.put("pa_expended", "0");
         content.put("pa_spoiled", "0");
-        db.insert("ammunition", null, content);
+        db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "2");
         content.put("a_id", "1");
@@ -460,7 +460,7 @@ public class MainActivity extends AppCompatActivity {
         content.put("pa_returned", "0");
         content.put("pa_expended", "0");
         content.put("pa_spoiled", "0");
-        db.insert("ammunition", null, content);
+        db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "2");
         content.put("a_id", "3");
@@ -469,7 +469,7 @@ public class MainActivity extends AppCompatActivity {
         content.put("pa_returned", "0");
         content.put("pa_expended", "0");
         content.put("pa_spoiled", "0");
-        db.insert("ammunition", null, content);
+        db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "3");
         content.put("a_id", "1");
@@ -478,7 +478,7 @@ public class MainActivity extends AppCompatActivity {
         content.put("pa_returned", "0");
         content.put("pa_expended", "0");
         content.put("pa_spoiled", "0");
-        db.insert("ammunition", null, content);
+        db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "3");
         content.put("a_id", "3");
@@ -487,7 +487,7 @@ public class MainActivity extends AppCompatActivity {
         content.put("pa_returned", "0");
         content.put("pa_expended", "0");
         content.put("pa_spoiled", "0");
-        db.insert("ammunition", null, content);
+        db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "4");
         content.put("a_id", "1");
@@ -496,7 +496,7 @@ public class MainActivity extends AppCompatActivity {
         content.put("pa_returned", "0");
         content.put("pa_expended", "0");
         content.put("pa_spoiled", "0");
-        db.insert("ammunition", null, content);
+        db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "4");
         content.put("a_id", "3");
@@ -505,7 +505,7 @@ public class MainActivity extends AppCompatActivity {
         content.put("pa_returned", "0");
         content.put("pa_expended", "0");
         content.put("pa_spoiled", "0");
-        db.insert("ammunition", null, content);
+        db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "5");
         content.put("a_id", "2");
@@ -514,7 +514,7 @@ public class MainActivity extends AppCompatActivity {
         content.put("pa_returned", "0");
         content.put("pa_expended", "0");
         content.put("pa_spoiled", "0");
-        db.insert("ammunition", null, content);
+        db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "5");
         content.put("a_id", "3");
@@ -523,7 +523,7 @@ public class MainActivity extends AppCompatActivity {
         content.put("pa_returned", "0");
         content.put("pa_expended", "0");
         content.put("pa_spoiled", "0");
-        db.insert("ammunition", null, content);
+        db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "6");
         content.put("a_id", "2");
@@ -532,7 +532,7 @@ public class MainActivity extends AppCompatActivity {
         content.put("pa_returned", "0");
         content.put("pa_expended", "0");
         content.put("pa_spoiled", "0");
-        db.insert("ammunition", null, content);
+        db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "6");
         content.put("a_id", "3");
@@ -541,7 +541,7 @@ public class MainActivity extends AppCompatActivity {
         content.put("pa_returned", "0");
         content.put("pa_expended", "0");
         content.put("pa_spoiled", "0");
-        db.insert("ammunition", null, content);
+        db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "7");
         content.put("a_id", "2");
@@ -550,7 +550,7 @@ public class MainActivity extends AppCompatActivity {
         content.put("pa_returned", "0");
         content.put("pa_expended", "0");
         content.put("pa_spoiled", "0");
-        db.insert("ammunition", null, content);
+        db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "7");
         content.put("a_id", "3");
@@ -559,7 +559,7 @@ public class MainActivity extends AppCompatActivity {
         content.put("pa_returned", "0");
         content.put("pa_expended", "0");
         content.put("pa_spoiled", "0");
-        db.insert("ammunition", null, content);
+        db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "8");
         content.put("a_id", "2");
@@ -568,7 +568,7 @@ public class MainActivity extends AppCompatActivity {
         content.put("pa_returned", "0");
         content.put("pa_expended", "0");
         content.put("pa_spoiled", "0");
-        db.insert("ammunition", null, content);
+        db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "8");
         content.put("a_id", "3");
@@ -577,7 +577,7 @@ public class MainActivity extends AppCompatActivity {
         content.put("pa_returned", "0");
         content.put("pa_expended", "0");
         content.put("pa_spoiled", "0");
-        db.insert("ammunition", null, content);
+        db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "9");
         content.put("a_id", "1");
@@ -586,7 +586,7 @@ public class MainActivity extends AppCompatActivity {
         content.put("pa_returned", "0");
         content.put("pa_expended", "0");
         content.put("pa_spoiled", "0");
-        db.insert("ammunition", null, content);
+        db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "9");
         content.put("a_id", "3");
@@ -595,7 +595,7 @@ public class MainActivity extends AppCompatActivity {
         content.put("pa_returned", "0");
         content.put("pa_expended", "0");
         content.put("pa_spoiled", "0");
-        db.insert("ammunition", null, content);
+        db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "10");
         content.put("a_id", "1");
@@ -604,7 +604,7 @@ public class MainActivity extends AppCompatActivity {
         content.put("pa_returned", "0");
         content.put("pa_expended", "0");
         content.put("pa_spoiled", "0");
-        db.insert("ammunition", null, content);
+        db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "10");
         content.put("a_id", "3");
@@ -613,7 +613,7 @@ public class MainActivity extends AppCompatActivity {
         content.put("pa_returned", "0");
         content.put("pa_expended", "0");
         content.put("pa_spoiled", "0");
-        db.insert("ammunition", null, content);
+        db.insert("personnel_ammunition", null, content);
 
         db.close();
     }
