@@ -332,7 +332,7 @@ public class MainActivity extends AppCompatActivity {
 
         content.put("p_id", "1");
         content.put("o_id", "2");
-        content.put("d_id", "1");
+        content.put("d_id", "3");
         db.insert("operation_personnel", null, content);
 
         content.put("p_id", "2");
@@ -342,7 +342,7 @@ public class MainActivity extends AppCompatActivity {
 
         content.put("p_id", "2");
         content.put("o_id", "2");
-        content.put("d_id", "1");
+        content.put("d_id", "3");
         db.insert("operation_personnel", null, content);
 
         content.put("p_id", "3");
@@ -352,7 +352,7 @@ public class MainActivity extends AppCompatActivity {
 
         content.put("p_id", "3");
         content.put("o_id", "2");
-        content.put("d_id", "1");
+        content.put("d_id", "3");
         db.insert("operation_personnel", null, content);
 
         content.put("p_id", "4");
@@ -362,7 +362,7 @@ public class MainActivity extends AppCompatActivity {
 
         content.put("p_id", "4");
         content.put("o_id", "3");
-        content.put("d_id", "1");
+        content.put("d_id", "4");
         db.insert("operation_personnel", null, content);
 
         content.put("p_id", "5");
@@ -372,7 +372,7 @@ public class MainActivity extends AppCompatActivity {
 
         content.put("p_id", "5");
         content.put("o_id", "3");
-        content.put("d_id", "1");
+        content.put("d_id", "4");
         db.insert("operation_personnel", null, content);
 
         db.close();

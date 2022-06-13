@@ -53,7 +53,7 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
         tv_Personnel_Name = (TextView) findViewById(R.id.tv_Personnel_Name);
         btn_ClearPad = (Button) findViewById(R.id.btn_ClearPad);
         btn_Validate = (Button) findViewById(R.id.btn_Validate);
-        tv_Issued = (TextView) findViewById(R.id.tv_Issued);
+        tv_Issued = (TextView) findViewById(R.id.tv_ToIssueOrIssued_Text);
 
         tv_Issue_Return_Receive.setText(Function4);
         tv_Detail_Name.setText("Detail Name");
@@ -63,7 +63,7 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
         db.execSQL("CREATE TABLE IF NOT EXISTS personnel_ammunition (pa_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, op_id integer NOT NULL, a_id integer NOT NULL, pa_issue_qty number NOT NULL, pa_issued number, pa_returned number, pa_expended number, pa_spoiled number)");
 
-        Cursor c1 = db.rawQuery("select * from Personnel_Ammunition where op_id = 1", null);
+        Cursor c1 = db.rawQuery("select * from personnel_ammunition where op_id = 1", null);
 
         ArrayList<HashMap<String, String>> IssueAmmoList = new ArrayList<HashMap<String, String>>();
         while (c1.moveToNext()) {
@@ -90,7 +90,7 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
         }
         db.close();
 
-        if (Function4.equals(Function4))
+        if (Function4.equals("Issuing: "))
         {
             ToIssueOrIssuedText = "To Issue";
             ToIssueOrIssuedQty = TAG_TOISSUE;
@@ -111,7 +111,7 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
                         R.id.tv_PAID,
                         R.id.tv_OPID,
                         R.id.tv_AID,
-                        R.id.tv_Issued,
+                        R.id.tv_ToIssueOrIssued_Text,
                         R.id.tv_ToIssueOrIssued_Qty,
                         R.id.tv_Returned_Qty,
                         R.id.tv_Expended_Qty,

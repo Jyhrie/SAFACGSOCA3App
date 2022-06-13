@@ -65,7 +65,7 @@
                     android:textSize="20sp" />
 
                 <TextView
-                    android:id="@+id/tv_Issued"
+                    android:id="@+id/tv_ToIssueOrIssued_Text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="To Issue Or Issued"
