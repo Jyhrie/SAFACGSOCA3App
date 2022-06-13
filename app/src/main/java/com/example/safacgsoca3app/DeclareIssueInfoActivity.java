@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -31,6 +32,9 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
     private static final String TAG_EXPENDED = "pa_expended";
     private static final String TAG_SPOILED = "pa_spoiled";
 
+    private static final String TAG_DNAME = "d_name";
+    private static final String TAG_ANAME = "a_name";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,26 +42,22 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String Function4 = intent.getStringExtra("Function3");
-        String ToIssueOrIssuedText;
-        String ToIssueOrIssuedQty;
 
         TextView tv_Issue_Return_Receive;
         TextView tv_Detail_Name;
         TextView tv_Personnel_Name;
-        TextView tv_Issued;
+        TextView tv_Ammunition_Name;
         Button btn_ClearPad;
         Button btn_Validate;
 
         tv_Issue_Return_Receive = (TextView) findViewById(R.id.tv_Issue_Return_Receive);
         tv_Detail_Name = (TextView) findViewById(R.id.tv_Detail_Name);
         tv_Personnel_Name = (TextView) findViewById(R.id.tv_Personnel_Name);
+        tv_Ammunition_Name = (TextView) findViewById(R.id.tv_Ammunition_Name);
         btn_ClearPad = (Button) findViewById(R.id.btn_ClearPad);
         btn_Validate = (Button) findViewById(R.id.btn_Validate);
-        tv_Issued = (TextView) findViewById(R.id.tv_ToIssueOrIssued_Text);
 
         tv_Issue_Return_Receive.setText(Function4);
-        tv_Detail_Name.setText("Detail Name");
-        tv_Personnel_Name.setText("Personnel Name");
 
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
@@ -74,13 +74,10 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
 
             String line_issue_issued = null;
             String line_toissue_issued_desc = null;
-            if (Function4.equals("Issuing: "))
-            {
+            if (Function4.equals("Issuing: ")) {
                 line_issue_issued = c1.getString(3);
                 line_toissue_issued_desc = "To Issue";
-            }
-            else
-            {
+            } else {
                 line_issue_issued = c1.getString(4);
                 line_toissue_issued_desc = "Issued";
             }
@@ -102,23 +99,20 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
         }
         db.close();
 
-
-
         ListView lv = findViewById(R.id.lv_Issue_Ammunition);
         ListAdapter adapter = new SimpleAdapter(
                 DeclareIssueInfoActivity.this, //context
                 IssueAmmoList, //hashmapdata
                 R.layout.list_issue_return_receive_ammunition, //layout of list
-                new String[]{TAG_PAID, TAG_OPID, TAG_AID, TAG_TOISSUE_ISSUED_DESC,TAG_TOISSUE_ISSUED , TAG_RETURNED, TAG_EXPENDED, TAG_SPOILED}, //from array
-                new int[]{//R.id.tv_Ammunition_Name,
-                        R.id.tv_PAID,
+                new String[]{TAG_PAID, TAG_OPID, TAG_AID, TAG_TOISSUE_ISSUED_DESC, TAG_TOISSUE_ISSUED, TAG_RETURNED, TAG_EXPENDED, TAG_SPOILED}, //from array
+                new int[]{R.id.tv_PAID,
                         R.id.tv_OPID,
                         R.id.tv_AID,
                         R.id.tv_ToIssueOrIssued_Text,
                         R.id.tv_ToIssueOrIssued_Qty,
                         R.id.tv_Returned_Qty,
                         R.id.tv_Expended_Qty,
-                        R.id.tv_Spoilt_Qty
+                        R.id.tv_Spoilt_Qty,
                 }); //toarray
         // updating listview
         lv.setAdapter(adapter);
@@ -129,7 +123,27 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
                 showEditIssueDialog();
             }
         });
+
+        SQLiteDatabase db2;
+        db2 = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+        db2.execSQL("CREATE TABLE IF NOT EXISTS detail (d_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, d_name text NOT NULL, o_id integer NOT NULL)");
+
+        Cursor c2 = db2.rawQuery("select * from Detail where d_id = 1", null);
+        while (c2.moveToNext()) {
+            tv_Detail_Name.setText(c2.getString(1));
         }
+        db2.close();
+
+        SQLiteDatabase db3;
+        db3 = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+        db3.execSQL("CREATE TABLE IF NOT EXISTS personnel (p_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, p_rank varchar(255) NOT NULL, p_name varchar(255) NOT NULL, p_nric text)");
+
+        Cursor c3 = db3.rawQuery("select * from Personnel where p_id = 1", null);
+        while (c3.moveToNext()) {
+            tv_Personnel_Name.setText(c3.getString(2));
+        }
+        db3.close();
+    }
 
     private void showEditIssueDialog()
     {
@@ -147,5 +161,4 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
         });
 
     }
-
 }
