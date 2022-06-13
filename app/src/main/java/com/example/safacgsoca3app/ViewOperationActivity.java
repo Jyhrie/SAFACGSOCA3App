@@ -53,6 +53,7 @@ public class ViewOperationActivity extends AppCompatActivity {
 
     private static final String TAG_A_ID = "a_id";
     private static final String TAG_A_NAME = "a_name";
+    private static final String TAG_A_QTY = "a_qty";
 
     private static final String TAG_ID = "o_id";
     private static final String TAG_PID ="p_id";
@@ -87,7 +88,7 @@ public class ViewOperationActivity extends AppCompatActivity {
         btnViewAmmunition = (Button) findViewById(R.id.btn_view_ammunition);
         btnAddIssueDetail = (Button) findViewById(R.id.btn_add_issue_detail);
 
-        showlvIssueDetail();
+        showlvIssueDetail(o_id);
 
         //pull data from db
         SQLiteDatabase db;
@@ -202,7 +203,7 @@ public class ViewOperationActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 ((TextView) findViewById(R.id.tv_selected_detail_id)).setText(detail_list.get(i).get(TAG_D_ID));
-                showlvIssueDetail();
+                showlvIssueDetail(o_id);
             }
 
             @Override
@@ -451,14 +452,13 @@ public class ViewOperationActivity extends AppCompatActivity {
 
     }
 
-    private void showlvIssueDetail()
+    private void showlvIssueDetail(String o_id)
     {
         String search_for_detail_id = ((TextView) findViewById(R.id.tv_selected_detail_id)).getText().toString();
         if(!search_for_detail_id.isEmpty()) {
             SQLiteDatabase db;
             db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-            Log.i("select p.p_id, p.p_rank, p.p_name, p.p_nric from personnel p, operation_personnel op where op.p_id = p.p_id and op.d_id = " + search_for_detail_id, "test");
-            Cursor c1 = db.rawQuery("select p.p_id, p.p_rank, p.p_name, p.p_nric from personnel p, operation_personnel op where op.p_id = p.p_id and op.d_id = " + search_for_detail_id, null);
+            Cursor c1 = db.rawQuery("select p.p_id, p.p_rank, p.p_name, p.p_nric from personnel p, operation_personnel op where op.p_id = p.p_id and op.o_id = " + o_id + " and op.d_id = " + search_for_detail_id, null);
 
             ArrayList<HashMap<String, String>> PersonnelList = new ArrayList<HashMap<String, String>>();
             while (c1.moveToNext()) {
@@ -516,41 +516,20 @@ public class ViewOperationActivity extends AppCompatActivity {
         ListView lv_assign_personnel_ammunition;
         lv_assign_personnel_ammunition = (ListView) DialogFragment.findViewById(R.id.lv_assign_personnel_ammunition);
 
-        //get all operation ammunition data
         SQLiteDatabase db;
-        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-        Cursor c1 = db.rawQuery("select a_id, a_name, a_qty from ammunition where o_id = " + o_id, null);
-        ArrayList<HashMap<String, String>> ammo_list = new ArrayList<HashMap<String, String>>();
-        while (c1.moveToNext()) {
-            HashMap<String, String> map = new HashMap<String, String>();
-            String line_id = c1.getString(0);
-            String line_name = c1.getString(1);
-
-            map.put(TAG_OPID, line_id);
-            map.put(TAG_PNAME, line_name);
-
-            ammo_list.add(map);
-        }
-        db.close();
-
-        //ammo dropdownlist adapter
-        SimpleAdapter ddlAdapter = new SimpleAdapter(ViewOperationActivity.this,
-                ammo_list,
-                android.R.layout.simple_spinner_dropdown_item,
-                new String[]{TAG_PNAME},
-                new int[]{android.R.id.text1});
 
         ArrayList<HashMap<String, String>> personnel_ammo_list = new ArrayList<HashMap<String, String>>();
-
         //do query to get hashmap of all ammo from personnel
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-        Cursor c2 = db.rawQuery("select a_id, pa_issue_qty from personnel_ammunition where op_id = " +op_id, null);
+        Cursor c2 = db.rawQuery("select pa_id a_id, pa_issue_qty from personnel_ammunition where op_id = " +op_id, null);
         while(c2.moveToNext())
         {
             HashMap<String, String> map = new HashMap<String, String>();
-            String line_a_id = c2.getString(0);
-            String line_pa_issue_qty = c2.getString(1);
+            String line_pa_id = c2.getString(0);
+            String line_a_id = c2.getString(1);
+            String line_pa_issue_qty = c2.getString(2);
 
+            map.put(TAG_PA_ID, line_pa_id);
             map.put(TAG_A_ID, line_a_id);
             map.put(TAG_PA_ISSUE_QTY, line_pa_issue_qty);
 
@@ -560,11 +539,78 @@ public class ViewOperationActivity extends AppCompatActivity {
         SimpleAdapter adapter = new SimpleAdapter(ViewOperationActivity.this,
                 personnel_ammo_list,
                 R.layout.list_assign_personnel_ammunition,
-                new String[]{},
-                new int[]{}
+                new String[]{TAG_PA_ID, TAG_A_ID,TAG_PA_ISSUE_QTY},
+                new int[]{R.id.tv_existing_pa_id, R.id.tv_selected_ammo_id, R.id.et_assign_personnel_ammunition_qty}
                 );
 
         lv_assign_personnel_ammunition.setAdapter(adapter);
+
+        //query for ammo
+        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+        Cursor c1 = db.rawQuery("select a_id, a_name, a_qty from ammunition where o_id = " + o_id, null);
+        ArrayList<HashMap<String, String>> ammo_list = new ArrayList<HashMap<String, String>>();
+        while (c1.moveToNext()) {
+
+            HashMap<String, String> map = new HashMap<String, String>();
+            String line_id = c1.getString(0);
+            String line_name = c1.getString(1);
+            String line_qty = c1.getString(1);
+
+            map.put(TAG_A_ID, line_id);
+            map.put(TAG_A_NAME, line_name);
+            map.put(TAG_A_QTY, line_qty);
+
+            ammo_list.add(map);
+        }
+        db.close();
+
+        SimpleAdapter ddl_adapter =  new SimpleAdapter(ViewOperationActivity.this,
+                ammo_list,
+                android.R.layout.simple_spinner_dropdown_item,
+                new String[]{TAG_A_NAME},
+                new int[]{android.R.id.text1}
+                );
+
+        for (int i = 0; i < lv_assign_personnel_ammunition.getCount(); i++) {
+            View v = lv_assign_personnel_ammunition.getChildAt(i);
+
+                //get & assign spinner data
+                Spinner ddl_assign_personnel_ammunition;
+                ddl_assign_personnel_ammunition = (Spinner) v.findViewById(R.id.ddl_assign_personnel_ammunition);
+
+                ddl_assign_personnel_ammunition.setAdapter(ddl_adapter);
+
+                //set value based on existing data
+                if(!((TextView) v.findViewById(R.id.tv_selected_ammo_id)).getText().toString().isEmpty())
+                {
+                    for(int j = 0; j < ammo_list.size(); j++)
+                    {
+                        HashMap<String,String> hash = new HashMap<String,String>();
+                        if (hash.get(TAG_A_ID).equals(((TextView) v.findViewById(R.id.tv_selected_ammo_id)).getText().toString()))
+                        {
+
+                            break;
+                        }
+
+                    }
+                }
+
+                //declare onclick listener update id of operation personnel
+                ddl_assign_personnel_ammunition.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+                        //ignore
+                    }
+                });
+            }
+
+
 
         Button btn_assign_personnel_ammunition_add_entry;
         btn_assign_personnel_ammunition_add_entry = (Button) DialogFragment.findViewById(R.id.btn_assign_personnel_ammunition_add_entry);
@@ -572,6 +618,7 @@ public class ViewOperationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                Log.i("adding entry", "test");
                 //add all existing into new hashmap array
                 ArrayList<HashMap<String,String>> existing_entries = new ArrayList<HashMap<String,String>>();
                 for(int i =0; i < lv_assign_personnel_ammunition.getCount(); i++)
@@ -579,43 +626,79 @@ public class ViewOperationActivity extends AppCompatActivity {
 
                     HashMap<String,String> map = new HashMap<String,String>();
                     View v = lv_assign_personnel_ammunition.getChildAt(i);
+                    String entry_pa_id = ((TextView) v.findViewById(R.id.tv_existing_pa_id)).getText().toString();
                     String entry_a_id = ((TextView) v.findViewById(R.id.tv_selected_ammo_id)).getText().toString();
                     String entry_pa_issue_qty = ((TextView) v.findViewById(R.id.et_assign_personnel_ammunition_qty)).getText().toString();
+
+                    map.put(TAG_PA_ID, entry_pa_id);
+                    map.put(TAG_A_ID, entry_a_id);
+                    map.put(TAG_PA_ISSUE_QTY, entry_pa_issue_qty);
 
                     existing_entries.add(map);
                 }
 
+                existing_entries.add(new HashMap<String,String>());
+
+                SimpleAdapter adapter = new SimpleAdapter(ViewOperationActivity.this,
+                        existing_entries,
+                        R.layout.list_assign_personnel_ammunition,
+                        new String[]{TAG_PA_ID, TAG_A_ID,TAG_PA_ISSUE_QTY},
+                        new int[]{R.id.tv_existing_pa_id, R.id.tv_selected_ammo_id, R.id.et_assign_personnel_ammunition_qty}
+                );
+
+                lv_assign_personnel_ammunition.setAdapter(adapter);
+
+                for (int i = 0; i < lv_assign_personnel_ammunition.getCount(); i++) {
+                    Log.i(Integer.toString(lv_assign_personnel_ammunition.getCount()), "count");
+                    View v = lv_assign_personnel_ammunition.getChildAt(i);
+
+                    //get & assign spinner data
+                    Spinner ddl_assign_personnel_ammunition;
+
+                    //((EditText) v.findViewById(R.id.et_assign_personnel_ammunition_qty)).setText("1234");
+
+                    /*ddl_assign_personnel_ammunition = (Spinner) v.findViewById(R.id.ddl_assign_personnel_ammunition);
+
+                    ddl_assign_personnel_ammunition.setAdapter(ddl_adapter);
+                    */
+                    //set value based on existing data
+
+                    /*if(!((TextView) v.findViewById(R.id.tv_selected_ammo_id)).getText().toString().isEmpty())
+                    {
+                        for(int j = 0; j < ammo_list.size(); j++)
+                        {
+                            HashMap<String,String> hash = new HashMap<String,String>();
+                            if (hash.get(TAG_A_ID).equals(((TextView) v.findViewById(R.id.tv_selected_ammo_id)).getText().toString()))
+                            {
+
+                                break;
+                            }
+
+                        }
+                    }*/
+
+                    //declare onclick listener update id of operation personnel
+                    /*ddl_assign_personnel_ammunition.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> adapterView) {
+                            //ignore
+                        }
+                    });*/
+                }
+
+
             }
+
+
         });
 
         //foreach item in list
-
-        /*for (int i = 0; i < lv_assign_personnel_ammunition.getCount(); i++) {
-            View v = lv_assign_personnel_ammunition.getChildAt(i);
-            if (((TextView) v.findViewById(R.id.tv_issuing_detail_ammo_id)).getText().toString().isEmpty());
-            {
-                //get & assign spinner data
-                Spinner ddl_assign_personnel_ammunition;
-                ddl_assign_personnel_ammunition = (Spinner) v.findViewById(R.id.ddl_assign_personnel_ammunition);
-
-                //active update id of operation personnel
-                ddl_assign_personnel_ammunition.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        ((TextView) v.findViewById(R.id.tv_selected_ammo_id)).setText(ammo_list.get(i).get(TAG_AID));
-
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
-                        //ignore
-
-                    }
-                });
-
-            }
-
-        }*/
 
         Button btn_save_assigned_ammunition;
         btn_save_assigned_ammunition = DialogFragment.findViewById(R.id.btn_save_assigned_ammunition);
@@ -665,8 +748,6 @@ public class ViewOperationActivity extends AppCompatActivity {
             }
         });
     }
-
-
 }
 
 

@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        initialize_database(false);
+        initialize_database(true);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -218,6 +218,7 @@ public class MainActivity extends AppCompatActivity {
         db.execSQL("CREATE TABLE IF NOT EXISTS detail (d_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, d_name text NOT NULL, o_id integer NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS personnel_ammunition (pa_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, op_id integer NOT NULL, a_id integer NOT NULL, pa_issue_qty number NOT NULL, pa_issued number, pa_returned number, pa_expended number, pa_spoiled number)");
 
+
         if(reset == true) {
             addexampleOperation();
             addexamplePersonnel();
@@ -226,7 +227,6 @@ public class MainActivity extends AppCompatActivity {
             addexamplePersonnelAmmunition();
             addexampleDetail();
         }
-
 
         db.close();
     }
