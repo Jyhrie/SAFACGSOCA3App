@@ -208,7 +208,6 @@ public class ViewOperationActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
                 //ignore
-
             }
         });
 
@@ -276,7 +275,7 @@ public class ViewOperationActivity extends AppCompatActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                showAssignPersonnelAmmo(parseInt(((TextView) view.findViewById(R.id.tv_edit_detail_personnel_id)).getText().toString()));
+                showAssignPersonnelAmmo(parseInt(((TextView) view.findViewById(R.id.tv_edit_detail_personnel_id)).getText().toString()), parseInt(o_id));
             }
         });
 
@@ -478,6 +477,7 @@ public class ViewOperationActivity extends AppCompatActivity {
             }
             db.close();
 
+
             ListView lv = findViewById(R.id.lv_Issue_Detail_Info);
             ListAdapter adapter = new SimpleAdapter(
                     ViewOperationActivity.this, //context
@@ -491,6 +491,8 @@ public class ViewOperationActivity extends AppCompatActivity {
             // updating listview
             lv.setAdapter(adapter);
 
+
+
             lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -503,7 +505,7 @@ public class ViewOperationActivity extends AppCompatActivity {
         }
     }
 
-    private void showAssignPersonnelAmmo(int op_id)
+    private void showAssignPersonnelAmmo(int op_id, int o_id)
     {
         Dialog DialogFragment = new Dialog(ViewOperationActivity.this, android.R.style.Theme_Black_NoTitleBar);
         DialogFragment.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
@@ -517,7 +519,7 @@ public class ViewOperationActivity extends AppCompatActivity {
         //get all operation ammunition data
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-        Cursor c1 = db.rawQuery("select * from ammunition", null);
+        Cursor c1 = db.rawQuery("select a_id, a_name, a_qty from ammunition where o_id = " + o_id, null);
         ArrayList<HashMap<String, String>> ammo_list = new ArrayList<HashMap<String, String>>();
         while (c1.moveToNext()) {
             HashMap<String, String> map = new HashMap<String, String>();
@@ -538,12 +540,31 @@ public class ViewOperationActivity extends AppCompatActivity {
                 new String[]{TAG_PNAME},
                 new int[]{android.R.id.text1});
 
-        //get all op_id currently
+        ArrayList<HashMap<String, String>> personnel_ammo_list = new ArrayList<HashMap<String, String>>();
 
-        //HELP
+        //do query to get hashmap of all ammo from personnel
+        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+        Cursor c2 = db.rawQuery("select a_id, pa_issue_qty from personnel_ammunition where op_id = " +op_id, null);
+        while(c2.moveToNext())
+        {
+            HashMap<String, String> map = new HashMap<String, String>();
+            String line_a_id = c2.getString(0);
+            String line_pa_issue_qty = c2.getString(1);
 
-        //
-        
+            map.put(TAG_A_ID, line_a_id);
+            map.put(TAG_PA_ISSUE_QTY, line_pa_issue_qty);
+
+            personnel_ammo_list.add(map);
+        }
+
+        SimpleAdapter adapter = new SimpleAdapter(ViewOperationActivity.this,
+                personnel_ammo_list,
+                R.layout.list_assign_personnel_ammunition,
+                new String[]{},
+                new int[]{}
+                );
+
+        lv_assign_personnel_ammunition.setAdapter(adapter);
 
         Button btn_assign_personnel_ammunition_add_entry;
         btn_assign_personnel_ammunition_add_entry = (Button) DialogFragment.findViewById(R.id.btn_assign_personnel_ammunition_add_entry);
@@ -551,12 +572,25 @@ public class ViewOperationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                //add all existing into new hashmap array
+                ArrayList<HashMap<String,String>> existing_entries = new ArrayList<HashMap<String,String>>();
+                for(int i =0; i < lv_assign_personnel_ammunition.getCount(); i++)
+                {
+
+                    HashMap<String,String> map = new HashMap<String,String>();
+                    View v = lv_assign_personnel_ammunition.getChildAt(i);
+                    String entry_a_id = ((TextView) v.findViewById(R.id.tv_selected_ammo_id)).getText().toString();
+                    String entry_pa_issue_qty = ((TextView) v.findViewById(R.id.et_assign_personnel_ammunition_qty)).getText().toString();
+
+                    existing_entries.add(map);
+                }
+
             }
         });
 
         //foreach item in list
 
-        for (int i = 0; i < lv_assign_personnel_ammunition.getCount(); i++) {
+        /*for (int i = 0; i < lv_assign_personnel_ammunition.getCount(); i++) {
             View v = lv_assign_personnel_ammunition.getChildAt(i);
             if (((TextView) v.findViewById(R.id.tv_issuing_detail_ammo_id)).getText().toString().isEmpty());
             {
@@ -581,7 +615,7 @@ public class ViewOperationActivity extends AppCompatActivity {
 
             }
 
-        }
+        }*/
 
         Button btn_save_assigned_ammunition;
         btn_save_assigned_ammunition = DialogFragment.findViewById(R.id.btn_save_assigned_ammunition);

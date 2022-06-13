@@ -5,6 +5,9 @@ import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +19,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     Context context;
     ArrayList<HashMap<String, String>> data;
+    String[] mfrom;
+    int[] mTo;
 
     public RecyclerViewAdapter(Context context, ArrayList<HashMap<String, String>> data)
     {
@@ -27,14 +32,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public RecyclerViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        //View view = inflater.inflate(R.layout, parent, false)
-        //return new RecyclerViewAdapter.MyViewHolder(view);
-        return null;
+        View view = inflater.inflate(R.layout.list_assign_personnel_ammunition, parent, false);
+        return new RecyclerViewAdapter.MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewAdapter.MyViewHolder holder, int position) {
-        //holder.text.setText(data.get(position).get(key))
+        //holder.tv_existing_pa_id.setText(data.get(position).get("key"));
     }
 
     @Override
@@ -45,6 +49,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public static class MyViewHolder extends RecyclerView.ViewHolder{
 
         //declare view object var
+        TextView tv_existing_pa_id;
+        TextView tv_selected_ammo_id;
+        Spinner ddl_assign_personnel_ammunition;
+        EditText et_assign_personnel_ammunition_qty;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -52,4 +60,5 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             //bind view object var
         }
     }
+
 }

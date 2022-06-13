@@ -2,6 +2,8 @@ package com.example.safacgsoca3app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.ListAdapter;
@@ -13,6 +15,40 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DisplayPersonnelInfoActivity extends AppCompatActivity {
+
+
+    private static final String TAG_P_ID = "p_id";
+    private static final String TAG_P_NAME = "p_name";
+    private static final String TAG_P_NRIC = "p_nric";
+
+    private static final String TAG_O_ID = "o_id";
+    private static final String TAG_O_NAME = "o_name";
+    private static final String TAG_O_KAH = "o_kah";
+
+    private static final String TAG_OP_ID = "op_id";
+
+    private static final String TAG_D_ID = "d_id";
+    private static final String TAG_D_NAME = "d_name";
+
+    private static final String TAG_PA_ID = "pa_id";
+    private static final String TAG_PA_ISSUE_QTY = "pa_issue_qty";
+    private static final String TAG_PA_ISSUED = "pa_issued";
+    private static final String TAG_PA_RETURNED = "pa_returned";
+    private static final String TAG_PA_EXPENEDED = "pa_expended";
+    private static final String TAG_PA_SPOILED = "pa_spoiled";
+
+    private static final String TAG_A_ID = "a_id";
+    private static final String TAG_A_NAME = "a_name";
+
+    private static final String TAG_ID = "o_id";
+    private static final String TAG_PID ="p_id";
+    private static final String TAG_NAME = "e_name";
+    private static final String TAG_PNAME = "p_name";
+    private static final String TAG_PRANK = "p_rank";
+    private static final String TAG_KAH = "o_kah";
+    private static final String TAG_ANAME = "a_name";
+    private static final String TAG_OPID = "op_id";
+
 
     public static final String TAG_ID_1 = "a_id";
     public static final String TAG_ID_2 = "b_id";
@@ -28,6 +64,10 @@ public class DisplayPersonnelInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_personnel_info);
+
+
+        Intent intent = getIntent();
+        String o_id = intent.getStringExtra(TAG_ID);
 
         TextView Display_Personnel_Info_Ops_Name;
         TextView Display_Personnel_Info_Detail_Name;
@@ -62,31 +102,34 @@ public class DisplayPersonnelInfoActivity extends AppCompatActivity {
 
 
 
-        //get data from db;
-        SQLiteDatabase db;
-        db = openOrCreateDatabase("A3App", MODE_PRIVATE, null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS Operation(o_id integer PRIMARY KEY NOT NULL, o_kah text NOT NULL)");
+
 
         ArrayList<HashMap<String, String>> Personnel_Ammo_List = new ArrayList<HashMap<String, String>>();
         //Defines an array of hashmaps. Each hashmap contains multiple values associated to one key each
         //Personnel_Ammo_List is the array of hashmaps
 
-        for (int i = 0; i < 2; i++) {
+        //get data from db
+        SQLiteDatabase db;
+        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+        Cursor c1 = db.rawQuery("select pa.pa_id, a.a_name, pa.pa_issued, pa.pa_expended, pa.pa_returned, pa.pa_spoiled from personnel_ammunition pa, ammunition a where a.a_id = pa.a_id", null);
+
+        while(c1.moveToNext()) {
             HashMap<String, String> map = new HashMap<String, String>();
-            String Ammunition_Text = "Ammunition Type";
-            String Issued_Quantity = "0";
-            String Expended_Quantity = "0";
-            String Returned_Quantity = "0";
-            String Spoilt_Quantity = "0";
+            String pa_id = c1.getString(0);
+            String Ammunition_Text = c1.getString(1);
+            String Issued_Quantity = c1.getString(2);
+            String Expended_Quantity = c1.getString(3);
+            String Returned_Quantity = c1.getString(4);
+            String Spoilt_Quantity = c1.getString(5);
 
             //In reality, the number of entries is not defined by the for loop but by database entries
             //For this example, we will manually create 2 entries containing a hardcoded string
 
-            map.put(TAG_ID_1, Ammunition_Text);
-            map.put(TAG_ID_2, Issued_Quantity);
-            map.put(TAG_ID_3, Expended_Quantity);
-            map.put(TAG_ID_4, Returned_Quantity);
-            map.put(TAG_ID_5, Spoilt_Quantity);
+            map.put(TAG_A_NAME, Ammunition_Text);
+            map.put(TAG_PA_ISSUED, Issued_Quantity);
+            map.put(TAG_PA_EXPENEDED, Expended_Quantity);
+            map.put(TAG_PA_RETURNED, Returned_Quantity);
+            map.put(TAG_PA_SPOILED, Spoilt_Quantity);
             //Puts key and data into hashmap
             Personnel_Ammo_List.add(map);
             //Adds a hashmap into the array
@@ -97,7 +140,7 @@ public class DisplayPersonnelInfoActivity extends AppCompatActivity {
                 DisplayPersonnelInfoActivity.this, //context
                 Personnel_Ammo_List, //hashmapdata
                 R.layout.list_display_personnel_ammunition, //layout of list
-                new String[]{TAG_ID_1,TAG_ID_2,TAG_ID_3,TAG_ID_4,TAG_ID_5}, //from array
+                new String[]{TAG_A_NAME,TAG_PA_ISSUED,TAG_PA_EXPENEDED,TAG_PA_RETURNED,TAG_PA_SPOILED}, //from array
                 new int[]{R.id.Personnel_Ammunition,R.id.Issued_Quantity,R.id.Expended_Quantity,R.id.Returned_Quantity,R.id.Spoilt_Quantity}); //toarray
         // updating listview
         lv.setAdapter(adapter);
