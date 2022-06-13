@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        initialize_database(true);
+        initialize_database(false);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -219,9 +219,12 @@ public class MainActivity extends AppCompatActivity {
         db.execSQL("CREATE TABLE IF NOT EXISTS personnel_ammunition (pa_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, op_id integer NOT NULL, a_id integer NOT NULL, pa_issue_qty number NOT NULL, pa_issued number, pa_returned number, pa_expended number, pa_spoiled number)");
 
         if(reset == true) {
-            addexamplepersonnel();
             addexampleOperation();
+            addexamplePersonnel();
+            addexampleOperationPersonnel();
             addexampleAmmunition();
+            addexamplePersonnelAmmunition();
+            addexampleDetail();
         }
 
 
@@ -264,7 +267,27 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void addexamplepersonnel(){
+    private void addexampleOperation(){
+        ContentValues content = new ContentValues();
+        SQLiteDatabase db;
+        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+
+        content.put("o_name", "OPS GLUON");
+        content.put("o_kah", "Conducting: ME4 Yuen Weng Kin\nSupervising: ME3 Teo Kwee Teck\nSafety: ME3 Raymond Tan\nLocation: Changi Naval Base\nDate: 12/09/2022");
+        db.insert("operation", null, content);
+
+        content.put("o_name", "OPS GUARDIAN ANGEL");
+        content.put("o_kah", "Conducting: ME4 Khoo Wei Liang\nSupervising: ME2 Fung Xue Ming\nSafety: ME1 Melvin\nLocation: Nee Soon Camp\nDate: 18/07/2022");
+        db.insert("operation", null, content);
+
+        content.put("o_name", "RANGE: TEKONG");
+        content.put("o_kah", "Conducting: ME2 Fung Xue Ming\nSupervising: ME1 Melvin\nSafety: ME1 Lincoln\nLocation: Pulau Tekong\nDate: 20/04/2023");
+        db.insert("operation", null, content);
+
+        db.close();
+    }
+
+    private void addexamplePersonnel(){
         ContentValues content = new ContentValues();
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
@@ -297,22 +320,84 @@ public class MainActivity extends AppCompatActivity {
         db.close();
     }
 
-    private void addexampleOperation(){
+    private void addexampleOperationPersonnel(){
         ContentValues content = new ContentValues();
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
 
-        content.put("o_name", "OPS GLUON");
-        content.put("o_kah", "Conducting: ME4 Yuen Weng Kin\nSupervising: ME3 Teo Kwee Teck\nSafety: ME3 Raymond Tan\nLocation: Changi Naval Base\nDate: 12/09/2022");
-        db.insert("operation", null, content);
+        content.put("p_id", "1");
+        content.put("o_id", "1");
+        content.put("d_id", "1");
+        db.insert("operation_personnel", null, content);
 
-        content.put("o_name", "OPS GUARDIAN ANGEL");
-        content.put("o_kah", "Conducting: ME4 Khoo Wei Liang\nSupervising: ME2 Fung Xue Ming\nSafety: ME1 Melvin\nLocation: Nee Soon Camp\nDate: 18/07/2022");
-        db.insert("operation", null, content);
+        content.put("p_id", "1");
+        content.put("o_id", "2");
+        content.put("d_id", "1");
+        db.insert("operation_personnel", null, content);
 
-        content.put("o_name", "RANGE: TEKONG");
-        content.put("o_kah", "Conducting: ME2 Fung Xue Ming\nSupervising: ME1 Melvin\nSafety: ME1 Lincoln\nLocation: Pulau Tekong\nDate: 20/04/2023");
-        db.insert("operation", null, content);
+        content.put("p_id", "2");
+        content.put("o_id", "1");
+        content.put("d_id", "1");
+        db.insert("operation_personnel", null, content);
+
+        content.put("p_id", "2");
+        content.put("o_id", "2");
+        content.put("d_id", "1");
+        db.insert("operation_personnel", null, content);
+
+        content.put("p_id", "3");
+        content.put("o_id", "1");
+        content.put("d_id", "1");
+        db.insert("operation_personnel", null, content);
+
+        content.put("p_id", "3");
+        content.put("o_id", "2");
+        content.put("d_id", "1");
+        db.insert("operation_personnel", null, content);
+
+        content.put("p_id", "4");
+        content.put("o_id", "1");
+        content.put("d_id", "2");
+        db.insert("operation_personnel", null, content);
+
+        content.put("p_id", "4");
+        content.put("o_id", "3");
+        content.put("d_id", "1");
+        db.insert("operation_personnel", null, content);
+
+        content.put("p_id", "5");
+        content.put("o_id", "1");
+        content.put("d_id", "2");
+        db.insert("operation_personnel", null, content);
+
+        content.put("p_id", "5");
+        content.put("o_id", "3");
+        content.put("d_id", "1");
+        db.insert("operation_personnel", null, content);
+
+        db.close();
+    }
+
+    private void addexampleDetail(){
+        ContentValues content = new ContentValues();
+        SQLiteDatabase db;
+        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+
+        content.put("o_id", "1");
+        content.put("d_name", "ALPHA");
+        db.insert("Detail", null, content);
+
+        content.put("o_id", "1");
+        content.put("d_name", "BRAVO");
+        db.insert("Detail", null, content);
+
+        content.put("o_id", "2");
+        content.put("d_name", "TRIDENT");
+        db.insert("Detail", null, content);
+
+        content.put("o_id", "3");
+        content.put("d_name", "DETAIL 1");
+        db.insert("Detail", null, content);
 
         db.close();
     }
@@ -332,14 +417,202 @@ public class MainActivity extends AppCompatActivity {
         content.put("a_qty", "1250");
         db.insert("ammunition", null, content);
 
-        content.put("o_id", "2");
+        content.put("o_id", "1");
         content.put("a_name", "SFG 87");
         content.put("a_qty", "48");
         db.insert("ammunition", null, content);
 
-        content.put("o_id", "3");
+        content.put("o_id", "1");
         content.put("a_name", "GREN HAND SMK RED");
         content.put("a_qty", "96");
+        db.insert("ammunition", null, content);
+
+        db.close();
+    }
+
+    private void addexamplePersonnelAmmunition(){
+        ContentValues content = new ContentValues();
+        SQLiteDatabase db;
+        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+
+        content.put("op_id", "1");
+        content.put("a_id", "1");
+        content.put("pa_issue_qty", "120");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
+        db.insert("ammunition", null, content);
+
+        content.put("op_id", "1");
+        content.put("a_id", "3");
+        content.put("pa_issue_qty", "2");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
+        db.insert("ammunition", null, content);
+
+        content.put("op_id", "2");
+        content.put("a_id", "1");
+        content.put("pa_issue_qty", "120");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
+        db.insert("ammunition", null, content);
+
+        content.put("op_id", "2");
+        content.put("a_id", "3");
+        content.put("pa_issue_qty", "2");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
+        db.insert("ammunition", null, content);
+
+        content.put("op_id", "3");
+        content.put("a_id", "1");
+        content.put("pa_issue_qty", "120");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
+        db.insert("ammunition", null, content);
+
+        content.put("op_id", "3");
+        content.put("a_id", "3");
+        content.put("pa_issue_qty", "2");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
+        db.insert("ammunition", null, content);
+
+        content.put("op_id", "4");
+        content.put("a_id", "1");
+        content.put("pa_issue_qty", "120");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
+        db.insert("ammunition", null, content);
+
+        content.put("op_id", "4");
+        content.put("a_id", "3");
+        content.put("pa_issue_qty", "2");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
+        db.insert("ammunition", null, content);
+
+        content.put("op_id", "5");
+        content.put("a_id", "2");
+        content.put("pa_issue_qty", "200");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
+        db.insert("ammunition", null, content);
+
+        content.put("op_id", "5");
+        content.put("a_id", "3");
+        content.put("pa_issue_qty", "2");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
+        db.insert("ammunition", null, content);
+
+        content.put("op_id", "6");
+        content.put("a_id", "2");
+        content.put("pa_issue_qty", "200");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
+        db.insert("ammunition", null, content);
+
+        content.put("op_id", "6");
+        content.put("a_id", "3");
+        content.put("pa_issue_qty", "2");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
+        db.insert("ammunition", null, content);
+
+        content.put("op_id", "7");
+        content.put("a_id", "2");
+        content.put("pa_issue_qty", "200");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
+        db.insert("ammunition", null, content);
+
+        content.put("op_id", "7");
+        content.put("a_id", "3");
+        content.put("pa_issue_qty", "2");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
+        db.insert("ammunition", null, content);
+
+        content.put("op_id", "8");
+        content.put("a_id", "2");
+        content.put("pa_issue_qty", "200");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
+        db.insert("ammunition", null, content);
+
+        content.put("op_id", "8");
+        content.put("a_id", "3");
+        content.put("pa_issue_qty", "2");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
+        db.insert("ammunition", null, content);
+
+        content.put("op_id", "9");
+        content.put("a_id", "1");
+        content.put("pa_issue_qty", "90");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
+        db.insert("ammunition", null, content);
+
+        content.put("op_id", "9");
+        content.put("a_id", "3");
+        content.put("pa_issue_qty", "2");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
+        db.insert("ammunition", null, content);
+
+        content.put("op_id", "10");
+        content.put("a_id", "1");
+        content.put("pa_issue_qty", "90");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
+        db.insert("ammunition", null, content);
+
+        content.put("op_id", "10");
+        content.put("a_id", "3");
+        content.put("pa_issue_qty", "2");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
         db.insert("ammunition", null, content);
 
         db.close();
