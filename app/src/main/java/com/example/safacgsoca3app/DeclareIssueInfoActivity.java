@@ -31,8 +31,6 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
     private static final String TAG_RETURNED = "pa_returned";
     private static final String TAG_EXPENDED = "pa_expended";
     private static final String TAG_SPOILED = "pa_spoiled";
-
-    private static final String TAG_DNAME = "d_name";
     private static final String TAG_ANAME = "a_name";
 
     @Override
@@ -99,6 +97,13 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
 
             IssueAmmoList.add(map);
         }
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS detail (d_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, d_name text NOT NULL, o_id integer NOT NULL)");
+        c1 = db.rawQuery("select d.d_name, p.p_name from detail d, personnel p, operation_personnel op where d.d_id = op.d_id and p.p_id = op.p_id and op.op_id = 1 ", null);
+        while (c1.moveToNext()) {
+            tv_Detail_Name.setText(c1.getString(0));
+            tv_Personnel_Name.setText(c1.getString(1));
+        }
         db.close();
 
         ListView lv = findViewById(R.id.lv_Issue_Ammunition);
@@ -127,6 +132,7 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
             }
         });
 
+        /*
         SQLiteDatabase db2;
         db2 = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
         db2.execSQL("CREATE TABLE IF NOT EXISTS detail (d_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, d_name text NOT NULL, o_id integer NOT NULL)");
@@ -145,7 +151,8 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
         while (c3.moveToNext()) {
             tv_Personnel_Name.setText(c3.getString(2));
         }
-        db3.close();
+        db3.close();\
+        */
     }
 
     private void showEditIssueDialog()

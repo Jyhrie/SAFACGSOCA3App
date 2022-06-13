@@ -313,8 +313,8 @@ public class MainActivity extends AppCompatActivity {
         db.insert("personnel", null, content);
 
         content.put("p_rank", "3SG");
-        content.put("p_name", "Slipped Disk");
-        content.put("p_nric", "Ouch");
+        content.put("p_name", "Shih Rong");
+        content.put("p_nric", "Chao Keng Warrior");
         db.insert("personnel", null, content);
 
         db.close();
