@@ -26,12 +26,11 @@
                 android:text="ammunition_add_entry" />
         </LinearLayout>
 
-        <ListView
-            android:id="@+id/lv_assign_personnel_ammunition"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_assign_personnel_ammunition"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"/>
 
-        </ListView>
     </LinearLayout>
 
 </LinearLayout>
