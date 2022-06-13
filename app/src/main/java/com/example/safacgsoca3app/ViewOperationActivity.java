@@ -42,6 +42,7 @@ public class ViewOperationActivity extends AppCompatActivity {
     private static final String TAG_OP_ID = "op_id";
 
     private static final String TAG_D_ID = "d_id";
+    private static final String TAG_D_NAME = "d_name";
 
     private static final String TAG_PA_ID = "pa_id";
     private static final String TAG_PA_ISSUE_QTY = "pa_issue_qty";
@@ -162,6 +163,59 @@ public class ViewOperationActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Intent intent = getIntent();
+        String o_id = intent.getStringExtra(TAG_ID);
+
+        //update ddl
+        Spinner ddl_select_operation_detail = findViewById(R.id.ddl_select_operation_detail);
+
+        SQLiteDatabase db;
+        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+        Cursor c1 = db.rawQuery("select * from detail where o_id = " + o_id, null);
+        ArrayList<HashMap<String, String>> detail_list = new ArrayList<HashMap<String, String>>();
+        while (c1.moveToNext()) {
+            HashMap<String, String> map = new HashMap<String, String>();
+            String line_id = c1.getString(0);
+            String line_name = c1.getString(1);
+
+            map.put(TAG_D_ID, line_id);
+            map.put(TAG_D_NAME, line_name);
+
+            detail_list.add(map);
+        }
+        db.close();
+
+        //ammo dropdownlist adapter
+        SimpleAdapter ddlAdapter = new SimpleAdapter(ViewOperationActivity.this,
+                detail_list,
+                android.R.layout.simple_spinner_dropdown_item,
+                new String[]{TAG_D_NAME},
+                new int[]{android.R.id.text1});
+
+        ddl_select_operation_detail.setAdapter(ddlAdapter);
+
+        ddl_select_operation_detail.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                ((TextView) findViewById(R.id.tv_selected_detail_id)).setText(detail_list.get(i).get(TAG_D_ID));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                //ignore
+
+            }
+        });
+
+        //refresh
+
+
+    }
+
     private void showAddEditDetailDialog(int context, String o_id, boolean reset)
     {
         EditText etDetailName;
@@ -229,11 +283,39 @@ public class ViewOperationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                //update db to add detail name, id
+                SQLiteDatabase db;
+                db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+
+                ContentValues content = new ContentValues();
+
+                content.put(TAG_D_NAME, String.valueOf(etDetailName.getText()));
+                content.put(TAG_O_ID, String.valueOf(o_id));
+
+                db.insert("detail", null, content);
+                db.close();
+
+                db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+                int sel_detail_id = -1;
+                Cursor cursor = db.rawQuery("SELECT o_id FROM detail ORDER BY d_id DESC LIMIT 1 ", null);
+                while(cursor.moveToNext())
+                {
+                    sel_detail_id = cursor.getInt(0);
+                }
+
+
                 for (int i = 0; i < lv_add_issuing_detail_personnel.getCount(); i++) {
                     View v = lv_add_issuing_detail_personnel.getChildAt(i);
+                    //update each instance of personnel to add to detail
+                    String line_op_id = ((TextView) v.findViewById(R.id.tv_edit_detail_personnel_id)).getText().toString();
 
+                    ContentValues cv = new ContentValues();
+                    cv.put(TAG_D_ID, sel_detail_id);
 
+                    db.update("operation_personnel", cv, "o_id = ?", new String[]{o_id});
                 }
+
+                db.close();
 
             }
         });
@@ -371,9 +453,11 @@ public class ViewOperationActivity extends AppCompatActivity {
 
     private void showlvIssueDetail()
     {
+        String search_for_detail_id = ((TextView) findViewById(R.id.tv_selected_detail_id)).getText().toString();
+
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-        Cursor c1 = db.rawQuery("select * from Personnel", null);
+        Cursor c1 = db.rawQuery("select p.p_id, p.p_rank, p.p_name, p.p_nric from personnel p, operation_personnel_op where op.p_id = p.p_id and op.d_id = " + search_for_detail_id, null);
 
         ArrayList<HashMap<String, String>> PersonnelList = new ArrayList<HashMap<String, String>>();
         while (c1.moveToNext()) {
@@ -544,6 +628,7 @@ public class ViewOperationActivity extends AppCompatActivity {
             }
         });
     }
+
 
 }
 
