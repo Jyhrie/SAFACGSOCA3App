@@ -202,6 +202,7 @@ public class ViewOperationActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 ((TextView) findViewById(R.id.tv_selected_detail_id)).setText(detail_list.get(i).get(TAG_D_ID));
+                showlvIssueDetail();
             }
 
             @Override
@@ -297,7 +298,7 @@ public class ViewOperationActivity extends AppCompatActivity {
 
                 db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
                 int sel_detail_id = -1;
-                Cursor cursor = db.rawQuery("SELECT o_id FROM detail ORDER BY d_id DESC LIMIT 1 ", null);
+                Cursor cursor = db.rawQuery("SELECT d_id FROM detail ORDER BY d_id DESC LIMIT 1 ", null);
                 while(cursor.moveToNext())
                 {
                     sel_detail_id = cursor.getInt(0);
@@ -312,7 +313,7 @@ public class ViewOperationActivity extends AppCompatActivity {
                     ContentValues cv = new ContentValues();
                     cv.put(TAG_D_ID, sel_detail_id);
 
-                    db.update("operation_personnel", cv, "o_id = ?", new String[]{o_id});
+                    db.update("operation_personnel", cv, "op_id = ?", new String[]{line_op_id});
                 }
 
                 db.close();
@@ -344,8 +345,8 @@ public class ViewOperationActivity extends AppCompatActivity {
         //wipe all previously selected personnel
         //db.execSQL("UPDATE operation_personnel SET d_id = 0 WHERE d_id = -1");
 
-        Cursor c1 = db.rawQuery("select op.op_id, p.p_rank, p.p_name from operation_personnel op, personnel p where op.d_id != -1 and p.p_id = op.p_id and op.o_id = "+ o_id , null);
-
+        //Cursor c1 = db.rawQuery("select op.op_id, p.p_rank, p.p_name from operation_personnel op, personnel p where op.d_id != -1 and p.p_id = op.p_id and op.o_id = "+ o_id , null);
+        Cursor c1 = db.rawQuery("select op.op_id, p.p_rank, p.p_name from operation_personnel op, personnel p where op.d_id is null and p.p_id = op.p_id and op.o_id = "+ o_id , null);
         ArrayList<HashMap<String, String>> personnelList = new ArrayList<HashMap<String, String>>();
         while (c1.moveToNext()) {
             Log.i("data found", "test");
@@ -454,50 +455,52 @@ public class ViewOperationActivity extends AppCompatActivity {
     private void showlvIssueDetail()
     {
         String search_for_detail_id = ((TextView) findViewById(R.id.tv_selected_detail_id)).getText().toString();
+        if(!search_for_detail_id.isEmpty()) {
+            SQLiteDatabase db;
+            db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+            Log.i("select p.p_id, p.p_rank, p.p_name, p.p_nric from personnel p, operation_personnel op where op.p_id = p.p_id and op.d_id = " + search_for_detail_id, "test");
+            Cursor c1 = db.rawQuery("select p.p_id, p.p_rank, p.p_name, p.p_nric from personnel p, operation_personnel op where op.p_id = p.p_id and op.d_id = " + search_for_detail_id, null);
 
-        SQLiteDatabase db;
-        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-        Cursor c1 = db.rawQuery("select p.p_id, p.p_rank, p.p_name, p.p_nric from personnel p, operation_personnel_op where op.p_id = p.p_id and op.d_id = " + search_for_detail_id, null);
+            ArrayList<HashMap<String, String>> PersonnelList = new ArrayList<HashMap<String, String>>();
+            while (c1.moveToNext()) {
+                HashMap<String, String> map = new HashMap<String, String>();
+                String line_id = c1.getString(0);
+                String line_rank = c1.getString(1);
+                String line_name = c1.getString(2);
+                String line_nric = c1.getString(3);
 
-        ArrayList<HashMap<String, String>> PersonnelList = new ArrayList<HashMap<String, String>>();
-        while (c1.moveToNext()) {
-            HashMap<String, String> map = new HashMap<String, String>();
-            String line_id = c1.getString(0);
-            String line_rank = c1.getString(1);
-            String line_name = c1.getString(2);
-            String line_nric = c1.getString(3);
+                map.put(TAG_PID, line_id);
+                map.put(TAG_PRANK, line_rank);
+                map.put(TAG_PNAME, line_name);
+                map.put(TAG_P_NRIC, line_nric);
 
-            map.put(TAG_PID, line_id);
-            map.put(TAG_PRANK, line_rank);
-            map.put(TAG_PNAME, line_name);
-            map.put(TAG_P_NRIC, line_nric);
-
-            PersonnelList.add(map);
-        }
-        db.close();
-
-        ListView lv = findViewById(R.id.lv_Issue_Detail_Info);
-        ListAdapter adapter = new SimpleAdapter(
-                ViewOperationActivity.this, //context
-                PersonnelList, //hashmapdata
-                R.layout.list_display_personnel, //layout of list
-                new String[]{TAG_PID, TAG_PRANK, TAG_PNAME, TAG_P_NRIC}, //from array
-                new int[]{R.id.tv_Personnel_ID_Checklist,
-                        R.id.tv_Personnel_Rank_Checklist,
-                        R.id.tv_Personnel_Name_Checklist,
-                        R.id.tv_Personnel_NRIC_Checklist}); //toarray
-        // updating listview
-        lv.setAdapter(adapter);
-
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getApplicationContext(), DisplayPersonnelInfoActivity.class);
-                intent.putExtra("detail_id", i);//replace with detail id from sql
-                startActivity(intent);
+                PersonnelList.add(map);
             }
+            db.close();
 
-        });
+            ListView lv = findViewById(R.id.lv_Issue_Detail_Info);
+            ListAdapter adapter = new SimpleAdapter(
+                    ViewOperationActivity.this, //context
+                    PersonnelList, //hashmapdata
+                    R.layout.list_display_personnel, //layout of list
+                    new String[]{TAG_PID, TAG_PRANK, TAG_PNAME, TAG_P_NRIC}, //from array
+                    new int[]{R.id.tv_Personnel_ID_Checklist,
+                            R.id.tv_Personnel_Rank_Checklist,
+                            R.id.tv_Personnel_Name_Checklist,
+                            R.id.tv_Personnel_NRIC_Checklist}); //toarray
+            // updating listview
+            lv.setAdapter(adapter);
+
+            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Intent intent = new Intent(getApplicationContext(), DisplayPersonnelInfoActivity.class);
+                    intent.putExtra("detail_id", i);//replace with detail id from sql
+                    startActivity(intent);
+                }
+
+            });
+        }
     }
 
     private void showAssignPersonnelAmmo(int op_id)

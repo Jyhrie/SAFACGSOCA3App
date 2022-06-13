@@ -72,7 +72,7 @@
                 android:id="@+id/tv_selected_detail_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:text="" />
 
             <Spinner
                 android:id="@+id/ddl_select_operation_detail"
