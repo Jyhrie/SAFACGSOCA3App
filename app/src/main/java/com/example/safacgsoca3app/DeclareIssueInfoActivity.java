@@ -63,7 +63,7 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
         db.execSQL("CREATE TABLE IF NOT EXISTS personnel_ammunition (pa_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, op_id integer NOT NULL, a_id integer NOT NULL, pa_issue_qty number NOT NULL, pa_issued number, pa_returned number, pa_expended number, pa_spoiled number)");
 
-        Cursor c1 = db.rawQuery("select * from personnel_ammunition where op_id = 1", null);
+        Cursor c1 = db.rawQuery("SELECT a.a_name pa.pa_id, pa.op_id, pa.a_id, pa.pa_issue_qty, pa.pa_issued, pa.pa_returned, pa.pa_expended, pa.pa_spoiled FROM personnel_ammunition pa, ammunition a WHERE a.a_id = pa.a_id and pa.op_id = 1", null);
 
         ArrayList<HashMap<String, String>> IssueAmmoList = new ArrayList<HashMap<String, String>>();
         while (c1.moveToNext()) {
@@ -99,41 +99,13 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
         }
         db.close();
 
-        SQLiteDatabase db4;
-        db4 = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-        db4.execSQL("CREATE TABLE IF NOT EXISTS ammunition (a_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_id integer NOT NULL, a_name varchar(255) NOT NULL, a_qty number NOT NULL)");
-
-        Cursor c4 = db4.rawQuery("select * from Ammunition", null);
-
-        ArrayList<HashMap<String, String>> IssueAmmoNameList = new ArrayList<HashMap<String, String>>();
-        while (c4.moveToNext()) {
-            HashMap<String, String> map = new HashMap<String, String>();
-            String line_ammunitionname = c4.getString(2);
-            map.put(TAG_ANAME, line_ammunitionname);
-
-            IssueAmmoNameList.add(map);
-        }
-        db4.close();
-
-        ArrayList<HashMap<String, String>> IssueList = new ArrayList<HashMap<String, String>>();
-        for (int i=0; i< IssueAmmoList.size(); i++){
-            HashMap<String, String> map1 = new HashMap<String, String>();
-            HashMap<String, String> map2 = new HashMap<String, String>();
-            map1 = IssueAmmoList.get(i);
-            map2 = IssueAmmoNameList.get(i);
-            map1.putAll(map2);
-            IssueList.add(map1);
-            Log.i(TAG_ANAME, String.valueOf(IssueList));
-        }
-
         ListView lv = findViewById(R.id.lv_Issue_Ammunition);
         ListAdapter adapter = new SimpleAdapter(
                 DeclareIssueInfoActivity.this, //context
-                IssueList, //hashmapdata
+                IssueAmmoList, //hashmapdata
                 R.layout.list_issue_return_receive_ammunition, //layout of list
-                new String[]{TAG_ANAME, TAG_PAID, TAG_OPID, TAG_AID, TAG_TOISSUE_ISSUED_DESC, TAG_TOISSUE_ISSUED, TAG_RETURNED, TAG_EXPENDED, TAG_SPOILED}, //from array
-                new int[]{R.id.tv_Ammunition_Name,
-                        R.id.tv_PAID,
+                new String[]{TAG_PAID, TAG_OPID, TAG_AID, TAG_TOISSUE_ISSUED_DESC, TAG_TOISSUE_ISSUED, TAG_RETURNED, TAG_EXPENDED, TAG_SPOILED}, //from array
+                new int[]{R.id.tv_PAID,
                         R.id.tv_OPID,
                         R.id.tv_AID,
                         R.id.tv_ToIssueOrIssued_Text,
