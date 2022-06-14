@@ -23,6 +23,8 @@
         <entry key="..\:/Users/Admin/AndroidStudioProjects/SAFACGSOCA3App/app/src/main/res/layout/list_nominalroll.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/activity_add_exercise.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/activity_declare_issue_return_receive_info.xml" value="0.21302083333333333" />
+        <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/activity_nominal_roll.xml" value="0.2846781504986401" />
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/activity_view_operation.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/dialog_assign_detail_personnel.xml" value="0.15625" />
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/dialog_assign_personnel_ammunition.xml" value="0.33" />
@@ -30,8 +32,19 @@
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/fragment_assign_detail_personnel.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/fragment_assign_personnel_ammunition.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/fragment_blank.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_add_issuing_detail_personnel.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_ammunition.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_assign_personnel_ammunition.xml" value="0.19114583333333332" />
+        <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_display_personnel.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_display_personnel_ammunition.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_issue_return_receive_ammunition.xml" value="0.21302083333333333" />
+        <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_loadout.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_nominalroll.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_operation.xml" value="0.35377358490566035" />
+        <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_operation_nominal_roll.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_personnel_checklist.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_view_detail_personnel.xml" value="0.33" />
+        <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_view_loadout_ammunition.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Tan Jun Hao/AndroidStudioProjects/SAFACGSOCA3App/app/src/main/res/layout/activity_ammunition.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/Tan Jun Hao/AndroidStudioProjects/SAFACGSOCA3App/app/src/main/res/layout/activity_main.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/Tan Jun Hao/AndroidStudioProjects/SAFACGSOCA3App/app/src/main/res/layout/activity_view_exercise.xml" value="0.16666666666666666" />

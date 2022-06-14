@@ -19,20 +19,22 @@
 
             <TextView
                 android:id="@+id/tvOperationListName"
-                android:layout_width="300dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Operation"
                 android:textAlignment="center"
-                android:textSize="16sp" />
+                android:textSize="30dp"
+                android:autoSizeTextType="uniform"/>
 
             <TextView
                 android:id="@+id/tvOperationListKAH"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="0.5"
+                android:autoSizeTextType="uniform"
                 android:text="Key Appointment Holders"
-                android:textSize="16sp" />
+                android:textSize="20dp" />
 
             <TextView
                 android:id="@+id/tvOperationListId"
