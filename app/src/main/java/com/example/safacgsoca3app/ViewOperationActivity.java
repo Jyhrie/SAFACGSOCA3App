@@ -2,15 +2,9 @@ package com.example.safacgsoca3app;
 
 import static java.lang.Integer.parseInt;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
-import android.content.ClipData;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -21,9 +15,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -32,7 +23,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class ViewOperationActivity extends AppCompatActivity implements RecyclerViewInterface {
 
@@ -68,6 +58,8 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
     private static final String TAG_KAH = "o_kah";
     private static final String TAG_ANAME = "a_name";
     private static final String TAG_OPID = "op_id";
+
+    private adapter_Personnel_Ammunition assign_personnel_adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -231,9 +223,19 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
 
     }
 
-    private void showAddEditDetailDialog(int d_id, String o_id, boolean reset)
+    public void showAddEditDetailDialog(int d_id, String o_id, boolean reset)
     {
 
+
+        fragment_Add_Edit_Detail fragment = new fragment_Add_Edit_Detail();
+        Bundle args = new Bundle();
+        args.putInt(TAG_D_ID, d_id);
+        args.putString(TAG_O_ID, o_id);
+        args.putBoolean("reset", reset);
+        fragment.setArguments(args);
+        fragment.show(getSupportFragmentManager(), "fragment_add_edit_detail");
+
+        /*
         //if d_id is -1, implied that it is a new entry in details table
 
         EditText etDetailName;
@@ -326,7 +328,7 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
                     content2.put(TAG_D_ID, d_id);
                     db.update("operation_personnel", content2, "d_id = ?", new String[]{String.valueOf(-1)});
 
-                    /*
+
                     //add personnel into detail/remove from detail
                         //query into database check all op_ids currently in detail
                     Cursor c1 = db.rawQuery("SELECT op_id FROM operation_personnel WHERE d_id = " + d_id, null);
@@ -338,7 +340,7 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
                         //delete from db all op_ids that do not exist in listview
                         //remove all ammo assigned to that personnel
                             //delete from personnel ammunition where op_id = deleted op_id
-                        //add all from listview to op_id*/
+                        //add all from listview to op_id
 
                 } else if (d_id == -1) {
 
@@ -376,13 +378,21 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
             public void onClick(View view) {
                 showSelectPersonnelDialog(o_id, DialogFragment, d_id);
             }
-        });
+        });*/
 
 
     }
 
-    private void showSelectPersonnelDialog(String o_id, Dialog prevDialog, int context)
+    public void showSelectPersonnelDialog(String o_id, int d_id)
     {
+        fragment_Assign_Detail_Personnel fragment = new fragment_Assign_Detail_Personnel();
+        Bundle args = new Bundle();
+        args.putString(TAG_O_ID, String.valueOf(o_id));
+        args.putInt(TAG_D_ID, d_id);
+        fragment.setArguments(args);
+        fragment.show(getSupportFragmentManager(), "fragment_assign_detail_personnel");
+
+        /*
         Dialog DialogFragment = new Dialog(ViewOperationActivity.this, android.R.style.Theme_Black_NoTitleBar);
         DialogFragment.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
         DialogFragment.setContentView(R.layout.dialog_assign_detail_personnel);
@@ -467,11 +477,10 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
                 }
                 db.close();
 
-                prevDialog.dismiss();
                 DialogFragment.dismiss();
                 showAddEditDetailDialog(context, o_id, false);
             }
-        });
+        });*/
 
     }
 
@@ -556,9 +565,16 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
         }
     }
 
-    private void showAssignPersonnelAmmo(String op_id, int o_id)
+    public void showAssignPersonnelAmmo(String op_id, int o_id)
     {
-        RecyclerViewInterface rInterface = this;
+        fragment_Assign_Personnel_Ammunition fragment = new fragment_Assign_Personnel_Ammunition();
+        Bundle args = new Bundle();
+        args.putString(TAG_OP_ID, op_id);
+        args.putString(TAG_O_ID, String.valueOf(o_id));
+        fragment.setArguments(args);
+        fragment.show(getSupportFragmentManager(), "fragment_assign_personnel_ammunition");
+
+        /*RecyclerViewInterface rInterface = this;
 
         Dialog DialogFragment = new Dialog(ViewOperationActivity.this, android.R.style.Theme_Black_NoTitleBar);
         DialogFragment.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
@@ -608,18 +624,14 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
             personnel_ammo_list.add(map);
         }
 
-        AssignPersonnelAmmunitionAdapter rAdapter = new AssignPersonnelAmmunitionAdapter(getApplicationContext(),
+        assign_personnel_adapter = new AssignPersonnelAmmunitionAdapter(getApplicationContext(),
                 personnel_ammo_list,
                 ammo_list,
                 this
         );
 
-        rv_assign_personnel_ammunition.setAdapter(rAdapter);
+        rv_assign_personnel_ammunition.setAdapter(assign_personnel_adapter);
         rv_assign_personnel_ammunition.setLayoutManager(new LinearLayoutManager(this));
-
-
-        /*ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
-        itemTouchHelper.attachToRecyclerView(rv_assign_personnel_ammunition);*/
 
 
         Button btn_assign_personnel_ammunition_add_entry;
@@ -691,32 +703,9 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
                     Log.i(entry.get(TAG_A_ID) + "AID", entry.get(TAG_PA_ISSUE_QTY) + "AQTY");
                 }
             }
-        });
+        });*/
     }
 
-
-
-    /*ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-        @Override
-        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-            return false;
-        }
-
-        @Override
-        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
-            int position = viewHolder.getAdapterPosition();
-
-            switch(direction){
-                case ItemTouchHelper.LEFT:
-                    //new String[10].remove(position);
-                    recyclerAdapter
-                    break;
-                case ItemTouchHelper.RIGHT:
-                    break;
-            }
-        }
-    };*/
 
     @Override
     public void onItemClick(int position) {

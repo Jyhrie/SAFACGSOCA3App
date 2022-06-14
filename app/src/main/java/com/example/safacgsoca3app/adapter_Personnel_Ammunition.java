@@ -1,6 +1,7 @@
 package com.example.safacgsoca3app;
 
 import static java.lang.Integer.parseInt;
+import static java.lang.Integer.valueOf;
 
 import android.content.Context;
 import android.text.Editable;
@@ -18,11 +19,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class AssignPersonnelAmmunitionAdapter extends RecyclerView.Adapter<AssignPersonnelAmmunitionAdapter.MyViewHolder> {
+public class adapter_Personnel_Ammunition extends RecyclerView.Adapter<adapter_Personnel_Ammunition.MyViewHolder> {
 
     Context context;
     ArrayList<HashMap<String, String>> data;
@@ -54,7 +54,7 @@ public class AssignPersonnelAmmunitionAdapter extends RecyclerView.Adapter<Assig
 
     private final RecyclerViewInterface recyclerViewInterface;
 
-    public AssignPersonnelAmmunitionAdapter(Context context, ArrayList<HashMap<String, String>> data, ArrayList<HashMap<String,String>> ddlData, RecyclerViewInterface recyclerViewInterface)
+    public adapter_Personnel_Ammunition(Context context, ArrayList<HashMap<String, String>> data, ArrayList<HashMap<String,String>> ddlData, RecyclerViewInterface recyclerViewInterface)
     {
         this.recyclerViewInterface = recyclerViewInterface;
         this.context = context;
@@ -64,14 +64,14 @@ public class AssignPersonnelAmmunitionAdapter extends RecyclerView.Adapter<Assig
 
     @NonNull
     @Override
-    public AssignPersonnelAmmunitionAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public adapter_Personnel_Ammunition.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.list_assign_personnel_ammunition, parent, false);
-        return new AssignPersonnelAmmunitionAdapter.MyViewHolder(view);
+        return new adapter_Personnel_Ammunition.MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AssignPersonnelAmmunitionAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull adapter_Personnel_Ammunition.MyViewHolder holder, int position) {
         int gpos = position;
         if(!data.get(position).containsKey(TAG_PA_ID)) {
             holder.tv_existing_pa_id.setText(data.get(position).get(TAG_PA_ID));
@@ -163,11 +163,6 @@ public class AssignPersonnelAmmunitionAdapter extends RecyclerView.Adapter<Assig
         return data.size();
     }
 
-    public ArrayList<HashMap<String, String>> getData()
-    {
-        return data;
-    }
-
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
         //declare view object var
@@ -199,7 +194,10 @@ public class AssignPersonnelAmmunitionAdapter extends RecyclerView.Adapter<Assig
                 }
             });
 
+
+
         }
     }
+
 
 }
