@@ -327,7 +327,7 @@ public class MainActivity extends AppCompatActivity {
 
         content.put("p_id", "1");
         content.put("o_id", "1");
-        content.put("d_id", "NULL");
+        content.put("d_id", "1");
         db.insert("operation_personnel", null, content);
 
         content.put("p_id", "1");
