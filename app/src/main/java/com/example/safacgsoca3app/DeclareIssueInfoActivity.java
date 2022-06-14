@@ -1,6 +1,7 @@
 package com.example.safacgsoca3app;
 
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -21,6 +23,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import kotlin.jvm.functions.Function4;
+
 public class DeclareIssueInfoActivity extends AppCompatActivity {
 
     private static final String TAG_PAID = "pa_id";
@@ -28,6 +32,8 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
     private static final String TAG_AID = "a_id";
     private static final String TAG_TOISSUE_ISSUED = "pa_toissue_issued";
     private static final String TAG_TOISSUE_ISSUED_DESC = "pa_toissue_issued_desc";
+    private static final String TAG_ISSUE_QTY = "pa_issue_qty";
+    private static final String TAG_ISSUED = "pa_issued";
     private static final String TAG_RETURNED = "pa_returned";
     private static final String TAG_EXPENDED = "pa_expended";
     private static final String TAG_SPOILED = "pa_spoiled";
@@ -40,22 +46,27 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String Function4 = intent.getStringExtra("Function3");
-
         TextView tv_Issue_Return_Receive;
-        TextView tv_Detail_Name;
-        TextView tv_Personnel_Name;
-        TextView tv_Ammunition_Name;
+
         Button btn_ClearPad;
         Button btn_Validate;
 
         tv_Issue_Return_Receive = (TextView) findViewById(R.id.tv_Issue_Return_Receive);
-        tv_Detail_Name = (TextView) findViewById(R.id.tv_Detail_Name);
-        tv_Personnel_Name = (TextView) findViewById(R.id.tv_Personnel_Name);
-        tv_Ammunition_Name = (TextView) findViewById(R.id.tv_Ammunition_Name);
         btn_ClearPad = (Button) findViewById(R.id.btn_ClearPad);
         btn_Validate = (Button) findViewById(R.id.btn_Validate);
 
         tv_Issue_Return_Receive.setText(Function4);
+        onResume(Function4);
+    }
+
+    protected void onResume(String Function4) {
+        super.onResume();
+
+        TextView tv_Detail_Name;
+        TextView tv_Personnel_Name;
+
+        tv_Detail_Name = (TextView) findViewById(R.id.tv_Detail_Name);
+        tv_Personnel_Name = (TextView) findViewById(R.id.tv_Personnel_Name);
 
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
@@ -124,51 +135,73 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
                 }); //toarray
         // updating listview
         lv.setAdapter(adapter);
+        Log.i(TAG_AID, "LISTVIEW UPDATE");
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                showEditIssueDialog();
+                showEditIssueDialog(IssueAmmoList, i, Function4);
             }
         });
-
-        /*
-        SQLiteDatabase db2;
-        db2 = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-        db2.execSQL("CREATE TABLE IF NOT EXISTS detail (d_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, d_name text NOT NULL, o_id integer NOT NULL)");
-
-        Cursor c2 = db2.rawQuery("select * from Detail where d_id = 1", null);
-        while (c2.moveToNext()) {
-            tv_Detail_Name.setText(c2.getString(1));
-        }
-        db2.close();
-
-        SQLiteDatabase db3;
-        db3 = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-        db3.execSQL("CREATE TABLE IF NOT EXISTS personnel (p_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, p_rank varchar(255) NOT NULL, p_name varchar(255) NOT NULL, p_nric text)");
-
-        Cursor c3 = db3.rawQuery("select * from Personnel where p_id = 1", null);
-        while (c3.moveToNext()) {
-            tv_Personnel_Name.setText(c3.getString(2));
-        }
-        db3.close();\
-        */
     }
 
-    private void showEditIssueDialog()
-    {
+    private void showEditIssueDialog(ArrayList<HashMap<String, String>> IssueAmmoList, int i, String Function4) {
         Dialog EditIssueDialog = new Dialog(DeclareIssueInfoActivity.this, android.R.style.Theme_Black_NoTitleBar);
-        EditIssueDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100,0,0,0)));
+        EditIssueDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
         EditIssueDialog.setContentView(R.layout.dialog_edit_issue_return_receive_ammunition);
         EditIssueDialog.setCancelable(true);
         EditIssueDialog.show();
 
-        Button btn_EditQty = (Button) EditIssueDialog.findViewById(R.id.btn_Confirm);
+        Button btn_EditQty;
+
+        EditText et_ToIssueOrIssued_Qty;
+        EditText et_Expended_Qty;
+        EditText et_Returned_Qty;
+        EditText et_Spoilt_Qty;
+        TextView tv_Ammunition_Name;
+        TextView tv_ToIssueOrIssued_Text;
+
+        et_ToIssueOrIssued_Qty = (EditText) EditIssueDialog.findViewById(R.id.et_ToIssueOrIssued_Qty);
+        et_Expended_Qty = (EditText) EditIssueDialog.findViewById(R.id.et_Expended_Qty);
+        et_Returned_Qty = (EditText) EditIssueDialog.findViewById(R.id.et_Returned_Qty);
+        et_Spoilt_Qty = (EditText) EditIssueDialog.findViewById(R.id.et_Spoilt_Qty);
+        tv_Ammunition_Name = (TextView) EditIssueDialog.findViewById(R.id.tv_Ammunition_Name);
+        tv_ToIssueOrIssued_Text = (TextView) EditIssueDialog.findViewById(R.id.tv_ToIssueOrIssued_Text);
+
+        et_ToIssueOrIssued_Qty.setText(IssueAmmoList.get(i).get("pa_toissue_issued"));
+        et_Expended_Qty.setText(IssueAmmoList.get(i).get("pa_expended"));
+        et_Returned_Qty.setText(IssueAmmoList.get(i).get("pa_returned"));
+        et_Spoilt_Qty.setText(IssueAmmoList.get(i).get("pa_spoiled"));
+        tv_Ammunition_Name.setText(IssueAmmoList.get(i).get("a_name"));
+        tv_ToIssueOrIssued_Text.setText(IssueAmmoList.get(i).get("pa_toissue_issued_desc"));
+
+        btn_EditQty = (Button) EditIssueDialog.findViewById(R.id.btn_Confirm);
         btn_EditQty.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
+                SQLiteDatabase db;
+                db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+                db.execSQL("CREATE TABLE IF NOT EXISTS personnel_ammunition (pa_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, op_id integer NOT NULL, a_id integer NOT NULL, pa_issue_qty number NOT NULL, pa_issued number, pa_returned number, pa_expended number, pa_spoiled number)");
+
+                ContentValues content = new ContentValues();
+                content.put(TAG_EXPENDED, String.valueOf(et_Expended_Qty.getText()));
+                content.put(TAG_RETURNED, String.valueOf(et_Returned_Qty.getText()));
+                content.put(TAG_SPOILED, String.valueOf(et_Spoilt_Qty.getText()));
+
+                if (IssueAmmoList.get(i).get("pa_toissue_issued_desc").equals("To Issue")) {
+                    content.put(TAG_ISSUE_QTY, String.valueOf(et_ToIssueOrIssued_Qty.getText()));
+                } else {
+                    content.put(TAG_ISSUED, String.valueOf(et_ToIssueOrIssued_Qty.getText()));
+                }
+
+                Log.i(TAG_AID, String.valueOf(content));
+                Log.i(TAG_AID, IssueAmmoList.get(i).get("pa_id"));
+
+                db.update("personnel_ammunition", content, "pa_id = ?", new String[]{IssueAmmoList.get(i).get("pa_id")});
+                db.close();
+                onResume(Function4);
                 EditIssueDialog.dismiss();
             }
         });
-
     }
 }
