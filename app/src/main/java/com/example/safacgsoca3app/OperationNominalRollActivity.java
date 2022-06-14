@@ -194,6 +194,7 @@ public class OperationNominalRollActivity extends AppCompatActivity {
                     }
                 }
                 db.close();
+                DialogFragment.dismiss();
             }
         });
     }

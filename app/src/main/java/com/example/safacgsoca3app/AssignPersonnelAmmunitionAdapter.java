@@ -99,7 +99,8 @@ public class AssignPersonnelAmmunitionAdapter extends RecyclerView.Adapter<Assig
             }
         }
 
-        if(!data.get(position).containsKey(TAG_PA_ISSUE_QTY)) {
+        if(data.get(position).containsKey(TAG_PA_ISSUE_QTY)) {
+            Log.i("has issue qty", data.get(position).get(TAG_PA_ISSUE_QTY));
             holder.et_assign_personnel_ammunition_qty.setText(data.get(position).get(TAG_PA_ISSUE_QTY));
         }
 
@@ -184,7 +185,7 @@ public class AssignPersonnelAmmunitionAdapter extends RecyclerView.Adapter<Assig
             ddl_assign_personnel_ammunition = itemView.findViewById(R.id.ddl_assign_personnel_ammunition);
             et_assign_personnel_ammunition_qty = itemView.findViewById(R.id.et_assign_personnel_ammunition_qty);
 
-            /*itemView.setOnClickListener(new View.OnClickListener(){
+            itemView.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
                     if(recyclerViewInterface != null)
@@ -196,7 +197,8 @@ public class AssignPersonnelAmmunitionAdapter extends RecyclerView.Adapter<Assig
                         }
                     }
                 }
-            });*/
+            });
+
         }
     }
 
