@@ -121,39 +121,41 @@ public class fragment_Assign_Personnel_Ammunition extends DialogFragment impleme
 
                 for (HashMap<String, String> map : data) {
                     Log.i(map.get(TAG_A_ID), map.get(TAG_PA_ISSUE_QTY));
-                    
-                //get all data stored within adapter
-                ArrayList<HashMap<String, String>> existing_data = data;
-                for (HashMap<String, String> entry : existing_data) {
-                    //check if TAG_PA_ID is new/old
-                    if (entry.get(TAG_PA_ID).equals("-1")) {
-                        //new entry
-                        ContentValues content = new ContentValues();
-                        content.put(TAG_OP_ID, String.valueOf(op_id));
-                        content.put(TAG_A_ID, entry.get(TAG_A_ID));
-                        content.put(TAG_PA_ISSUE_QTY, entry.get(TAG_PA_ISSUE_QTY));
 
-                        SQLiteDatabase db;
-                        db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
-                        db.insert("personnel_ammunition", null, content);
-                        db.close();
-                    } else {
-                        ContentValues content = new ContentValues();
-                        content.put(TAG_A_ID, entry.get(TAG_A_ID));
-                        content.put(TAG_PA_ISSUE_QTY, entry.get(TAG_PA_ISSUE_QTY));
+                    //get all data stored within adapter
+                    ArrayList<HashMap<String, String>> existing_data = data;
+                    for (HashMap<String, String> entry : existing_data) {
+                        //check if TAG_PA_ID is new/old
+                        if (entry.get(TAG_PA_ID).equals("-1")) {
+                            //new entry
+                            ContentValues content = new ContentValues();
+                            content.put(TAG_OP_ID, String.valueOf(op_id));
+                            content.put(TAG_A_ID, entry.get(TAG_A_ID));
+                            content.put(TAG_PA_ISSUE_QTY, entry.get(TAG_PA_ISSUE_QTY));
 
-                        SQLiteDatabase db;
-                        db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
-                        db.update("personnel_ammunition", content, "pa_id = ?", new String[]{entry.get(TAG_PA_ID)});
-                        db.close();
+                            SQLiteDatabase db;
+                            db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
+                            db.insert("personnel_ammunition", null, content);
+                            db.close();
+                        } else {
+                            ContentValues content = new ContentValues();
+                            content.put(TAG_A_ID, entry.get(TAG_A_ID));
+                            content.put(TAG_PA_ISSUE_QTY, entry.get(TAG_PA_ISSUE_QTY));
+
+                            SQLiteDatabase db;
+                            db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
+                            db.update("personnel_ammunition", content, "pa_id = ?", new String[]{entry.get(TAG_PA_ID)});
+                            db.close();
+                        }
+
+
+                        //check if existing TAG_PA_IDs have been removed
+                        Log.i(entry.get(TAG_A_ID) + "AID", entry.get(TAG_PA_ISSUE_QTY) + "AQTY");
                     }
-
-
-                    //check if existing TAG_PA_IDs have been removed
-                    Log.i(entry.get(TAG_A_ID) + "AID", entry.get(TAG_PA_ISSUE_QTY) + "AQTY");
                 }
             }
         });
+
 
         return v;
     }
