@@ -135,7 +135,6 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
                 }); //toarray
         // updating listview
         lv.setAdapter(adapter);
-        Log.i(TAG_AID, "LISTVIEW UPDATE");
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -175,6 +174,20 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
         tv_Ammunition_Name.setText(IssueAmmoList.get(i).get("a_name"));
         tv_ToIssueOrIssued_Text.setText(IssueAmmoList.get(i).get("pa_toissue_issued_desc"));
 
+        if (IssueAmmoList.get(i).get("pa_toissue_issued_desc").equals("To Issue")) {
+            et_ToIssueOrIssued_Qty.setEnabled(true);
+            et_Expended_Qty.setEnabled(false);
+            et_Returned_Qty.setEnabled(false);
+            et_Spoilt_Qty.setEnabled(false);
+            Log.i(TAG_AID, "TO ISSUE");
+        } else {
+            et_ToIssueOrIssued_Qty.setEnabled(false);
+            et_Expended_Qty.setEnabled(true);
+            et_Returned_Qty.setEnabled(true);
+            et_Spoilt_Qty.setEnabled(true);
+            Log.i(TAG_AID, "ISSUED");
+        }
+
         btn_EditQty = (Button) EditIssueDialog.findViewById(R.id.btn_Confirm);
         btn_EditQty.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -188,14 +201,14 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
                 content.put(TAG_RETURNED, String.valueOf(et_Returned_Qty.getText()));
                 content.put(TAG_SPOILED, String.valueOf(et_Spoilt_Qty.getText()));
 
-                if (IssueAmmoList.get(i).get("pa_toissue_issued_desc").equals("To Issue")) {
+                if (IssueAmmoList.get(i).get("pa_toissue_issued_desc").equals("To Issue"))
+                {
                     content.put(TAG_ISSUE_QTY, String.valueOf(et_ToIssueOrIssued_Qty.getText()));
-                } else {
+                }
+                else
+                {
                     content.put(TAG_ISSUED, String.valueOf(et_ToIssueOrIssued_Qty.getText()));
                 }
-
-                Log.i(TAG_AID, String.valueOf(content));
-                Log.i(TAG_AID, IssueAmmoList.get(i).get("pa_id"));
 
                 db.update("personnel_ammunition", content, "pa_id = ?", new String[]{IssueAmmoList.get(i).get("pa_id")});
                 db.close();
