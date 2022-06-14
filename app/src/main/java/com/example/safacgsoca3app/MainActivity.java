@@ -327,7 +327,7 @@ public class MainActivity extends AppCompatActivity {
 
         content.put("p_id", "1");
         content.put("o_id", "1");
-        content.put("d_id", "1");
+        content.put("d_id", "NULL");
         db.insert("operation_personnel", null, content);
 
         content.put("p_id", "1");
@@ -425,6 +425,21 @@ public class MainActivity extends AppCompatActivity {
         content.put("o_id", "1");
         content.put("a_name", "GREN HAND SMK RED");
         content.put("a_qty", "96");
+        db.insert("ammunition", null, content);
+
+        content.put("o_id", "3");
+        content.put("a_name", "GREN HAND SMK RED");
+        content.put("a_qty", "96");
+        db.insert("ammunition", null, content);
+
+        content.put("o_id", "3");
+        content.put("a_name", "5.56 FRANGIBLE");
+        content.put("a_qty", "1000");
+        db.insert("ammunition", null, content);
+
+        content.put("o_id", "3");
+        content.put("a_name", "7.62 LAPUA SCENAR");
+        content.put("a_qty", "400");
         db.insert("ammunition", null, content);
 
         db.close();

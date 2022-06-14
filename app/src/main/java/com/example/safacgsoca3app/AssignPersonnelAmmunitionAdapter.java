@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
@@ -66,37 +67,66 @@ public class AssignPersonnelAmmunitionAdapter extends RecyclerView.Adapter<Assig
     public AssignPersonnelAmmunitionAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.list_assign_personnel_ammunition, parent, false);
-        return new AssignPersonnelAmmunitionAdapter.MyViewHolder(view, recyclerViewInterface);
+        return new AssignPersonnelAmmunitionAdapter.MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull AssignPersonnelAmmunitionAdapter.MyViewHolder holder, int position) {
         int gpos = position;
-        holder.tv_existing_pa_id.setText(data.get(position).get(TAG_PA_ID));
-        holder.tv_selected_ammo_id.setText(data.get(position).get(TAG_A_ID));
+        if(!data.get(position).containsKey(TAG_PA_ID)) {
+            holder.tv_existing_pa_id.setText(data.get(position).get(TAG_PA_ID));
+        }
+        if(!data.get(position).containsKey(TAG_A_ID)) {
+            holder.tv_selected_ammo_id.setText(data.get(position).get(TAG_A_ID));
+        }
 
+        Log.i("data", String.valueOf(ddlData.size()));
         //form ddl adapter
         SimpleAdapter ddlAdapter = new SimpleAdapter(context,
                 ddlData,
                 android.R.layout.simple_spinner_dropdown_item,
-                new String[]{TAG_A_ID},
+                new String[]{TAG_A_NAME},
                 new int[]{android.R.id.text1});
         holder.ddl_assign_personnel_ammunition.setAdapter(ddlAdapter);
 
         //get selection position;
         for(int i = 0; i< ddlData.size(); i++)
         {
-            if(ddlData.get(i).get(TAG_A_ID).equals(data.get(position).get(TAG_A_ID)))
+            if(ddlData.get(i).get(TAG_A_ID).equals(data.get(gpos).get(TAG_A_ID)))
             {
-                int pos = parseInt(data.get(position).get(TAG_A_ID));
-                holder.ddl_assign_personnel_ammunition.setSelection(pos);
+                holder.ddl_assign_personnel_ammunition.setSelection(i);
                 break;
             }
         }
-        holder.et_assign_personnel_ammunition_qty.setText(data.get(position).get(TAG_PA_ISSUE_QTY));
 
+        if(!data.get(position).containsKey(TAG_PA_ISSUE_QTY)) {
+            holder.et_assign_personnel_ammunition_qty.setText(data.get(position).get(TAG_PA_ISSUE_QTY));
+        }
 
         //reactive functions
+
+        holder.ddl_assign_personnel_ammunition.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            //set selected ammo id tv to ammo id
+
+                Log.i("gpos", String.valueOf(gpos));
+
+                if(data.get(gpos).containsKey(TAG_A_ID)) {
+                    data.get(gpos).replace(TAG_A_ID, ddlData.get(holder.ddl_assign_personnel_ammunition.getSelectedItemPosition()).get(TAG_A_ID));
+                }else
+                {
+                    Log.i("NO AID EXISTS", String.valueOf(gpos));
+                    data.get(gpos).put(TAG_A_ID, ddlData.get(holder.ddl_assign_personnel_ammunition.getSelectedItemPosition()).get(TAG_A_ID));
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
 
         holder.et_assign_personnel_ammunition_qty.addTextChangedListener(new TextWatcher() {
 
@@ -114,7 +144,13 @@ public class AssignPersonnelAmmunitionAdapter extends RecyclerView.Adapter<Assig
             @Override
             public void afterTextChanged(Editable editable) {
 
-                data.get(gpos).replace(TAG_PA_ISSUE_QTY,holder.et_assign_personnel_ammunition_qty.getText().toString());
+                if (data.get(gpos).containsKey(TAG_PA_ISSUE_QTY)) {
+                    data.get(gpos).replace(TAG_PA_ISSUE_QTY, holder.et_assign_personnel_ammunition_qty.getText().toString());
+                }
+                else
+                {
+                    data.get(gpos).put(TAG_PA_ISSUE_QTY, holder.et_assign_personnel_ammunition_qty.getText().toString());
+                }
                 Log.i("TEXT CHANGED", String.valueOf(gpos));
             }
         });
@@ -139,7 +175,7 @@ public class AssignPersonnelAmmunitionAdapter extends RecyclerView.Adapter<Assig
         Spinner ddl_assign_personnel_ammunition;
         EditText et_assign_personnel_ammunition_qty;
 
-        public MyViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
+        public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
             //bind view object var
@@ -148,7 +184,7 @@ public class AssignPersonnelAmmunitionAdapter extends RecyclerView.Adapter<Assig
             ddl_assign_personnel_ammunition = itemView.findViewById(R.id.ddl_assign_personnel_ammunition);
             et_assign_personnel_ammunition_qty = itemView.findViewById(R.id.et_assign_personnel_ammunition_qty);
 
-            itemView.setOnClickListener(new View.OnClickListener(){
+            /*itemView.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
                     if(recyclerViewInterface != null)
@@ -160,7 +196,7 @@ public class AssignPersonnelAmmunitionAdapter extends RecyclerView.Adapter<Assig
                         }
                     }
                 }
-            });
+            });*/
         }
     }
 

@@ -509,6 +509,8 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
 
     private void showAssignPersonnelAmmo(int op_id, int o_id)
     {
+        RecyclerViewInterface rInterface = this;
+
         Dialog DialogFragment = new Dialog(ViewOperationActivity.this, android.R.style.Theme_Black_NoTitleBar);
         DialogFragment.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
         DialogFragment.setContentView(R.layout.dialog_assign_personnel_ammunition);
@@ -557,12 +559,6 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
 
             personnel_ammo_list.add(map);
         }
-        HashMap<String, String> map = new HashMap<String, String>();
-        map.put(TAG_PA_ID, "1");
-        map.put(TAG_A_ID, "1");
-        map.put(TAG_PA_ISSUE_QTY, "1000");
-
-        personnel_ammo_list.add(map);
 
         AssignPersonnelAmmunitionAdapter rAdapter = new AssignPersonnelAmmunitionAdapter(getApplicationContext(),
                 personnel_ammo_list,
@@ -573,16 +569,40 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
         rv_assign_personnel_ammunition.setAdapter(rAdapter);
         rv_assign_personnel_ammunition.setLayoutManager(new LinearLayoutManager(this));
 
-        AssignPersonnelAmmunitionAdapter adap = (AssignPersonnelAmmunitionAdapter) rv_assign_personnel_ammunition.getAdapter();
-        ArrayList<HashMap<String, String>> dat = adap.getData();
-        Log.i(dat.get(0).get(TAG_PA_ISSUE_QTY), "pls work");
+
+
+
+        Button btn_assign_personnel_ammunition_add_entry;
+        btn_assign_personnel_ammunition_add_entry = (Button) DialogFragment.findViewById(R.id.btn_assign_personnel_ammunition_add_entry);
+        btn_assign_personnel_ammunition_add_entry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AssignPersonnelAmmunitionAdapter adapter = (AssignPersonnelAmmunitionAdapter) rv_assign_personnel_ammunition.getAdapter();
+                ArrayList<HashMap<String, String>> existing_data = adapter.getData();
+                existing_data.add(new HashMap<String,String>());
+                AssignPersonnelAmmunitionAdapter rAdapter = new AssignPersonnelAmmunitionAdapter(getApplicationContext(),
+                        personnel_ammo_list,
+                        ammo_list,
+                        rInterface
+                );
+                rv_assign_personnel_ammunition.setAdapter(rAdapter);
+            }
+        });
 
 
         Button btn_save_assigned_ammunition = (Button) DialogFragment.findViewById(R.id.btn_save_assigned_ammunition);
         btn_save_assigned_ammunition.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i(dat.get(0).get(TAG_PA_ISSUE_QTY), "pls work");
+                AssignPersonnelAmmunitionAdapter adapter = (AssignPersonnelAmmunitionAdapter) rv_assign_personnel_ammunition.getAdapter();
+                ArrayList<HashMap<String, String>> existing_data = adapter.getData();
+                for(HashMap<String, String> entry : existing_data)
+                {
+                    //
+
+
+                    Log.i(entry.get(TAG_A_ID) + "AID", entry.get(TAG_PA_ISSUE_QTY) + "AQTY");
+                }
             }
         });
 
