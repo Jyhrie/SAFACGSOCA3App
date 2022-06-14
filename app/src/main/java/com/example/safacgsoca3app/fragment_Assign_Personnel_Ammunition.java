@@ -121,13 +121,8 @@ public class fragment_Assign_Personnel_Ammunition extends DialogFragment impleme
 
                 for (HashMap<String, String> map : data) {
                     Log.i(map.get(TAG_A_ID), map.get(TAG_PA_ISSUE_QTY));
-                }
-            }
-        });
-
+                    
                 //get all data stored within adapter
-
-                /*adapter_Personnel_Ammunition adapter = (adapter_Personnel_Ammunition) rv_assign_personnel_ammunition.getAdapter();
                 ArrayList<HashMap<String, String>> existing_data = data;
                 for (HashMap<String, String> entry : existing_data) {
                     //check if TAG_PA_ID is new/old
@@ -158,7 +153,7 @@ public class fragment_Assign_Personnel_Ammunition extends DialogFragment impleme
                     Log.i(entry.get(TAG_A_ID) + "AID", entry.get(TAG_PA_ISSUE_QTY) + "AQTY");
                 }
             }
-        });*/
+        });
 
         return v;
     }
