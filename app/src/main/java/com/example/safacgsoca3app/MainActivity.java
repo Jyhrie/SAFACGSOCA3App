@@ -104,7 +104,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        Button btnTesting;
+        btnTesting = findViewById(R.id.btnTesting);
+        btnTesting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), GenerateDocumentsActivity.class);
+                startActivity(i);
+            }
+        });
 
     }
 
