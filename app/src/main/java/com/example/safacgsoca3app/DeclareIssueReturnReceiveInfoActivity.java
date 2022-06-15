@@ -29,6 +29,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.github.gcacace.signaturepad.views.SignaturePad;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -63,25 +65,43 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
         TextView tv_Issue_Return_Receive;
         Button btn_ClearPad;
         Button btn_Validate;
+        SignaturePad Signature_Pad;
+        ImageView imageView;
 
         tv_Issue_Return_Receive = (TextView) findViewById(R.id.tv_Issue_Return_Receive);
         btn_ClearPad = (Button) findViewById(R.id.btn_ClearPad);
         btn_Validate = (Button) findViewById(R.id.btn_Validate);
+        Signature_Pad = findViewById(R.id.Signature_Pad);
+        imageView = findViewById(R.id.imageView);
 
         tv_Issue_Return_Receive.setText(Function4);
+
+        btn_ClearPad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Signature_Pad.clear();
+            }
+        });
+
+        btn_Validate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bitmap bitmap = Signature_Pad.getSignatureBitmap();
+                imageView.setImageBitmap(bitmap);
+            }
+        });
+
         onResume(Function4);
-    }
+        }
 
     protected void onResume(String Function4) {
         super.onResume();
 
         TextView tv_Detail_Name;
         TextView tv_Personnel_Name;
-        View view_Signature_Pad;
 
         tv_Detail_Name = (TextView) findViewById(R.id.tv_Detail_Name);
         tv_Personnel_Name = (TextView) findViewById(R.id.tv_Personnel_Name);
-        view_Signature_Pad = (View) findViewById(R.id.view_Signature_Pad);
 
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
