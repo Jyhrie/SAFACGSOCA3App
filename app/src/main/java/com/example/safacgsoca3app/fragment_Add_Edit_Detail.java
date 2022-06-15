@@ -174,9 +174,10 @@ public class fragment_Add_Edit_Detail extends DialogFragment implements Recycler
                     //iterate over both lists
                     for(int i = 0; i< existing_detail_personnel_id.size(); i++)
                     {
-                        if(new_detail_personnel_id.contains(existing_detail_personnel_id.get(i) ))
+                        if(!new_detail_personnel_id.contains(existing_detail_personnel_id.get(i)))
                         {
-                            
+                            db.execSQL("UPDATE d_id from op_id WHERE op_id = " + existing_detail_personnel_id.get(i));
+                            db.execSQL("DELETE FROM personnel_ammunition WHERE op_id = " + existing_detail_personnel_id.get(i));
                         }
                     }
                         //remove their ammo as well
@@ -251,6 +252,7 @@ public class fragment_Add_Edit_Detail extends DialogFragment implements Recycler
 
     public void refreshData()
     {
+        Log.i("ref", "data");
         get_op_list();
         rvAdapter.notifyDataSetChanged();
     }
@@ -258,7 +260,7 @@ public class fragment_Add_Edit_Detail extends DialogFragment implements Recycler
     public void get_op_list()
     {
         Context context = getContext();
-        op_list = new ArrayList<HashMap<String, String>>();
+        //op_list = new ArrayList<HashMap<String, String>>();
         SQLiteDatabase db;
         db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
         Cursor c1 = db.rawQuery("select op.op_id, p.p_name, p.p_nric from operation_personnel op, personnel p where op.p_id = p.p_id and (op.d_id = " + d_id + " or op.d_id = -1)", null);

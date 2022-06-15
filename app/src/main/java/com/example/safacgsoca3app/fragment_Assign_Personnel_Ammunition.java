@@ -120,13 +120,12 @@ public class fragment_Assign_Personnel_Ammunition extends DialogFragment impleme
             @Override
             public void onClick(View view) {
 
-                for (HashMap<String, String> map : data) {
-                    Log.i(map.get(TAG_A_ID), map.get(TAG_PA_ISSUE_QTY));
 
                     //get all data stored within adapter
                     ArrayList<HashMap<String, String>> existing_data = data;
                     for (HashMap<String, String> entry : existing_data) {
                         //check if TAG_PA_ID is new/old
+                        Log.i(entry.get(TAG_PA_ID), "paid");
                         if (entry.get(TAG_PA_ID).equals("-1")) {
                             //new entry
                             ContentValues content = new ContentValues();
@@ -153,8 +152,6 @@ public class fragment_Assign_Personnel_Ammunition extends DialogFragment impleme
                         //check if existing TAG_PA_IDs have been removed
                         Log.i(entry.get(TAG_A_ID) + "AID", entry.get(TAG_PA_ISSUE_QTY) + "AQTY");
                     }
-                }
-                source.refreshFragmentData();
                 dismiss();
             }
         });
