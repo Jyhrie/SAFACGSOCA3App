@@ -63,6 +63,8 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
 
     private adapter_Personnel_Ammunition assign_personnel_adapter;
 
+    fragment_Add_Edit_Detail fragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -228,9 +230,7 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
 
     public void showAddEditDetailDialog(int d_id, String o_id, boolean reset)
     {
-
-
-        fragment_Add_Edit_Detail fragment = new fragment_Add_Edit_Detail();
+        fragment = new fragment_Add_Edit_Detail();
         Bundle args = new Bundle();
         args.putInt(TAG_D_ID, d_id);
         args.putString(TAG_O_ID, o_id);
@@ -709,6 +709,10 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
         });*/
     }
 
+    public void refreshFragmentData()
+    {
+        fragment.refreshData();
+    }
 
     @Override
     public void onItemClick(int position) {

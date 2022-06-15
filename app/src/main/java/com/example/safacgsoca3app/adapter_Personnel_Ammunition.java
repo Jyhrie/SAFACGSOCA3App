@@ -73,10 +73,10 @@ public class adapter_Personnel_Ammunition extends RecyclerView.Adapter<adapter_P
     @Override
     public void onBindViewHolder(@NonNull adapter_Personnel_Ammunition.MyViewHolder holder, int position) {
         int gpos = position;
-        if(!data.get(position).containsKey(TAG_PA_ID)) {
+        if(data.get(position).containsKey(TAG_PA_ID)) {
             holder.tv_existing_pa_id.setText(data.get(position).get(TAG_PA_ID));
         }
-        if(!data.get(position).containsKey(TAG_A_ID)) {
+        if(data.get(position).containsKey(TAG_A_ID)) {
             holder.tv_selected_ammo_id.setText(data.get(position).get(TAG_A_ID));
         }
 

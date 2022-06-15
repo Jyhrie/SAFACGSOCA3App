@@ -7,8 +7,15 @@
         android:id="@+id/tv_edit_detail_personnel_name"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:text="TextView" />
+
+    <TextView
+        android:id="@+id/tv_edit_detail_personnel_nric"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="Test" />
 
     <TextView
         android:id="@+id/tv_edit_detail_personnel_id"

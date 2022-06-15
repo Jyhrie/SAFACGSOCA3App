@@ -144,7 +144,9 @@ public class fragment_Assign_Detail_Personnel extends DialogFragment {
                 }
                 db.close();
 
+                //update prev detail dialog
                 source.showAddEditDetailDialog(d_id, o_id, false);
+                dismiss();
             }
         });
 

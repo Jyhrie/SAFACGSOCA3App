@@ -18,10 +18,10 @@
             android:inputType="textPersonName"
             android:text="" />
 
-        <ListView
-            android:id="@+id/lv_edit_issuing_detail_personnel"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_edit_issuing_detail_personnel"
             android:layout_width="match_parent"
-            android:layout_height="201dp" />
+            android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/btnCreateDetail"

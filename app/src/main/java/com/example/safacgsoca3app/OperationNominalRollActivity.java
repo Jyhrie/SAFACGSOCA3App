@@ -23,6 +23,8 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -58,7 +60,7 @@ public class OperationNominalRollActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String o_id = intent.getStringExtra(TAG_O_ID);
 
-        Button btn_operation_nominal_add_personnel;
+        FloatingActionButton btn_operation_nominal_add_personnel;
         btn_operation_nominal_add_personnel = findViewById(R.id.btn_operation_nominal_add_personnel);
 
         btn_operation_nominal_add_personnel.setOnClickListener(new View.OnClickListener() {
@@ -70,7 +72,7 @@ public class OperationNominalRollActivity extends AppCompatActivity {
 
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-        Cursor c1 = db.rawQuery("SELECT op.op_id, p.p_rank, p.p_name, p.p_nric FROM personnel p, operation_personnel op WHERE op.p_id = p.p_id AND op.o_id = " + o_id , null);
+        Cursor c1 = db.rawQuery("SELECT op.op_id, p.p_rank, p.p_name, p.p_nric, d.d_name FROM personnel p LEFT OUTER JOIN operation_personnel op ON op.p_id = p.p_id LEFT OUTER JOIN detail d ON d.d_id = op.d_id WHERE op.o_id = " + o_id , null);
 
         ArrayList<HashMap<String, String>> ammoList = new ArrayList<HashMap<String, String>>();
         while (c1.moveToNext()) {
@@ -80,15 +82,22 @@ public class OperationNominalRollActivity extends AppCompatActivity {
             String line_rank = c1.getString(1);
             String line_name = c1.getString(2);
             String line_nric = c1.getString(3);
+            String line_detail_name = c1.getString(4);
+
+            if(line_detail_name == null)
+            {
+                line_detail_name = "UNASSIGNED DETAIL";
+            }
 
             map.put(TAG_OP_ID, line_id);
             map.put(TAG_P_NAME, line_rank + " " + line_name);
             map.put(TAG_P_NRIC, line_nric);
-            map.put(TAG_D_ID, "1");
+            map.put(TAG_D_ID, line_detail_name);
 
             ammoList.add(map);
         }
         db.close();
+        Log.i(String.valueOf(ammoList.size()), "str");
 
         ListView lv = findViewById(R.id.lv_operation_nominal_roll);
         ListAdapter adapter = new SimpleAdapter(

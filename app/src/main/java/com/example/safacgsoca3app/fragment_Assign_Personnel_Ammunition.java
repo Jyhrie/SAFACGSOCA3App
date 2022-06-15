@@ -66,6 +66,7 @@ public class fragment_Assign_Personnel_Ammunition extends DialogFragment impleme
         super.onCreateView(inflater, container, savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_assign_personnel_ammunition, container, false);
         Context context = getContext();
+        ViewOperationActivity source = (ViewOperationActivity) getActivity();
 
         Bundle args = getArguments();
         String o_id = args.getString(TAG_O_ID);
@@ -153,6 +154,8 @@ public class fragment_Assign_Personnel_Ammunition extends DialogFragment impleme
                         Log.i(entry.get(TAG_A_ID) + "AID", entry.get(TAG_PA_ISSUE_QTY) + "AQTY");
                     }
                 }
+                source.refreshFragmentData();
+                dismiss();
             }
         });
 

@@ -5,45 +5,35 @@
     android:layout_height="match_parent">
 
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#FFFFFF"
-        android:paddingTop="10dp">
+        android:layout_height="200dp"
+        android:orientation="horizontal">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/tvOperationListName"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:text="Operation"
+            android:textAlignment="center"
+            android:textSize="50dp" />
 
-            <TextView
-                android:id="@+id/tvOperationListName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Operation"
-                android:textAlignment="center"
-                android:textSize="30dp"
-                android:autoSizeTextType="uniform"/>
+        <TextView
+            android:id="@+id/tvOperationListKAH"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:text="Key Appointment Holders"
+            android:textSize="30dp" />
 
-            <TextView
-                android:id="@+id/tvOperationListKAH"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:autoSizeTextType="uniform"
-                android:text="Key Appointment Holders"
-                android:textSize="20dp" />
+        <TextView
+            android:id="@+id/tvOperationListId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="TextView"
+            android:visibility="gone" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/tvOperationListId"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="TextView"
-                android:visibility="gone" />
-        </LinearLayout>
-
-    </RelativeLayout>
 </RelativeLayout>
