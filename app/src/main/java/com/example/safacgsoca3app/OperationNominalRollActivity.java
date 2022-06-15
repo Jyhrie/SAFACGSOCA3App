@@ -1,7 +1,9 @@
 package com.example.safacgsoca3app;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
@@ -28,7 +30,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class OperationNominalRollActivity extends AppCompatActivity {
+public class OperationNominalRollActivity extends AppCompatActivity implements RecyclerViewInterface{
 
     private static final String TAG_P_ID = "p_id";
     private static final String TAG_P_NAME = "p_name";
@@ -41,6 +43,7 @@ public class OperationNominalRollActivity extends AppCompatActivity {
     private static final String TAG_OP_ID = "op_id";
 
     private static final String TAG_D_ID = "d_id";
+    private static final String TAG_D_NAME = "d_name";
 
     private static final String TAG_PA_ID = "pa_id";
     private static final String TAG_PA_ISSUE_QTY = "pa_issue_qty";
@@ -51,6 +54,9 @@ public class OperationNominalRollActivity extends AppCompatActivity {
 
     private static final String TAG_A_ID = "a_id";
     private static final String TAG_A_NAME = "a_name";
+
+    ArrayList<HashMap<String,String>> data;
+    adapter_Operation_Nominal_Roll rvAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +80,7 @@ public class OperationNominalRollActivity extends AppCompatActivity {
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
         Cursor c1 = db.rawQuery("SELECT op.op_id, p.p_rank, p.p_name, p.p_nric, d.d_name FROM personnel p LEFT OUTER JOIN operation_personnel op ON op.p_id = p.p_id LEFT OUTER JOIN detail d ON d.d_id = op.d_id WHERE op.o_id = " + o_id , null);
 
-        ArrayList<HashMap<String, String>> ammoList = new ArrayList<HashMap<String, String>>();
+        data = new ArrayList<HashMap<String, String>>();
         while (c1.moveToNext()) {
             Log.i(c1.getString(0),"test2");
             HashMap<String, String> map = new HashMap<String, String>();
@@ -92,14 +98,32 @@ public class OperationNominalRollActivity extends AppCompatActivity {
             map.put(TAG_OP_ID, line_id);
             map.put(TAG_P_NAME, line_rank + " " + line_name);
             map.put(TAG_P_NRIC, line_nric);
-            map.put(TAG_D_ID, line_detail_name);
+            map.put(TAG_D_NAME, line_detail_name);
 
-            ammoList.add(map);
+            data.add(map);
         }
         db.close();
-        Log.i(String.valueOf(ammoList.size()), "str");
+        Log.i(String.valueOf(data.size()), "str");
 
-        ListView lv = findViewById(R.id.lv_operation_nominal_roll);
+
+        RecyclerView rv;
+        rvAdapter = new adapter_Operation_Nominal_Roll(
+                this,
+                data,
+                this
+
+        );
+
+        rv = findViewById(R.id.rv_operation_nominal_roll);
+
+        rv.setAdapter(rvAdapter);
+        rv.setLayoutManager(new LinearLayoutManager(this));
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(rv);
+
+
+        /*ListView lv = findViewById(R.id.rv_operation_nominal_roll);
         ListAdapter adapter = new SimpleAdapter(
                 OperationNominalRollActivity.this, //context
                 ammoList, //hashmapdata
@@ -107,7 +131,7 @@ public class OperationNominalRollActivity extends AppCompatActivity {
                 new String[]{TAG_OP_ID, TAG_P_NAME, TAG_P_NRIC, TAG_D_ID}, //from array
                 new int[]{R.id.tv_personnel_o_id_list_operation_nominal_roll, R.id.tv_personnel_name_list_operation_nominal_roll, R.id.tv_personnel_nric_list_operation_nominal_roll, R.id.tv_personnel_detail_list_operation_nominal_roll});
         // updating listview
-        lv.setAdapter(adapter);
+        lv.setAdapter(adapter);*/
 
     }
 
@@ -206,6 +230,45 @@ public class OperationNominalRollActivity extends AppCompatActivity {
                 DialogFragment.dismiss();
             }
         });
+    }
+
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+            int position = viewHolder.getAdapterPosition();
+
+            switch(direction){
+                case ItemTouchHelper.LEFT:
+                    Log.i(String.valueOf(data.size()), String.valueOf(position));
+                    removeGuyFromDB(position);
+                    data.remove(position);
+                    rvAdapter.notifyItemRemoved(position);
+                    break;
+                case ItemTouchHelper.RIGHT:
+                    break;
+            }
+        }
+    };
+
+
+    public void removeGuyFromDB(int position)
+    {
+        SQLiteDatabase db;
+        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+        db.execSQL("DELETE FROM personnel_ammunition WHERE op_id = " + data.get(position).get(TAG_OP_ID));
+        db.execSQL("DELETE FROM operation_personnel WHERE op_id = " + data.get(position).get(TAG_OP_ID));
+        db.close();
+    }
+
+    @Override
+    public void onItemClick(int position) {
+
     }
 }
 

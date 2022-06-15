@@ -29,15 +29,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ListView
-            android:id="@+id/lv_operation_nominal_roll"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_operation_nominal_roll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginEnd="1dp"
             android:layout_weight="1"
             tools:ignore="MissingConstraints">
 
-        </ListView>
+        </androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

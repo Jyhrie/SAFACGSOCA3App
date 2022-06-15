@@ -7,15 +7,15 @@
     android:orientation="vertical"
     tools:context=".NominalRollActivity">
 
-    <ListView
-        android:id="@+id/lvNominalRoll"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvNominalRoll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginEnd="1dp"
         tools:ignore="MissingConstraints"
         android:layout_weight="1">
 
-    </ListView>
+    </androidx.recyclerview.widget.RecyclerView>
 
     <LinearLayout
         android:layout_width="match_parent"

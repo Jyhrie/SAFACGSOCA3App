@@ -28,10 +28,29 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG_P_ID = "p_id";
+    private static final String TAG_P_NAME = "p_name";
+    private static final String TAG_P_NRIC = "p_nric";
 
-    private static final String TAG_ID = "o_id";
-    private static final String TAG_NAME = "o_name";
-    private static final String TAG_KAH = "o_kah";
+    private static final String TAG_O_ID = "o_id";
+    private static final String TAG_O_NAME = "o_name";
+    private static final String TAG_O_KAH = "o_kah";
+
+    private static final String TAG_OP_ID = "op_id";
+
+    private static final String TAG_D_ID = "d_id";
+    private static final String TAG_D_NAME = "d_name";
+
+    private static final String TAG_PA_ID = "pa_id";
+    private static final String TAG_PA_ISSUE_QTY = "pa_issue_qty";
+    private static final String TAG_PA_ISSUED = "pa_issued";
+    private static final String TAG_PA_RETURNED = "pa_returned";
+    private static final String TAG_PA_EXPENEDED = "pa_expended";
+    private static final String TAG_PA_SPOILED = "pa_spoiled";
+
+    private static final String TAG_A_ID = "a_id";
+    private static final String TAG_A_NAME = "a_name";
+    private static final String TAG_A_QTY = "a_qty";
 
 
     @Override
@@ -62,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String oid = ((TextView) view.findViewById(R.id.tvOperationListId)).getText().toString();
                 Intent intent = new Intent(getApplicationContext(), ViewOperationActivity.class);
-                intent.putExtra(TAG_ID, oid);
+                intent.putExtra(TAG_O_ID, oid);
                 startActivity(intent);
             }
         });
@@ -102,9 +121,9 @@ public class MainActivity extends AppCompatActivity {
             String line_name = c1.getString(1);
             String line_qty = c1.getString(2);
 
-            map.put(TAG_ID, line_id);
-            map.put(TAG_NAME, line_name);
-            map.put(TAG_KAH, line_qty);
+            map.put(TAG_O_ID, line_id);
+            map.put(TAG_O_NAME, line_name);
+            map.put(TAG_O_KAH, line_qty);
 
             opsList.add(map);
         }
@@ -115,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this, //context
                 opsList, //hashmapdata
                 R.layout.list_operation, //layout of list
-                new String[]{TAG_ID, TAG_NAME, TAG_KAH}, //from array
+                new String[]{TAG_O_ID, TAG_O_NAME, TAG_O_KAH}, //from array
                 new int[]{R.id.tvOperationListId, R.id.tvOperationListName, R.id.tvOperationListKAH}); //toarray
         // updating listview
         lv.setAdapter(adapter);
@@ -125,7 +144,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showAddExerciseDialog() {
+        fragment_Add_Operation fragment = new fragment_Add_Operation();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        fragment.show(getSupportFragmentManager(), "fragment_assign_personnel_ammunition");
 
+
+        /*
         Dialog DialogFragment = new Dialog(MainActivity.this, android.R.style.Theme_Black_NoTitleBar);
         DialogFragment.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
         DialogFragment.setContentView(R.layout.dialog_add_exercise);
@@ -183,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
 
                 DialogFragment.dismiss();
             }
-        });
+        });*/
     }
 
     public void initialize_database(boolean reset)
