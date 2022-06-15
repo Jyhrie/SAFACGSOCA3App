@@ -500,6 +500,8 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
         btn_SelectPersonnel.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(ViewOperationActivity.this, PersonnelChecklistActivity.class);
+                String Function = "Receiving: ";
+                i.putExtra("Function", Function);
                 ViewOperationActivity.this.startActivity(i);
                 ReceiveDialog.dismiss();
             }

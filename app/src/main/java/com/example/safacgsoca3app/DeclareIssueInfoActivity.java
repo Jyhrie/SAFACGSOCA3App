@@ -27,6 +27,14 @@ import kotlin.jvm.functions.Function4;
 
 public class DeclareIssueInfoActivity extends AppCompatActivity {
 
+
+
+
+    private static final String placeholder_op_id = "1";
+
+
+
+
     private static final String TAG_PAID = "pa_id";
     private static final String TAG_OPID = "op_id";
     private static final String TAG_AID = "a_id";
@@ -46,6 +54,7 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String Function4 = intent.getStringExtra("Function3");
+
         TextView tv_Issue_Return_Receive;
 
         Button btn_ClearPad;
@@ -72,7 +81,7 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
         db.execSQL("CREATE TABLE IF NOT EXISTS personnel_ammunition (pa_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, op_id integer NOT NULL, a_id integer NOT NULL, pa_issue_qty number NOT NULL, pa_issued number, pa_returned number, pa_expended number, pa_spoiled number)");
 
-        Cursor c1 = db.rawQuery("SELECT a.a_name, pa.pa_id, pa.op_id, pa.a_id, pa.pa_issue_qty, pa.pa_issued, pa.pa_returned, pa.pa_expended, pa.pa_spoiled FROM personnel_ammunition pa, ammunition a WHERE a.a_id = pa.a_id and pa.op_id = 1", null);
+        Cursor c1 = db.rawQuery("SELECT a.a_name, pa.pa_id, pa.op_id, pa.a_id, pa.pa_issue_qty, pa.pa_issued, pa.pa_returned, pa.pa_expended, pa.pa_spoiled FROM personnel_ammunition pa, ammunition a WHERE a.a_id = pa.a_id and pa.op_id =" + placeholder_op_id, null);
 
         ArrayList<HashMap<String, String>> IssueAmmoList = new ArrayList<HashMap<String, String>>();
         while (c1.moveToNext()) {
@@ -110,7 +119,7 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
         }
 
         db.execSQL("CREATE TABLE IF NOT EXISTS detail (d_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, d_name text NOT NULL, o_id integer NOT NULL)");
-        c1 = db.rawQuery("select d.d_name, p.p_name from detail d, personnel p, operation_personnel op where d.d_id = op.d_id and p.p_id = op.p_id and op.op_id = 1 ", null);
+        c1 = db.rawQuery("select d.d_name, p.p_name from detail d, personnel p, operation_personnel op where d.d_id = op.d_id and p.p_id = op.p_id and op.op_id = "+placeholder_op_id, null);
         while (c1.moveToNext()) {
             tv_Detail_Name.setText(c1.getString(0));
             tv_Personnel_Name.setText(c1.getString(1));

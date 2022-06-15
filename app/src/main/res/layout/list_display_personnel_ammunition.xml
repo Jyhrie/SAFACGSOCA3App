@@ -15,6 +15,13 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/pa_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:visibility="gone" />
+
+        <TextView
             android:id="@+id/Personnel_Ammunition"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -96,7 +103,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/Spoilt_Quantity"
+                    android:id="@+id/Spoiled_Quantity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="30dp"
@@ -111,7 +118,7 @@
                     android:layout_marginEnd="30dp"
                     android:layout_marginRight="30dp"
                     android:gravity="center"
-                    android:text="@string/Spoilt" />
+                    android:text="@string/Spoiled" />
             </LinearLayout>
         </LinearLayout>
 
