@@ -51,7 +51,7 @@
     <string name="Issued">Issued</string>
     <string name="Expended">Expended</string>
     <string name="Returned">Returned</string>
-    <string name="Spoilt">Spoilt</string>
+    <string name="Spoiled">Spoiled</string>
 
     <string name="SelectPersonnel">Select Personnel</string>
     <string name="ScanQRCode">Scan QR Code</string>

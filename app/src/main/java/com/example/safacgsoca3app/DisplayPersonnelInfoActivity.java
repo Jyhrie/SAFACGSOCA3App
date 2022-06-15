@@ -17,6 +17,13 @@ import java.util.HashMap;
 public class DisplayPersonnelInfoActivity extends AppCompatActivity {
 
 
+
+
+    private static final String placeholder_op_id = "1";
+
+
+
+
     private static final String TAG_P_ID = "p_id";
     private static final String TAG_P_NAME = "p_name";
     private static final String TAG_P_NRIC = "p_nric";
@@ -111,39 +118,55 @@ public class DisplayPersonnelInfoActivity extends AppCompatActivity {
         //get data from db
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-        Cursor c1 = db.rawQuery("select pa.pa_id, a.a_name, pa.pa_issued, pa.pa_expended, pa.pa_returned, pa.pa_spoiled from personnel_ammunition pa, ammunition a where a.a_id = pa.a_id", null);
+        Cursor c1 = db.rawQuery("SELECT a.a_name, pa.pa_id, pa.pa_issued, pa.pa_expended, pa.pa_returned, pa.pa_spoiled FROM personnel_ammunition pa, ammunition a WHERE a.a_id = pa.a_id and pa.op_id = "+placeholder_op_id, null);
 
         while(c1.moveToNext()) {
             HashMap<String, String> map = new HashMap<String, String>();
-            String pa_id = c1.getString(0);
-            String Ammunition_Text = c1.getString(1);
+
+            String Ammunition_Text = c1.getString(0);
+            String pa_id = c1.getString(1);
             String Issued_Quantity = c1.getString(2);
             String Expended_Quantity = c1.getString(3);
             String Returned_Quantity = c1.getString(4);
-            String Spoilt_Quantity = c1.getString(5);
+            String Spoiled_Quantity = c1.getString(5);
 
             //In reality, the number of entries is not defined by the for loop but by database entries
             //For this example, we will manually create 2 entries containing a hardcoded string
 
             map.put(TAG_A_NAME, Ammunition_Text);
+            map.put(TAG_PA_ID, pa_id);
             map.put(TAG_PA_ISSUED, Issued_Quantity);
             map.put(TAG_PA_EXPENEDED, Expended_Quantity);
             map.put(TAG_PA_RETURNED, Returned_Quantity);
-            map.put(TAG_PA_SPOILED, Spoilt_Quantity);
+            map.put(TAG_PA_SPOILED, Spoiled_Quantity);
             //Puts key and data into hashmap
             Personnel_Ammo_List.add(map);
             //Adds a hashmap into the array
         }
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS detail (d_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, d_name text NOT NULL, o_id integer NOT NULL)");
+        c1 = db.rawQuery("select d.d_name, p.p_name, p.p_nric from detail d, personnel p, operation_personnel op where d.d_id = op.d_id and p.p_id = op.p_id and op.op_id = "+placeholder_op_id, null);
+        while (c1.moveToNext()) {
+            Display_Personnel_Info_Detail_Name.setText(c1.getString(0));
+            Display_Personnel_Info_Personnel_Name.setText(c1.getString(1));
+            Display_Personnel_Info_Remarks.setText(c1.getString(2));
+        }
+
+        c1 = db.rawQuery("select o_name from operation o, operation_personnel op where o.o_id = op.o_id and op.op_id = "+placeholder_op_id, null);
+        while (c1.moveToNext()) {
+            Display_Personnel_Info_Ops_Name.setText(c1.getString(0));
+        }
+
+        db.close();
 
         ListView lv = findViewById(R.id.lv_Personnel_Ammunition);
         ListAdapter adapter = new SimpleAdapter(
                 DisplayPersonnelInfoActivity.this, //context
                 Personnel_Ammo_List, //hashmapdata
                 R.layout.list_display_personnel_ammunition, //layout of list
-                new String[]{TAG_A_NAME,TAG_PA_ISSUED,TAG_PA_EXPENEDED,TAG_PA_RETURNED,TAG_PA_SPOILED}, //from array
-                new int[]{R.id.Personnel_Ammunition,R.id.Issued_Quantity,R.id.Expended_Quantity,R.id.Returned_Quantity,R.id.Spoilt_Quantity}); //toarray
+                new String[]{TAG_A_NAME,TAG_PA_ID,TAG_PA_ISSUED,TAG_PA_EXPENEDED,TAG_PA_RETURNED,TAG_PA_SPOILED}, //from array
+                new int[]{R.id.Personnel_Ammunition,R.id.pa_id,R.id.Issued_Quantity,R.id.Expended_Quantity,R.id.Returned_Quantity,R.id.Spoiled_Quantity}); //toarray
         // updating listview
         lv.setAdapter(adapter);
-
     }
 }
