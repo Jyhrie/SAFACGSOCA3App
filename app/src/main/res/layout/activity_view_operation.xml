@@ -30,13 +30,6 @@
                 android:text="Operation Name" />
 
             <TextView
-                android:id="@+id/tv_date_location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="30dp"
-                android:text="Date Location" />
-
-            <TextView
                 android:id="@+id/tv_kah"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

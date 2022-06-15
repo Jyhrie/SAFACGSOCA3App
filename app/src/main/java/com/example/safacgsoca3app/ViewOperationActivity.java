@@ -84,7 +84,6 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
         Button btnAddIssueDetail;
 
         tvOperationName = (TextView) findViewById(R.id.tv_operation_name);
-        tvDateLocation = (TextView) findViewById(R.id.tv_date_location);
         tvKAH = (TextView) findViewById(R.id.tv_kah);
         btnViewOperationNominalRoll = (Button) findViewById(R.id.btn_view_operation_nominal);
         btnViewAmmunition = (Button) findViewById(R.id.btn_view_ammunition);
@@ -108,7 +107,6 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
             String line_kah = c1.getString(2);
 
             tvOperationName.setText(line_name);
-            tvDateLocation.setText("test date");
             tvKAH.setText(line_kah);
         }
         db.close();
