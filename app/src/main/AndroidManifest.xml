@@ -39,7 +39,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DeclareIssueInfoActivity"
+            android:name=".DeclareIssueReturnReceiveInfoActivity"
             android:exported="true"></activity>
         <activity
             android:name=".PersonnelChecklistActivity"

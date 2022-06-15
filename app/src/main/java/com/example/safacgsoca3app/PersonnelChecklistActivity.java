@@ -96,7 +96,7 @@ public class PersonnelChecklistActivity extends AppCompatActivity {
         btnProceed.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                Intent intent = new Intent(PersonnelChecklistActivity.this, DeclareIssueInfoActivity.class);
+                Intent intent = new Intent(PersonnelChecklistActivity.this, DeclareIssueReturnReceiveInfoActivity.class);
                 String Function3 = Function2;
                 intent.putExtra("Function3", Function3);
                 PersonnelChecklistActivity.this.startActivity(intent);

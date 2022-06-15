@@ -1,20 +1,29 @@
 package com.example.safacgsoca3app;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
@@ -23,16 +32,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import kotlin.jvm.functions.Function4;
-
-public class DeclareIssueInfoActivity extends AppCompatActivity {
 
 
+public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
 
 
     private static final String placeholder_op_id = "1";
-
-
 
 
     private static final String TAG_PAID = "pa_id";
@@ -56,7 +61,6 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
         String Function4 = intent.getStringExtra("Function3");
 
         TextView tv_Issue_Return_Receive;
-
         Button btn_ClearPad;
         Button btn_Validate;
 
@@ -73,9 +77,11 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
 
         TextView tv_Detail_Name;
         TextView tv_Personnel_Name;
+        View view_Signature_Pad;
 
         tv_Detail_Name = (TextView) findViewById(R.id.tv_Detail_Name);
         tv_Personnel_Name = (TextView) findViewById(R.id.tv_Personnel_Name);
+        view_Signature_Pad = (View) findViewById(R.id.view_Signature_Pad);
 
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
@@ -128,7 +134,7 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
 
         ListView lv = findViewById(R.id.lv_Issue_Ammunition);
         ListAdapter adapter = new SimpleAdapter(
-                DeclareIssueInfoActivity.this, //context
+                DeclareIssueReturnReceiveInfoActivity.this, //context
                 IssueAmmoList, //hashmapdata
                 R.layout.list_issue_return_receive_ammunition, //layout of list
                 new String[]{TAG_ANAME, TAG_PAID, TAG_OPID, TAG_AID, TAG_TOISSUE_ISSUED_DESC, TAG_TOISSUE_ISSUED, TAG_RETURNED, TAG_EXPENDED, TAG_SPOILED}, //from array
@@ -151,10 +157,10 @@ public class DeclareIssueInfoActivity extends AppCompatActivity {
                 showEditIssueDialog(IssueAmmoList, i, Function4);
             }
         });
-    }
+ }
 
     private void showEditIssueDialog(ArrayList<HashMap<String, String>> IssueAmmoList, int i, String Function4) {
-        Dialog EditIssueDialog = new Dialog(DeclareIssueInfoActivity.this, android.R.style.Theme_Black_NoTitleBar);
+        Dialog EditIssueDialog = new Dialog(DeclareIssueReturnReceiveInfoActivity.this, android.R.style.Theme_Black_NoTitleBar);
         EditIssueDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
         EditIssueDialog.setContentView(R.layout.dialog_edit_issue_return_receive_ammunition);
         EditIssueDialog.setCancelable(true);
