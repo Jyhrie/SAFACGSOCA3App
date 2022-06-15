@@ -74,12 +74,14 @@ public class fragment_Add_Edit_Detail extends DialogFragment implements Recycler
     int d_id;
     boolean reset;
     adapter_Detail_Personnel rvAdapter;
+    View v;
+    RecyclerViewInterface recyclerViewInterface;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View v = inflater.inflate(R.layout.fragment_add_edit_detail, container, false);
+        v = inflater.inflate(R.layout.fragment_add_edit_detail, container, false);
         Context context = getContext();
-        RecyclerViewInterface recyclerViewInterface = this;
+        recyclerViewInterface = this;
 
         source = (ViewOperationActivity) getActivity();
 
@@ -119,20 +121,9 @@ public class fragment_Add_Edit_Detail extends DialogFragment implements Recycler
 
         db.close();
 
-        get_op_list();
+        refreshData();
 
-        RecyclerView rv = v.findViewById(R.id.rv_edit_issuing_detail_personnel);
-        rvAdapter = new adapter_Detail_Personnel(
-                context,
-                op_list,
-                recyclerViewInterface
-        );
 
-        rv.setAdapter(rvAdapter);
-        rv.setLayoutManager(new LinearLayoutManager(context));
-
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
-        itemTouchHelper.attachToRecyclerView(rv);
 
 
 
@@ -212,7 +203,11 @@ public class fragment_Add_Edit_Detail extends DialogFragment implements Recycler
                     content2.put(TAG_D_ID, new_detail_id);
                     db.update("operation_personnel", content2, "d_id = ?", new String[]{String.valueOf(-1)});
                     db.close();
+
+
                 }
+                source.refreshlvActivityDetail(o_id);
+                dismiss();
             }
 
         });
@@ -252,9 +247,20 @@ public class fragment_Add_Edit_Detail extends DialogFragment implements Recycler
 
     public void refreshData()
     {
-        Log.i("ref", "data");
+        Context context = getContext();
         get_op_list();
-        rvAdapter.notifyDataSetChanged();
+        RecyclerView rv = v.findViewById(R.id.rv_edit_issuing_detail_personnel);
+        rvAdapter = new adapter_Detail_Personnel(
+                context,
+                op_list,
+                recyclerViewInterface
+        );
+        rv.setAdapter(rvAdapter);
+        rv.setLayoutManager(new LinearLayoutManager(context));
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(rv);
+
     }
 
     public void get_op_list()

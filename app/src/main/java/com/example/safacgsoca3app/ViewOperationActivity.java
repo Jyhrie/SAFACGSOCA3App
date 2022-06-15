@@ -89,7 +89,7 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
         btnViewAmmunition = (Button) findViewById(R.id.btn_view_ammunition);
         btnAddIssueDetail = (Button) findViewById(R.id.btn_add_issue_detail);
 
-        showlvIssueDetail(o_id);
+        refreshlvActivityDetail(o_id);
 
         //pull data from db
         SQLiteDatabase db;
@@ -203,7 +203,7 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 ((TextView) findViewById(R.id.tv_selected_detail_id)).setText(detail_list.get(i).get(TAG_D_ID));
-                showlvIssueDetail(o_id);
+                refreshlvActivityDetail(o_id);
             }
 
             @Override
@@ -514,7 +514,7 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
 
     }
 
-    private void showlvIssueDetail(String o_id)
+    public void refreshlvActivityDetail(String o_id)
     {
         String search_for_detail_id = ((TextView) findViewById(R.id.tv_selected_detail_id)).getText().toString();
         if(!search_for_detail_id.isEmpty()) {
