@@ -34,6 +34,17 @@ public class PersonnelChecklistActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String Function2 = intent.getStringExtra("Function");
+        String d_id = intent.getStringExtra("d_id");
+        String d_name = intent.getStringExtra("d_name");
+
+        TextView tv_D_ID;
+        TextView tv_Personnel_Checklist_Detail_Name;
+
+        tv_D_ID = findViewById(R.id.tv_D_ID);
+        tv_Personnel_Checklist_Detail_Name = findViewById(R.id.tv_Personnel_Checklist_Detail_Name);
+
+        tv_D_ID.setText(d_id);
+        tv_Personnel_Checklist_Detail_Name.setText(d_name);
 
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);

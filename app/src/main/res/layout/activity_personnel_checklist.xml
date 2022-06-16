@@ -7,6 +7,13 @@
     tools:context="com.example.safacgsoca3app.PersonnelChecklistActivity">
 
     <TextView
+        android:id="@+id/tv_D_ID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:visibility="gone" />
+
+    <TextView
         android:id="@+id/tv_Personnel_Checklist_Detail_Name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

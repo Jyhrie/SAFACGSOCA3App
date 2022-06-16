@@ -88,6 +88,16 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Bitmap bitmap = Signature_Pad.getSignatureBitmap();
                 imageView.setImageBitmap(bitmap);
+
+                // TO DO:
+                // SAVE TOISSUE AS ISSUED
+                // SAVE OTHER QUANTITIES IN DB
+                // SAVE BITMAP
+                // GENERATE DOCUMENTS WITHOUT AMMO IC SIGNATURE
+
+                // AMMO IC CHECKS AND SIGNS
+                // EXPORT
+
             }
         });
 

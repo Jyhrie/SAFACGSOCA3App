@@ -61,6 +61,9 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
     private static final String TAG_ANAME = "a_name";
     private static final String TAG_OPID = "op_id";
 
+    public String Selected_d_id;
+    public String Selected_d_name;
+
     private adapter_Personnel_Ammunition assign_personnel_adapter;
 
     fragment_Add_Edit_Detail fragment;
@@ -77,7 +80,6 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
         Log.i("o_id = " + o_id, "view_operation_activity");
 
         TextView tvOperationName;
-        TextView tvDateLocation;
         TextView tvKAH;
         Button btnViewOperationNominalRoll;
         Button btnViewAmmunition;
@@ -109,6 +111,7 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
             tvOperationName.setText(line_name);
             tvKAH.setText(line_kah);
         }
+
         db.close();
 
         btnViewOperationNominalRoll.setOnClickListener(new View.OnClickListener(){
@@ -142,6 +145,8 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
                 Intent intent = new Intent(ViewOperationActivity.this, PersonnelChecklistActivity.class);
                 String Function = "Issuing: ";
                 intent.putExtra("Function", Function);
+                intent.putExtra("d_id", Selected_d_id);
+                intent.putExtra("d_name", Selected_d_name);
                 ViewOperationActivity.this.startActivity(intent);
             }
         });
@@ -152,6 +157,8 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
                 Intent intent = new Intent(ViewOperationActivity.this, PersonnelChecklistActivity.class);
                 String Function = "Returning: ";
                 intent.putExtra("Function", Function);
+                intent.putExtra("d_id", Selected_d_id);
+                intent.putExtra("d_name", Selected_d_name);
                 ViewOperationActivity.this.startActivity(intent);
             }
         });
@@ -497,10 +504,12 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
         Button btn_SelectPersonnel = (Button) ReceiveDialog.findViewById(R.id.btn_SelectPersonnel);
         btn_SelectPersonnel.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent i = new Intent(ViewOperationActivity.this, PersonnelChecklistActivity.class);
+                Intent intent = new Intent(ViewOperationActivity.this, PersonnelChecklistActivity.class);
                 String Function = "Receiving: ";
-                i.putExtra("Function", Function);
-                ViewOperationActivity.this.startActivity(i);
+                intent.putExtra("Function", Function);
+                intent.putExtra("d_id", Selected_d_id);
+                intent.putExtra("d_name", Selected_d_name);
+                ViewOperationActivity.this.startActivity(intent);
                 ReceiveDialog.dismiss();
             }
         });
@@ -538,6 +547,14 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
 
                 PersonnelList.add(map);
             }
+
+            c1 = db.rawQuery("select * from detail where d_id = " + search_for_detail_id, null);
+            ArrayList<HashMap<String, String>> detail_list = new ArrayList<HashMap<String, String>>();
+            while (c1.moveToNext()) {
+                Selected_d_id = c1.getString(0);
+                Selected_d_name = c1.getString(1);
+            }
+
             db.close();
 
 
