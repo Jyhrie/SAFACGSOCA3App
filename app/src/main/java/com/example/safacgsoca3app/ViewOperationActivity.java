@@ -61,6 +61,7 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
     private static final String TAG_ANAME = "a_name";
     private static final String TAG_OPID = "op_id";
 
+    public String Selected_o_id;
     public String Selected_d_id;
     public String Selected_d_name;
 
@@ -77,6 +78,7 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
         //get id
         Intent intent = getIntent();
         String o_id = intent.getStringExtra(TAG_ID);
+        Selected_o_id = o_id;
         Log.i("o_id = " + o_id, "view_operation_activity");
 
         TextView tvOperationName;
@@ -145,6 +147,7 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
                 Intent intent = new Intent(ViewOperationActivity.this, PersonnelChecklistActivity.class);
                 String Function = "Issuing: ";
                 intent.putExtra("Function", Function);
+                intent.putExtra("o_id", Selected_o_id);
                 intent.putExtra("d_id", Selected_d_id);
                 intent.putExtra("d_name", Selected_d_name);
                 ViewOperationActivity.this.startActivity(intent);
@@ -157,6 +160,7 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
                 Intent intent = new Intent(ViewOperationActivity.this, PersonnelChecklistActivity.class);
                 String Function = "Returning: ";
                 intent.putExtra("Function", Function);
+                intent.putExtra("o_id", Selected_o_id);
                 intent.putExtra("d_id", Selected_d_id);
                 intent.putExtra("d_name", Selected_d_name);
                 ViewOperationActivity.this.startActivity(intent);
@@ -507,6 +511,7 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
                 Intent intent = new Intent(ViewOperationActivity.this, PersonnelChecklistActivity.class);
                 String Function = "Receiving: ";
                 intent.putExtra("Function", Function);
+                intent.putExtra("o_id", Selected_o_id);
                 intent.putExtra("d_id", Selected_d_id);
                 intent.putExtra("d_name", Selected_d_name);
                 ViewOperationActivity.this.startActivity(intent);

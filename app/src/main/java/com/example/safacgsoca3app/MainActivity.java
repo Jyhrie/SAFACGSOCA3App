@@ -245,11 +245,45 @@ public class MainActivity extends AppCompatActivity {
         }
 
         db.execSQL("CREATE TABLE IF NOT EXISTS personnel (p_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, p_rank varchar(255) NOT NULL, p_name varchar(255) NOT NULL, p_nric text)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS operation (o_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_name varchar(255) NOT NULL, o_kah text NOT NULL)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS operation (o_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_name varchar(255) NOT NULL, o_kah text NOT NULL, o_unit text NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS operation_personnel (op_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, p_id integer NOT NULL, o_id integer NOT NULL, d_id integer)");
         db.execSQL("CREATE TABLE IF NOT EXISTS ammunition (a_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_id integer NOT NULL, a_name varchar(255) NOT NULL, a_qty number NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS detail (d_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, d_name text NOT NULL, o_id integer NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS personnel_ammunition (pa_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, op_id integer NOT NULL, a_id integer NOT NULL, pa_issue_qty number NOT NULL, pa_issued number, pa_returned number, pa_expended number, pa_spoiled number)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS transaction_data (" +
+                "td_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                "a_id integer NOT NULL, " +
+                "pa_id integer NOT NULL, " +
+
+                // Operation Name, Date/Time (extracted from KAH), Unit Name, Detail Name
+                "o_name varchar(255) NOT NULL, " +
+                "o_kah text NOT NULL, " +
+                "o_unit text NOT NULL, " +
+                "d_name text NOT NULL, " +
+
+                // Ammunition name to split documents based on Ammo Type
+                "td_ammo_name text NOT NULL, " +
+
+                // Personnel name associated with each entry in each document
+                "td_personnel_name text NOT NULL, " +
+
+                // issued/returned/expended/spoiled associated with each entry in each document
+                "td_issued number NOT NULL, " +
+                "td_returned number NOT NULL, " +
+                "td_expended number NOT NULL, " +
+                "td_spoiled number NOT NULL, " +
+
+                // Issue and Return date/time, signatures
+                "td_issuedatetime text NOT NULL, " +
+                "td_issuesignaturereceiving image NOT NULL, " +
+                "td_issuesignatureissuing image NOT NULL, " +
+                "td_returndatetime text NOT NULL, " +
+                "td_returnsignaturereceiving image NOT NULL, " +
+                "td_returnsignatureissuing image NOT NULL, " +
+
+                // Exported or not
+                "td_exported boolean NOT NULL)");
+
 
 
         if(reset == true) {
@@ -307,15 +341,18 @@ public class MainActivity extends AppCompatActivity {
 
         content.put("o_name", "OPS GLUON");
         content.put("o_kah", "Conducting: ME4 Yuen Weng Kin\nSupervising: ME3 Teo Kwee Teck\nSafety: ME3 Raymond Tan\nLocation: Changi Naval Base\nDate: 12/09/2022");
+        content.put("o_unit", "NDU");
         db.insert("operation", null, content);
 
         content.put("o_name", "OPS GUARDIAN ANGEL");
         content.put("o_kah", "Conducting: ME4 Khoo Wei Liang\nSupervising: ME2 Fung Xue Ming\nSafety: ME1 Melvin\nLocation: Nee Soon Camp\nDate: 18/07/2022");
         db.insert("operation", null, content);
+        content.put("o_unit", "ADF");
 
-        content.put("o_name", "RANGE: TEKONG");
-        content.put("o_kah", "Conducting: ME2 Fung Xue Ming\nSupervising: ME1 Melvin\nSafety: ME1 Lincoln\nLocation: Pulau Tekong\nDate: 20/04/2023");
+        content.put("o_name", "RANGE: PULAU HANTU");
+        content.put("o_kah", "Conducting: ME2 Fung Xue Ming\nSupervising: ME1 Melvin\nSafety: ME1 Lincoln\nLocation: Pulau Hantu\nDate: 20/04/2023");
         db.insert("operation", null, content);
+        content.put("o_unit", "GSAB");
 
         db.close();
     }

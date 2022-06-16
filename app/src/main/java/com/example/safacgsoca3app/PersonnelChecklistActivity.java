@@ -21,7 +21,7 @@ import java.util.HashMap;
 
 public class PersonnelChecklistActivity extends AppCompatActivity {
 
-    public static final String TAG_ID = "p_id";
+    public static final String TAG_ID = "op_id";
     public static final String TAG_RANK = "p_rank";
     public static final String TAG_NAME = "p_name";
     public static final String TAG_REMARKS = "p_remarks";
@@ -34,6 +34,7 @@ public class PersonnelChecklistActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String Function2 = intent.getStringExtra("Function");
+        String o_id = intent.getStringExtra("o_id");
         String d_id = intent.getStringExtra("d_id");
         String d_name = intent.getStringExtra("d_name");
 
@@ -46,10 +47,12 @@ public class PersonnelChecklistActivity extends AppCompatActivity {
         tv_D_ID.setText(d_id);
         tv_Personnel_Checklist_Detail_Name.setText(d_name);
 
+        HashMap<String, String> PersonnelSelectionMap = new HashMap<String, String>();
+
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
         db.execSQL("CREATE TABLE IF NOT EXISTS personnel (p_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, p_rank varchar(255) NOT NULL, p_name varchar(255) NOT NULL, p_nric text)");
-        Cursor c1 = db.rawQuery("select * from Personnel", null);
+        Cursor c1 = db.rawQuery("select op.op_id, p.p_rank, p.p_name, p.p_nric from personnel p, operation_personnel op where op.p_id = p.p_id and op.o_id = " + o_id + " and op.d_id = " + d_id, null);
 
         ArrayList<HashMap<String, String>> PersonnelList = new ArrayList<HashMap<String, String>>();
         while (c1.moveToNext()) {
@@ -64,6 +67,8 @@ public class PersonnelChecklistActivity extends AppCompatActivity {
             map.put(TAG_RANK, line_rank);
             map.put(TAG_NAME, line_name);
             map.put(TAG_REMARKS, line_remarks);
+            PersonnelSelectionMap.put(line_id, "0");
+            Log.i(" ", String.valueOf(PersonnelSelectionMap));
 
             PersonnelList.add(map);
         }
@@ -89,14 +94,19 @@ public class PersonnelChecklistActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 ConstraintLayout layout = ((ConstraintLayout) view.findViewById(R.id.ConstraintLayout));
                 TextView select = (TextView) view.findViewById(R.id.tv_Personnel_Selected_Status);
-                Log.i("xd", select.getText().toString());
+                TextView selectid = (TextView) view.findViewById(R.id.tv_Personnel_ID_Checklist);
+
                 if(select.getText().toString() == "false")
                 {
                     select.setText("true");
                     layout.setBackgroundResource(R.color.teal);
+                    PersonnelSelectionMap.put(selectid.getText().toString(), "1");
+                    Log.i(" ", String.valueOf(PersonnelSelectionMap));                    ;
                 }else {
                     select.setText("false");
                     layout.setBackgroundResource(R.color.white);
+                    PersonnelSelectionMap.put(selectid.getText().toString(), "0");
+                    Log.i(" ", String.valueOf(PersonnelSelectionMap));
                 }
 
             }
