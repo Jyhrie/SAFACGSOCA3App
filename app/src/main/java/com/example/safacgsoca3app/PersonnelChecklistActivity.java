@@ -120,6 +120,9 @@ public class PersonnelChecklistActivity extends AppCompatActivity {
                 Intent intent = new Intent(PersonnelChecklistActivity.this, DeclareIssueReturnReceiveInfoActivity.class);
                 String Function3 = Function2;
                 intent.putExtra("Function3", Function3);
+                intent.putExtra("o_id", o_id);
+                intent.putExtra("d_id", d_id);
+                intent.putExtra("d_name", d_name);
                 PersonnelChecklistActivity.this.startActivity(intent);
             }
         });
