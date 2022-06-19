@@ -31,10 +31,6 @@ import java.util.HashMap;
 
 public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
 
-
-    private static final String placeholder_op_id = "1";
-
-
     private static final String TAG_PAID = "pa_id";
     private static final String TAG_OPID = "op_id";
     private static final String TAG_AID = "a_id";
@@ -47,11 +43,14 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
     private static final String TAG_SPOILED = "pa_spoiled";
     private static final String TAG_ANAME = "a_name";
 
+    String Selected;
     String o_id;
     String d_id;
     String d_name;
+    String p_rank;
     String p_name;
-    String op_id = placeholder_op_id;
+    String p_remarks;
+    String op_id;
     String a_id;
     String pa_id;
     String o_name;
@@ -63,6 +62,9 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
     String pa_expended;
     String pa_spoiled;
     int length;
+    ArrayList<HashMap<String, String>> PersonnelList;
+    String Function4;
+    int SelectedPersonnel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,10 +72,13 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_declare_issue_return_receive_info);
 
         Intent intent = getIntent();
-        String Function4 = intent.getStringExtra("Function3");
+        Function4 = intent.getStringExtra("Function3");
         o_id = intent.getStringExtra("o_id");
         d_id = intent.getStringExtra("d_id");
         d_name = intent.getStringExtra("d_name");
+        PersonnelList = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("PersonnelList");
+        SelectedPersonnel = 0;
+        op_id = PersonnelList.get(SelectedPersonnel).get("op_id");
 
         TextView tv_Issue_Return_Receive;
         Button btn_ClearPad;
@@ -107,7 +112,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
                 SQLiteDatabase db;
                 db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
                 ContentValues content = new ContentValues();
-                Cursor c1 = db.rawQuery("SELECT pa_issue_qty FROM personnel_ammunition WHERE op_id =" + placeholder_op_id, null);
+                Cursor c1 = db.rawQuery("SELECT pa_issue_qty FROM personnel_ammunition WHERE op_id =" + op_id, null);
                 while (c1.moveToNext()) {
                     FromToIssueToIssued = c1.getString(0);
                 }
@@ -125,13 +130,22 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
 
                 // EXPORT
 
+                if (SelectedPersonnel<PersonnelList.size())
+                {
+                    SelectedPersonnel++;
+                    Log.i("Selected Personnel", String.valueOf(SelectedPersonnel));
+                    onResume();
+                }
+                else if (SelectedPersonnel>PersonnelList.size())
+                {
+                    
+                }
+
             }
         });
+    }
 
-        onResume(Function4);
-        }
-
-    protected void onResume(String Function4) {
+    protected void onResume() {
         super.onResume();
 
         TextView tv_Detail_Name;
@@ -144,46 +158,49 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
         db.execSQL("CREATE TABLE IF NOT EXISTS personnel_ammunition (pa_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, op_id integer NOT NULL, a_id integer NOT NULL, pa_issue_qty number NOT NULL, pa_issued number, pa_returned number, pa_expended number, pa_spoiled number)");
 
-        Cursor c1 = db.rawQuery("SELECT a.a_name, pa.pa_id, pa.op_id, pa.a_id, pa.pa_issue_qty, pa.pa_issued, pa.pa_returned, pa.pa_expended, pa.pa_spoiled FROM personnel_ammunition pa, ammunition a WHERE a.a_id = pa.a_id and pa.op_id =" + placeholder_op_id, null);
+        Cursor c1 = db.rawQuery("SELECT a.a_name, pa.pa_id, pa.a_id, pa.pa_issue_qty, pa.pa_issued, pa.pa_returned, pa.pa_expended, pa.pa_spoiled FROM personnel_ammunition pa, ammunition a WHERE a.a_id = pa.a_id and pa.op_id =" + op_id, null);
 
         ArrayList<HashMap<String, String>> IssueAmmoList = new ArrayList<HashMap<String, String>>();
         while (c1.moveToNext()) {
             HashMap<String, String> map = new HashMap<String, String>();
             String line_aname = c1.getString(0);
             String line_paid = c1.getString(1);
-            String line_opid = c1.getString(2);
-            String line_aid = c1.getString(3);
+            String line_aid = c1.getString(2);
 
             String line_issue_issued = null;
             String line_toissue_issued_desc = null;
             if (Function4.equals("Issuing: ")) {
-                line_issue_issued = c1.getString(4);
+                line_issue_issued = c1.getString(3);
                 line_toissue_issued_desc = "To Issue";
             } else {
-                line_issue_issued = c1.getString(5);
+                line_issue_issued = c1.getString(4);
                 line_toissue_issued_desc = "Issued";
             }
 
-            String line_returned = c1.getString(6);
-            String line_expended = c1.getString(7);
-            String line_spoiled = c1.getString(8);
+            String line_returned = c1.getString(5);
+            String line_expended = c1.getString(6);
+            String line_spoiled = c1.getString(7);
 
             map.put(TAG_ANAME, line_aname);
             map.put(TAG_PAID, line_paid);
-            map.put(TAG_OPID, line_opid);
             map.put(TAG_AID, line_aid);
             map.put(TAG_TOISSUE_ISSUED, line_issue_issued);
             map.put(TAG_TOISSUE_ISSUED_DESC, line_toissue_issued_desc);
             map.put(TAG_RETURNED, line_returned);
             map.put(TAG_EXPENDED, line_expended);
             map.put(TAG_SPOILED, line_spoiled);
+            map.put(TAG_OPID, PersonnelList.get(SelectedPersonnel).get("op_id"));
+            map.put(Selected, PersonnelList.get(SelectedPersonnel).get("SELECTED"));
+            map.put(p_rank, PersonnelList.get(SelectedPersonnel).get("p_rank"));
+            map.put(p_name, PersonnelList.get(SelectedPersonnel).get("p_name"));
+            map.put(p_remarks, PersonnelList.get(SelectedPersonnel).get("p_remarks"));
 
             IssueAmmoList.add(map);
         }
         length = IssueAmmoList.size();
 
         db.execSQL("CREATE TABLE IF NOT EXISTS detail (d_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, d_name text NOT NULL, o_id integer NOT NULL)");
-        c1 = db.rawQuery("select d.d_name, p.p_name from detail d, personnel p, operation_personnel op where d.d_id = op.d_id and p.p_id = op.p_id and op.op_id = "+placeholder_op_id, null);
+        c1 = db.rawQuery("select d.d_name, p.p_name from detail d, personnel p, operation_personnel op where d.d_id = op.d_id and p.p_id = op.p_id and op.op_id = "+op_id, null);
         while (c1.moveToNext()) {
             tv_Detail_Name.setText(c1.getString(0));
             tv_Personnel_Name.setText(c1.getString(1));
@@ -212,12 +229,12 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                showEditIssueDialog(IssueAmmoList, i, Function4);
+                showEditIssueDialog(IssueAmmoList, i);
             }
         });
  }
 
-    private void showEditIssueDialog(ArrayList<HashMap<String, String>> IssueAmmoList, int i, String Function4) {
+    private void showEditIssueDialog(ArrayList<HashMap<String, String>> IssueAmmoList, int i) {
         Dialog EditIssueDialog = new Dialog(DeclareIssueReturnReceiveInfoActivity.this, android.R.style.Theme_Black_NoTitleBar);
         EditIssueDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
         EditIssueDialog.setContentView(R.layout.dialog_edit_issue_return_receive_ammunition);
@@ -288,7 +305,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
 
 
                 db.close();
-                onResume(Function4);
+                onResume();
                 EditIssueDialog.dismiss();
             }
         });
@@ -302,14 +319,13 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
 
             ContentValues content = new ContentValues();
 
-            Cursor c1 = db.rawQuery("SELECT a.a_name, pa.pa_id, pa.op_id, pa.a_id, pa.pa_issue_qty, pa.pa_issued, pa.pa_returned, pa.pa_expended, pa.pa_spoiled FROM personnel_ammunition pa, ammunition a WHERE a.a_id = pa.a_id and pa.op_id =" + placeholder_op_id, null);
+            Cursor c1 = db.rawQuery("SELECT a.a_name, pa.pa_id, pa.a_id, pa.pa_issue_qty, pa.pa_issued, pa.pa_returned, pa.pa_expended, pa.pa_spoiled FROM personnel_ammunition pa, ammunition a WHERE a.a_id = pa.a_id and pa.op_id =" + op_id, null);
 
             while (c1.moveToNext()) {
                 HashMap<String, String> map = new HashMap<String, String>();
                 a_name = c1.getString(0);
                 pa_id = c1.getString(1);
-                op_id = c1.getString(2);
-                a_id = c1.getString(3);
+                a_id = c1.getString(2);
             }
 
                 content.put("td_ammo_name", a_name);
