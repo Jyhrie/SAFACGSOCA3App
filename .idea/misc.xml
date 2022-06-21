@@ -73,39 +73,52 @@
         <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/activity_add_exercise.xml" value="0.1" />
         <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/activity_ammunition.xml" value="0.19880290722530997" />
         <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/activity_declare_issue_info.xml" value="0.2" />
-        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/activity_declare_issue_return_receive_info.xml" value="0.264" />
+        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/activity_declare_issue_return_receive_info.xml" value="0.2" />
         <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/activity_declare_return_receive_info.xml" value="0.2" />
         <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/activity_display_personnel.xml" value="0.2" />
-        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/activity_display_personnel_info.xml" value="0.264" />
-        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/activity_display_personnel_info.xml" value="0.2" />
+        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/activity_main.xml" value="0.16" />
         <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/activity_nominal_roll.xml" value="0.4" />
         <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/activity_operation_nominal_roll.xml" value="0.2302810516772439" />
         <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/activity_personnel_checklist.xml" value="0.2" />
         <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/activity_view_loadout.xml" value="0.1" />
         <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/activity_view_operation.xml" value="0.264" />
         <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/dialog_add_ammunition.xml" value="0.2" />
+        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/dialog_add_edit_detail.xml" value="0.12109375" />
         <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/dialog_add_exercise.xml" value="0.2302810516772439" />
         <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/dialog_add_issuing_detail.xml" value="0.1" />
         <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/dialog_add_nominal_roll.xml" value="0.19880290722530997" />
-        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/dialog_add_operation_personnel.xml" value="0.2302810516772439" />
+        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/dialog_add_operation_personnel.xml" value="0.1" />
+        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/dialog_assign_detail_personnel.xml" value="0.12109375" />
+        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/dialog_assign_personnel_ammunition.xml" value="0.12109375" />
+        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/dialog_delete_exercise.xml" value="0.12109375" />
         <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/dialog_delete_operation.xml" value="0.22937443336355395" />
         <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/dialog_edit_issue_ammunition.xml" value="0.264" />
-        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/dialog_edit_issue_return_receive_ammunition.xml" value="0.1" />
+        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/dialog_edit_issue_return_receive_ammunition.xml" value="0.2" />
         <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/dialog_edit_operation.xml" value="0.22937443336355395" />
-        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/dialog_editdelete_nominal_roll.xml" value="0.1" />
+        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/dialog_editdelete_nominal_roll.xml" value="0.16" />
         <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/dialog_receive.xml" value="0.1" />
-        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/dialog_view_loadout.xml" value="0.1" />
+        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/dialog_view_ammunition.xml" value="0.12109375" />
+        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/dialog_view_loadout.xml" value="0.2" />
+        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/fragment_add_edit_detail.xml" value="0.16" />
+        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/fragment_assign_detail_personnel.xml" value="0.10829207920792079" />
+        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/fragment_assign_personnel_ammunition.xml" value="0.10829207920792079" />
         <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_add_issuing_detail_ammunition.xml" value="0.1" />
         <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_add_issuing_detail_personnel.xml" value="0.2302810516772439" />
-        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_ammunition.xml" value="0.264" />
-        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_display_personnel.xml" value="0.264" />
+        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_add_operation_personnel.xml" value="0.12109375" />
+        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_ammunition.xml" value="0.2" />
+        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_assign_detail_personnel.xml" value="0.1" />
+        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_assign_personnel_ammunition.xml" value="0.16" />
+        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_display_personnel.xml" value="0.1" />
         <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_display_personnel_ammunition.xml" value="0.264" />
         <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_issue_ammunition.xml" value="0.264" />
-        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_issue_return_receive_ammunition.xml" value="0.4" />
+        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_issue_return_receive_ammunition.xml" value="0.16" />
+        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_loadout.xml" value="0.12109375" />
         <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_nominalroll.xml" value="0.264" />
-        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_operation.xml" value="0.264" />
+        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_operation.xml" value="0.176" />
         <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_personnel_checklist.xml" value="0.264" />
         <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_return_receive_ammo.xml" value="0.264" />
+        <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_view_detail_personnel.xml" value="0.1" />
         <entry key="..\:/Users/Zack/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_view_loadout_ammunition.xml" value="0.1" />
       </map>
     </option>

@@ -23,7 +23,7 @@
             android:id="@+id/tvOperationListKAH"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.5"
+            android:layout_weight="0.45"
             android:text="Key Appointment Holders"
             android:textSize="30dp" />
 

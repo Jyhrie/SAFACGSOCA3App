@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        initialize_database(false);
+        initialize_database(true);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -379,12 +379,42 @@ public class MainActivity extends AppCompatActivity {
 
         content.put("p_rank", "CFC");
         content.put("p_name", "Gabriel");
-        content.put("p_nric", "488J");
+        content.put("p_nric", "488H");
         db.insert("personnel", null, content);
 
         content.put("p_rank", "3SG");
         content.put("p_name", "Shih Rong");
         content.put("p_nric", "Chao Keng Warrior");
+        db.insert("personnel", null, content);
+
+        content.put("p_rank", "LCP");
+        content.put("p_name", "Daniel");
+        content.put("p_nric", "696Z");
+        db.insert("personnel", null, content);
+
+        content.put("p_rank", "PTE");
+        content.put("p_name", "Lambert");
+        content.put("p_nric", "353J");
+        db.insert("personnel", null, content);
+
+        content.put("p_rank", "ME1");
+        content.put("p_name", "Reeve");
+        content.put("p_nric", "007J");
+        db.insert("personnel", null, content);
+
+        content.put("p_rank", "PTE");
+        content.put("p_name", "Bernard");
+        content.put("p_nric", "101D");
+        db.insert("personnel", null, content);
+
+        content.put("p_rank", "PTE");
+        content.put("p_name", "Aidan");
+        content.put("p_nric", "404E");
+        db.insert("personnel", null, content);
+
+        content.put("p_rank", "LCP");
+        content.put("p_name", "Jing Yan");
+        content.put("p_nric", "666F");
         db.insert("personnel", null, content);
 
         db.close();

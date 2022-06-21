@@ -7,11 +7,13 @@
     <ListView
         android:id="@+id/lv_add_operation_personnel"
         android:layout_width="match_parent"
-        android:layout_height="150dp" />
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF" />
 
     <Button
         android:id="@+id/btn_add_operation_personnel_submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text = "submit"/>
+        android:text="submit"
+        android:textSize="20sp" />
 </LinearLayout>
