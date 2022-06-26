@@ -142,16 +142,28 @@ public class PersonnelChecklistActivity extends AppCompatActivity {
                     }
                 }
 
-
-
                 Log.i(" ", String.valueOf(PersonnelList));
+
+                ArrayList<HashMap<String, String>> PersonnelListAppended = new ArrayList<HashMap<String, String>>();
+                for (int i = 0 ; i<PersonnelList.size(); i++)
+                {
+                    if (PersonnelList.get(i).get("SELECTED").equals("TRUE"))
+                    {
+                        PersonnelListAppended.add(PersonnelList.get(i));
+                    }
+                }
+
+                Log.i(" ", String.valueOf(PersonnelListAppended));
+
+
+
                 Intent intent = new Intent(PersonnelChecklistActivity.this, DeclareIssueReturnReceiveInfoActivity.class);
                 String Function3 = Function2;
                 intent.putExtra("Function3", Function3);
                 intent.putExtra("o_id", o_id);
                 intent.putExtra("d_id", d_id);
                 intent.putExtra("d_name", d_name);
-                intent.putExtra("PersonnelList", PersonnelList);
+                intent.putExtra("PersonnelList", PersonnelListAppended);
                 PersonnelChecklistActivity.this.startActivity(intent);
             }
         });

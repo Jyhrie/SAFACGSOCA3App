@@ -275,11 +275,9 @@ public class MainActivity extends AppCompatActivity {
 
                 // Issue and Return date/time, signatures
                 "td_issuedatetime text NOT NULL, " +
-                "td_issuesignaturereceiving image NOT NULL, " +
-                "td_issuesignatureissuing image NOT NULL, " +
+                "td_issuesignature image NOT NULL, " +
                 "td_returndatetime text NOT NULL, " +
-                "td_returnsignaturereceiving image NOT NULL, " +
-                "td_returnsignatureissuing image NOT NULL, " +
+                "td_returnsignature image NOT NULL, " +
 
                 // Exported or not
                 "td_exported boolean NOT NULL)");

@@ -49,7 +49,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
     String d_name;
     String p_rank;
     String p_name;
-    String p_remarks;
+    String p_nric;
     String op_id;
     String a_id;
     String pa_id;
@@ -65,6 +65,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
     ArrayList<HashMap<String, String>> PersonnelList;
     String Function4;
     int SelectedPersonnel;
+    int SelectedAmmunition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +79,12 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
         d_name = intent.getStringExtra("d_name");
         PersonnelList = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("PersonnelList");
         SelectedPersonnel = 0;
+        SelectedAmmunition = 0;
+
         op_id = PersonnelList.get(SelectedPersonnel).get("op_id");
+        p_rank = PersonnelList.get(SelectedPersonnel).get("p_rank");
+        p_name = PersonnelList.get(SelectedPersonnel).get("p_name");
+        p_nric = PersonnelList.get(SelectedPersonnel).get("p_nric");
 
         TextView tv_Issue_Return_Receive;
         Button btn_ClearPad;
@@ -104,6 +110,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
         btn_Validate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Bitmap bitmap = Signature_Pad.getSignatureBitmap();
                 imageView.setImageBitmap(bitmap);
 
@@ -111,16 +118,80 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
                 String FromToIssueToIssued = null;
                 SQLiteDatabase db;
                 db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-                ContentValues content = new ContentValues();
-                Cursor c1 = db.rawQuery("SELECT pa_issue_qty FROM personnel_ammunition WHERE op_id =" + op_id, null);
+
+                Cursor c1 = db.rawQuery("SELECT pa_id FROM personnel_ammunition WHERE op_id =" + op_id, null);
                 while (c1.moveToNext()) {
-                    FromToIssueToIssued = c1.getString(0);
+
+                    for (int i = 0; !c1.isAfterLast(); i++) {
+
+                        pa_id = c1.getString(i);
+                        Log.i("Selected op_id", op_id);
+                        Log.i("Selected pa_id", pa_id);
+
+
+                        c1 = db.rawQuery("SELECT pa_issue_qty FROM personnel_ammunition WHERE pa_id =" + pa_id, null);
+                        while (c1.moveToNext()) {
+                            FromToIssueToIssued = c1.getString(0);
+                        }
+
+
+                        db.execSQL("UPDATE personnel_ammunition SET pa_issued = " + FromToIssueToIssued + " WHERE pa_id = " + pa_id);
+
+
+                        ContentValues content = new ContentValues();
+
+                        c1 = db.rawQuery("SELECT a.a_name, pa.a_id FROM personnel_ammunition pa, ammunition a WHERE a.a_id = pa.a_id and pa.pa_id =" + pa_id, null);
+
+                        while (c1.moveToNext()) {
+                            HashMap<String, String> map = new HashMap<String, String>();
+                            a_name = c1.getString(0);
+                            a_id = c1.getString(1);
+                        }
+
+                        content.put("td_ammo_name", a_name);
+                        content.put("pa_id", pa_id);
+                        content.put("a_id", a_id);
+
+                        //Cursor c1 = db.rawQuery("SELECT a.a_id, pa.pa_id, o.o_name, o.o_kah, o.o_unit, a.a_name, pa.pa_issued, pa.pa_returned, pa.pa_expended, pa.pa_spoiled FROM personnel p, operation_personnel op, operation o, ammunition a, personnel_ammunition pa WHERE p.p_id = op.p_id and o.o_id = a.o_id = op.o_id and a.a_id = pa.a_id and pa.op_id ="+ op_id, null);
+                        c1 = db.rawQuery("SELECT pa_issued, pa_returned, pa_expended, pa_spoiled FROM personnel_ammunition WHERE pa_id =" + pa_id, null);
+                        while (c1.moveToNext()) {
+                            pa_issued = c1.getString(0);
+                            pa_returned = c1.getString(1);
+                            pa_expended = c1.getString(2);
+                            pa_spoiled = c1.getString(3);
+                        }
+
+                        content.put("td_issued", pa_issued);
+                        content.put("td_returned", pa_returned);
+                        content.put("td_expended", pa_expended);
+                        content.put("td_spoiled", pa_spoiled);
+
+                        c1 = db.rawQuery("SELECT o_name, o_kah, o_unit FROM operation WHERE o_id = " + o_id, null);
+                        while (c1.moveToNext()) {
+                            o_name = c1.getString(0);
+                            o_kah = c1.getString(1);
+                            o_unit = c1.getString(2);
+                        }
+
+                        content.put("o_name", o_name);
+                        content.put("o_kah", o_kah);
+                        content.put("o_unit", o_unit);
+
+
+                        content.put("d_name", d_name);
+                        content.put("td_personnel_name", p_name);
+                        content.put("td_issuedatetime", " ");
+                        content.put("td_issuesignature", " ");
+                        content.put("td_returndatetime", " ");
+                        content.put("td_returnsignature", " ");
+                        content.put("td_exported", "0");
+
+                        Log.i("Content", content.toString());
+                        db.insert("Transaction_Data", null, content);
+
+                    }
                 }
-                content.put("pa_issued", FromToIssueToIssued);
-                db.update("personnel_ammunition", content, "pa_issued = ?", new String[]{String.valueOf(FromToIssueToIssued)});
                 db.close();
-                // SAVE OTHER QUANTITIES IN DB
-                UpdateTransactionData();
 
                 // SAVE BITMAP
 
@@ -133,12 +204,12 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
                 if (SelectedPersonnel<PersonnelList.size())
                 {
                     SelectedPersonnel++;
-                    Log.i("Selected Personnel", String.valueOf(SelectedPersonnel));
-                    onResume();
+                    Log.i("SelectedPersonnel", String.valueOf(SelectedPersonnel));
                 }
                 else if (SelectedPersonnel>PersonnelList.size())
                 {
-
+                    SelectedAmmunition = 0;
+                    Log.i("SelectedAmmunition Reset", String.valueOf(SelectedPersonnel));
                 }
 
             }
@@ -193,7 +264,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
             map.put(Selected, PersonnelList.get(SelectedPersonnel).get("SELECTED"));
             map.put(p_rank, PersonnelList.get(SelectedPersonnel).get("p_rank"));
             map.put(p_name, PersonnelList.get(SelectedPersonnel).get("p_name"));
-            map.put(p_remarks, PersonnelList.get(SelectedPersonnel).get("p_remarks"));
+            map.put(p_nric, PersonnelList.get(SelectedPersonnel).get("p_nric"));
 
             IssueAmmoList.add(map);
         }
@@ -232,7 +303,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
                 showEditIssueDialog(IssueAmmoList, i);
             }
         });
- }
+    }
 
     private void showEditIssueDialog(ArrayList<HashMap<String, String>> IssueAmmoList, int i) {
         Dialog EditIssueDialog = new Dialog(DeclareIssueReturnReceiveInfoActivity.this, android.R.style.Theme_Black_NoTitleBar);
@@ -309,65 +380,5 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
                 EditIssueDialog.dismiss();
             }
         });
-    }
-
-    private void UpdateTransactionData() {
-        for (int i = 0; i < length; i++) {
-
-            SQLiteDatabase db;
-            db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-
-            ContentValues content = new ContentValues();
-
-            Cursor c1 = db.rawQuery("SELECT a.a_name, pa.pa_id, pa.a_id, pa.pa_issue_qty, pa.pa_issued, pa.pa_returned, pa.pa_expended, pa.pa_spoiled FROM personnel_ammunition pa, ammunition a WHERE a.a_id = pa.a_id and pa.op_id =" + op_id, null);
-
-            while (c1.moveToNext()) {
-                HashMap<String, String> map = new HashMap<String, String>();
-                a_name = c1.getString(0);
-                pa_id = c1.getString(1);
-                a_id = c1.getString(2);
-            }
-
-                content.put("td_ammo_name", a_name);
-                content.put("pa_id", pa_id);
-                content.put("a_id", a_id);
-
-            //Cursor c1 = db.rawQuery("SELECT a.a_id, pa.pa_id, o.o_name, o.o_kah, o.o_unit, a.a_name, pa.pa_issued, pa.pa_returned, pa.pa_expended, pa.pa_spoiled FROM personnel p, operation_personnel op, operation o, ammunition a, personnel_ammunition pa WHERE p.p_id = op.p_id and o.o_id = a.o_id = op.o_id and a.a_id = pa.a_id and pa.op_id ="+ op_id, null);
-            c1 = db.rawQuery("SELECT pa_issued, pa_returned, pa_expended, pa_spoiled FROM personnel_ammunition WHERE op_id = " + op_id + " and pa_id =" + pa_id, null);
-            while (c1.moveToNext()) {
-                pa_issued = c1.getString(0);
-                pa_returned = c1.getString(1);
-                pa_expended = c1.getString(2);
-                pa_spoiled = c1.getString(3);
-            }
-
-            content.put("td_issued", pa_issued);
-            content.put("td_returned", pa_returned);
-            content.put("td_expended", pa_expended);
-            content.put("td_spoiled", pa_spoiled);
-
-            c1 = db.rawQuery("SELECT o_name, o_kah, o_unit FROM operation WHERE o_id = " + o_id, null);
-            while (c1.moveToNext()) {
-                o_name = c1.getString(0);
-                o_kah = c1.getString(1);
-                o_unit = c1.getString(2);
-            }
-
-            content.put("td_operation_name", o_name);
-            content.put("td_kah", o_kah);
-            content.put("td_unit", o_unit);
-
-
-            content.put("td_detail_name", d_name);
-            content.put("td_personnel_name", p_name);
-            content.put("td_issuedatetime", " ");
-            content.put("td_issuesignature", " ");
-            content.put("td_returndatetime", " ");
-            content.put("td_returnsignature", " ");
-            content.put("td_exported", "0");
-
-            db.insert("Transaction_Data", null, content);
-            db.close();
-        }
     }
 }
