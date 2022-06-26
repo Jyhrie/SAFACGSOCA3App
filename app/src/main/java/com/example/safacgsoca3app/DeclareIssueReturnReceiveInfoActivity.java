@@ -122,9 +122,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
                 Cursor c1 = db.rawQuery("SELECT pa_id FROM personnel_ammunition WHERE op_id =" + op_id, null);
                 while (c1.moveToNext()) {
 
-                    for (int i = 0; !c1.isAfterLast(); i++) {
-
-                        pa_id = c1.getString(i);
+                        pa_id = c1.getString(0);
                         Log.i("Selected op_id", op_id);
                         Log.i("Selected pa_id", pa_id);
 
@@ -188,8 +186,6 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
 
                         Log.i("Content", content.toString());
                         db.insert("Transaction_Data", null, content);
-
-                    }
                 }
                 db.close();
 
@@ -205,6 +201,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
                 {
                     SelectedPersonnel++;
                     Log.i("SelectedPersonnel", String.valueOf(SelectedPersonnel));
+                    onResume();
                 }
                 else if (SelectedPersonnel>PersonnelList.size())
                 {
@@ -218,6 +215,11 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
 
     protected void onResume() {
         super.onResume();
+
+        op_id = PersonnelList.get(SelectedPersonnel).get("op_id");
+        p_rank = PersonnelList.get(SelectedPersonnel).get("p_rank");
+        p_name = PersonnelList.get(SelectedPersonnel).get("p_name");
+        p_nric = PersonnelList.get(SelectedPersonnel).get("p_nric");
 
         TextView tv_Detail_Name;
         TextView tv_Personnel_Name;
