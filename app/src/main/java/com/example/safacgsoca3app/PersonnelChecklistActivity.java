@@ -34,7 +34,7 @@ public class PersonnelChecklistActivity extends AppCompatActivity {
         setContentView(R.layout.activity_personnel_checklist);
 
         Intent intent = getIntent();
-        String Function2 = intent.getStringExtra("Function");
+        String type = intent.getStringExtra("type");
         String o_id = intent.getStringExtra("o_id");
         String d_id = intent.getStringExtra("d_id");
         String d_name = intent.getStringExtra("d_name");
@@ -158,11 +158,9 @@ public class PersonnelChecklistActivity extends AppCompatActivity {
 
 
                 Intent intent = new Intent(PersonnelChecklistActivity.this, DeclareIssueReturnReceiveInfoActivity.class);
-                String Function3 = Function2;
-                intent.putExtra("Function3", Function3);
+                intent.putExtra("type", type);
                 intent.putExtra("o_id", o_id);
                 intent.putExtra("d_id", d_id);
-                intent.putExtra("d_name", d_name);
                 intent.putExtra("PersonnelList", PersonnelListAppended);
                 PersonnelChecklistActivity.this.startActivity(intent);
             }

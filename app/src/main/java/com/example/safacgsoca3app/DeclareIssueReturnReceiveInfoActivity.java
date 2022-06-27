@@ -43,48 +43,17 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
     private static final String TAG_SPOILED = "pa_spoiled";
     private static final String TAG_ANAME = "a_name";
 
-    String Selected;
-    String o_id;
-    String d_id;
-    String d_name;
-    String p_rank;
-    String p_name;
-    String p_nric;
-    String op_id;
-    String a_id;
-    String pa_id;
-    String o_name;
-    String o_kah;
-    String o_unit;
-    String a_name;
-    String pa_issued;
-    String pa_returned;
-    String pa_expended;
-    String pa_spoiled;
-    int length;
-    ArrayList<HashMap<String, String>> PersonnelList;
-    String Function4;
-    int SelectedPersonnel;
-    int SelectedAmmunition;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_declare_issue_return_receive_info);
 
         Intent intent = getIntent();
-        Function4 = intent.getStringExtra("Function3");
-        o_id = intent.getStringExtra("o_id");
-        d_id = intent.getStringExtra("d_id");
-        d_name = intent.getStringExtra("d_name");
-        PersonnelList = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("PersonnelList");
-        SelectedPersonnel = 0;
-        SelectedAmmunition = 0;
 
-        op_id = PersonnelList.get(SelectedPersonnel).get("op_id");
-        p_rank = PersonnelList.get(SelectedPersonnel).get("p_rank");
-        p_name = PersonnelList.get(SelectedPersonnel).get("p_name");
-        p_nric = PersonnelList.get(SelectedPersonnel).get("p_nric");
+        String type = intent.getStringExtra("type");
+        String o_id = intent.getStringExtra("o_id");
+        String d_id = intent.getStringExtra("d_id");
+        ArrayList<HashMap<String, String>> PersonnelList = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("PersonnelList");
 
         TextView tv_Issue_Return_Receive;
         Button btn_ClearPad;
@@ -98,7 +67,20 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
         Signature_Pad = findViewById(R.id.Signature_Pad);
         imageView = findViewById(R.id.imageView);
 
-        tv_Issue_Return_Receive.setText(Function4);
+        if(Integer.valueOf(type) == 1)//ammo unissued
+        {
+            tv_Issue_Return_Receive.setText("ISSUING");
+        }
+        else if(Integer.valueOf(type) == 2)
+        {
+            tv_Issue_Return_Receive.setText("RETURN");
+        }
+        else if(Integer.valueOf(type) == 3)
+        {
+            tv_Issue_Return_Receive.setText("RECIEVE");
+        }
+
+
 
         btn_ClearPad.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,6 +89,9 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
             }
         });
 
+
+
+        //redo whole chunk
         btn_Validate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,17 +99,16 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
                 Bitmap bitmap = Signature_Pad.getSignatureBitmap();
                 imageView.setImageBitmap(bitmap);
 
+                
                 // SAVE TOISSUE AS ISSUED
                 String FromToIssueToIssued = null;
                 SQLiteDatabase db;
                 db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-
                 Cursor c1 = db.rawQuery("SELECT pa_id FROM personnel_ammunition WHERE op_id =" + op_id, null);
                 while (c1.moveToNext()) {
 
+
                         pa_id = c1.getString(0);
-                        Log.i("Selected op_id", op_id);
-                        Log.i("Selected pa_id", pa_id);
 
 
                         c1 = db.rawQuery("SELECT pa_issue_qty FROM personnel_ammunition WHERE pa_id =" + pa_id, null);
@@ -211,11 +195,13 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
 
             }
         });
+        //end redo*/
     }
 
     protected void onResume() {
         super.onResume();
 
+        /*
         op_id = PersonnelList.get(SelectedPersonnel).get("op_id");
         p_rank = PersonnelList.get(SelectedPersonnel).get("p_rank");
         p_name = PersonnelList.get(SelectedPersonnel).get("p_name");
@@ -304,7 +290,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 showEditIssueDialog(IssueAmmoList, i);
             }
-        });
+        });*/
     }
 
     private void showEditIssueDialog(ArrayList<HashMap<String, String>> IssueAmmoList, int i) {

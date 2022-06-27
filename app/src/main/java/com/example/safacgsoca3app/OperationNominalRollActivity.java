@@ -138,6 +138,9 @@ public class OperationNominalRollActivity extends AppCompatActivity implements R
     @Override
     protected void onResume() {
         super.onResume();
+        Intent intent = getIntent();
+        String o_id = intent.getStringExtra(TAG_O_ID);
+        refreshData(o_id);
 
 
     }
@@ -227,6 +230,7 @@ public class OperationNominalRollActivity extends AppCompatActivity implements R
                     }
                 }
                 db.close();
+                refreshData(o_id);
                 DialogFragment.dismiss();
             }
         });
@@ -256,6 +260,53 @@ public class OperationNominalRollActivity extends AppCompatActivity implements R
         }
     };
 
+    public void refreshData(String o_id)
+    {
+
+        SQLiteDatabase db;
+        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+        Cursor c1 = db.rawQuery("SELECT op.op_id, p.p_rank, p.p_name, p.p_nric, d.d_name FROM personnel p LEFT OUTER JOIN operation_personnel op ON op.p_id = p.p_id LEFT OUTER JOIN detail d ON d.d_id = op.d_id WHERE op.o_id = " + o_id , null);
+
+        data = new ArrayList<HashMap<String, String>>();
+        while (c1.moveToNext()) {
+            Log.i(c1.getString(0),"test2");
+            HashMap<String, String> map = new HashMap<String, String>();
+            String line_id = c1.getString(0);
+            String line_rank = c1.getString(1);
+            String line_name = c1.getString(2);
+            String line_nric = c1.getString(3);
+            String line_detail_name = c1.getString(4);
+
+            if(line_detail_name == null)
+            {
+                line_detail_name = "UNASSIGNED DETAIL";
+            }
+
+            map.put(TAG_OP_ID, line_id);
+            map.put(TAG_P_NAME, line_rank + " " + line_name);
+            map.put(TAG_P_NRIC, line_nric);
+            map.put(TAG_D_NAME, line_detail_name);
+
+            data.add(map);
+        }
+        RecyclerView rv;
+        rvAdapter = new adapter_Operation_Nominal_Roll(
+                this,
+                data,
+                this
+
+        );
+
+        rv = findViewById(R.id.rv_operation_nominal_roll);
+
+        rv.setAdapter(rvAdapter);
+        rv.setLayoutManager(new LinearLayoutManager(this));
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(rv);
+
+
+    }
 
     public void removeGuyFromDB(int position)
     {

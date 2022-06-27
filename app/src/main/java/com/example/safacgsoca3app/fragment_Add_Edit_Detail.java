@@ -99,8 +99,6 @@ public class fragment_Add_Edit_Detail extends DialogFragment implements Recycler
         btnSaveDetail = (Button) v.findViewById(R.id.btnCreateDetail);
         btnSelectPersonnel = (Button) v.findViewById(R.id.btnSelectPersonnel);
 
-        String DetailName = String.valueOf(etDetailName);;
-
 
         //initialize fields
         SQLiteDatabase db;
@@ -206,7 +204,7 @@ public class fragment_Add_Edit_Detail extends DialogFragment implements Recycler
 
 
                 }
-                source.refreshlvActivityDetail(o_id);
+                source.refreshPageAfterEditDetail(o_id, d_id);
                 dismiss();
             }
 
