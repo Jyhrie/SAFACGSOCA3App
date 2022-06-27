@@ -91,13 +91,14 @@ public class NominalRollActivity extends AppCompatActivity implements RecyclerVi
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(rv);
 
+        /*
+
         Button btnDeletePersonnel;
-        btnDeletePersonnel = (Button) findViewById(R.id.btnDeletePersonnel);
 
         btnDeletePersonnel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*
+
                 String pid = ((TextView) view.findViewById(R.id.tvPersonnelId)).getText().toString();
                 SQLiteDatabase db;
                 db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
@@ -105,11 +106,11 @@ public class NominalRollActivity extends AppCompatActivity implements RecyclerVi
                 db.execSQL("DELETE FROM operation WHERE p_id = " + pid);
                 db.close();
                 onResume();
-                */
+
             }
         });
 
-
+        */
     }
 
     private void openAddNominalRollDialog(View view)
