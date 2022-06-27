@@ -40,7 +40,7 @@
                     android:id="@+id/tv_Operation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="2.1"
                     android:text="Operation"
                     android:textAlignment="center"
                     android:textSize="30dp" />
@@ -49,9 +49,18 @@
                     android:id="@+id/tv_Conducting"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.45"
+                    android:layout_weight="2"
                     android:text="Key Appointment Holders"
                     android:textSize="30dp" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="Long press operation to delete"
+                    android:textSize="24sp" />
+
             </LinearLayout>
 
             <ListView
@@ -80,7 +89,7 @@
                 android:layout_marginTop="3dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginBottom="3dp"
-                android:text="@string/NominalRoll" />
+                android:text="Unit Nominal Roll" />
 
             <Button
                 android:id="@+id/btn_export_db_to_excel"
