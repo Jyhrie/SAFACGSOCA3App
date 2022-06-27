@@ -307,6 +307,20 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
                 showAddEditDetailDialog(Integer.parseInt(detail_list.get((int) ddl_select_operation_detail.getSelectedItemId()).get(TAG_D_ID)), o_id, true);
             }
         });
+
+        Button btn_delete_selected_detail;
+        btn_delete_selected_detail = findViewById(R.id.btn_delete_selected_detail);
+        btn_delete_selected_detail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SQLiteDatabase db;
+                db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+                db.execSQL("DELETE FROM Detail WHERE d_id = "+ detail_list.get((int) ddl_select_operation_detail.getSelectedItemId()).get(TAG_D_ID));
+                db.execSQL("UPDATE Operation_Personnel SET d_id = null WHERE d_id = "+ detail_list.get((int) ddl_select_operation_detail.getSelectedItemId()).get(TAG_D_ID));
+                db.close();
+                refreshPageAfterEditDetail(o_id, 0);
+            }
+        });
     }
 
     public void refreshlvActivityDetail(String o_id)

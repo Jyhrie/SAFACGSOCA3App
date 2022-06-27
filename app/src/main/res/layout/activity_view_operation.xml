@@ -90,13 +90,21 @@
                     android:id="@+id/ddl_select_operation_detail"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1" />
+                    android:layout_weight=".25" />
 
                 <Button
                     android:id="@+id/btn_edit_selected_detail"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Edit Detail" />
+                    android:layout_weight="1"
+                    android:text="Edit" />
+
+                <Button
+                    android:id="@+id/btn_delete_selected_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Delete" />
             </LinearLayout>
 
             <ListView
