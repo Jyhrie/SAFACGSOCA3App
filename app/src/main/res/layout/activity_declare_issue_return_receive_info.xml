@@ -76,8 +76,8 @@
         android:orientation="vertical"
         app:layout_constraintGuide_begin="1264dp" />
 
-    <ListView
-        android:id="@+id/lv_Issue_Ammunition"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_Issue_Ammunition"
         android:layout_width="0dp"
         android:layout_height="200dp"
         android:layout_marginTop="5dp"
@@ -93,7 +93,7 @@
         android:text="Recipient Signature:"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="@+id/guideline7"
-        app:layout_constraintTop_toBottomOf="@+id/lv_Issue_Ammunition" />
+        app:layout_constraintTop_toBottomOf="@+id/rv_Issue_Ammunition"/>
 
     <Button
         android:id="@+id/btn_ClearPad"

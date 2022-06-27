@@ -1,6 +1,7 @@
 package com.example.safacgsoca3app;
 
 import android.app.Dialog;
+import android.app.Person;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -29,20 +30,66 @@ import java.util.HashMap;
 
 
 
-public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
+public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity implements RecyclerViewInterface {
 
-    private static final String TAG_PAID = "pa_id";
-    private static final String TAG_OPID = "op_id";
-    private static final String TAG_AID = "a_id";
-    private static final String TAG_TOISSUE_ISSUED = "pa_toissue_issued";
-    private static final String TAG_TOISSUE_ISSUED_DESC = "pa_toissue_issued_desc";
-    private static final String TAG_ISSUE_QTY = "pa_issue_qty";
-    private static final String TAG_ISSUED = "pa_issued";
-    private static final String TAG_RETURNED = "pa_returned";
-    private static final String TAG_EXPENDED = "pa_expended";
-    private static final String TAG_SPOILED = "pa_spoiled";
+    private static final String TAG_DYNAMIC_ISSUE = "dynamic_issue";
+
+    private static final String TAG_TD_ID = "td_id"
+    private static final String TAG_DOC_NUMBER = "doc_id";
+    private static final String TAG_TD_O_NAME = "td_o_name";
+    private static final String TAG_TD_O_KAH = "td_o_kah";
+    private static final String TAG_TD_O_UNIT = "td_o_unit";
+    private static final String TAG_TD_D_NAME = "td_d_name";
+    private static final String TAG_TD_AMMO_NAME = "td_a_name";
+    private static final String TAG_TD_PERSONNEL_NAME = "td_p_name";
+    private static final String TAG_TD_ISSUED = "td_issued";
+    private static final String TAG_TD_RETURNED = "td_returned";
+    private static final String TAG_TD_EXPENDED = "td_expended";
+    private static final String TAG_TD_SPOILED = "td_spoiled";
+    private static final String TAG_TD_ISSUEDATETIME = "td_issuedatetime";
+    private static final String TAG_TD_ISSUESIGNATURE = "td_issuesignature";
+    private static final String TAG_TD_RETURNDATETIME = "td_returndatetime";
+    private static final String TAG_TD_RETURNSIGNATURE = "td_returnsignature";
+    private static final String TAG_TD_EXPORTED = "td_exported";
+
+
+    private static final String TAG_P_ID = "p_id";
+    private static final String TAG_P_NAME = "p_name";
+    private static final String TAG_P_NRIC = "p_nric";
+
+    private static final String TAG_O_ID = "o_id";
+    private static final String TAG_O_NAME = "o_name";
+    private static final String TAG_O_KAH = "o_kah";
+    private static final String TAG_O_UNIT = "o_unit";
+
+    private static final String TAG_OP_ID = "op_id";
+
+    private static final String TAG_D_ID = "d_id";
+    private static final String TAG_D_NAME = "d_name";
+
+    private static final String TAG_PA_ID = "pa_id";
+    private static final String TAG_PA_ISSUE_QTY = "pa_issue_qty";
+    private static final String TAG_PA_ISSUED = "pa_issued";
+    private static final String TAG_PA_RETURNED = "pa_returned";
+    private static final String TAG_PA_EXPENEDED = "pa_expended";
+    private static final String TAG_PA_SPOILED = "pa_spoiled";
+
+    private static final String TAG_A_ID = "a_id";
+    private static final String TAG_A_NAME = "a_name";
+    private static final String TAG_A_QTY = "a_qty";
+
+    private static final String TAG_ID = "o_id";
+    private static final String TAG_PID ="p_id";
+    private static final String TAG_NAME = "e_name";
+    private static final String TAG_PNAME = "p_name";
+    private static final String TAG_PRANK = "p_rank";
+    private static final String TAG_KAH = "o_kah";
     private static final String TAG_ANAME = "a_name";
+    private static final String TAG_OPID = "op_id";
 
+    private static final String TAG_NEW_ENTRY = "new_entry";
+
+    ArrayList<HashMap<String,String>> rvData = new ArrayList<HashMap<String,String>>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +101,8 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
         String o_id = intent.getStringExtra("o_id");
         String d_id = intent.getStringExtra("d_id");
         ArrayList<HashMap<String, String>> PersonnelList = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("PersonnelList");
+        String current_op_id = PersonnelList.remove(0).get(TAG_OP_ID);
+
 
         TextView tv_Issue_Return_Receive;
         Button btn_ClearPad;
@@ -80,7 +129,66 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
             tv_Issue_Return_Receive.setText("RECIEVE");
         }
 
+        //query for all pa_id entries with op_id
+        SQLiteDatabase db;
+        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+        //Cursor c1 = db.rawQuery("select pa_id from personnel_ammunition where pa_id not in (select pa_id from transaction_data where td_exported = 1 and pa_id in (select pa_id from personnel_ammunition where op_id = " + current_op_id + ")) and op_id = " + current_op_id , null);
 
+
+        //add into arraylist of new or opened
+        Cursor c1 = db.rawQuery("select pa.pa_id, iif(td.td_exported is null, 1, td.td_exported) new_entry, iif(td.td_id is null, -1, td.td_exported) td_id  from personnel_ammunition pa left join transaction_data td on pa.pa_id = td.pa_id where pa.op_id = " + current_op_id, null);
+        ArrayList<HashMap<String,String>> all_pa_id = new ArrayList<>();
+        while(c1.moveToNext())
+        {
+            HashMap<String,String> line_map = new HashMap<String, String>();
+            line_map.put(TAG_PA_ID, c1.getString(0));
+            line_map.put(TAG_NEW_ENTRY, c1.getString(1));
+            line_map.put(TAG_TD_ID, c1.getString(2));
+        }
+
+        //form rvData
+        for(HashMap<String,String> entries : all_pa_id)
+        {
+
+            HashMap<String,String> map = new HashMap<String, String>();
+            int current_pa_id = Integer.valueOf(entries.get(TAG_PA_ID));
+            boolean current_is_new_entry = Boolean.parseBoolean(entries.get(TAG_NEW_ENTRY));
+            String current_td_id = entries.get(TAG_TD_ID);
+
+            //TAG_DYNAMIC_ISSUE = true if new entry, false if existing entry
+            //TAG_PA_ID = taken from above query
+            //TAG_A_NAME = raw text taken from transaction details if old entry, referenced from ammunition table if old entry
+            //TAG_PA_ISSUE_QTY = text taken from personnel_ammunition if entry is new, else take issued value from transaction detail
+            //TAG_TD_RETURNED = text taken only from transaction detail. automatically set this value to issued quantity in event of ops
+            //TAG_TD_EXPENDED = text taken only from transaction detail. automatically set this value to issued quantity in event of range
+            //TAG_TD_SPOILED = text taken only from transaction detail.
+
+            if(current_is_new_entry == true)
+            {
+                map.put(TAG_DYNAMIC_ISSUE, "true");
+                map.put(TAG_PA_ID, String.valueOf(current_pa_id));
+
+                c1 = db.rawQuery("select a.a_name, pa.pa_issue_qty from personnel_ammunition pa, ammunition a where a.a_id = pa.a_id and pa.pa_id = "+ current_pa_id, null);
+                if(c1.moveToFirst())
+                {
+                    map.put(TAG_A_NAME, c1.getString(0));
+                    map.put(TAG_PA_ISSUE_QTY, c1.getString(1));
+                }
+            }
+            else
+            {
+                map.put(TAG_DYNAMIC_ISSUE, "false");
+                map.put(TAG_TD_ID, current_td_id);
+                map.put(TAG_PA_ID, String.valueOf(current_pa_id));
+
+                //query for the rest of the data in transaction_details
+                //c1 = db.rawQuery("select ")
+
+
+            }
+
+
+        }
 
         btn_ClearPad.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,16 +205,70 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
                 Bitmap bitmap = Signature_Pad.getSignatureBitmap();
                 imageView.setImageBitmap(bitmap);
 
-                //check entry type
+                int doc = -1;
+                int pa_id = 1;
+                //open database
+                SQLiteDatabase db;
+                db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
 
+
+                String doc_o_name = null;
+                String doc_o_unit = null;
+                String doc_d_name = null;
+                //get o_name, kah, unit date from o_id
+                Cursor c1 = db.rawQuery("select o_name, o_unit from operation where o_id = " + o_id, null);
+                if(c1.moveToFirst())
+                {
+                    String line_o_name = c1.getString(0);
+                    String line_o_unit = c1.getString(1);
+                }
+                c1 = db.rawQuery("select d.d_name from detail d, personnel_ammunition pa, operation_personnel op where pa.op_id = op.op_id and d.d_id = op.d_id and pa.pa_id = " + pa_id, null);
+                if(c1.moveToFirst())
+                {
+                    String line_d_name = c1.getString(0);
+                }
+                //check if document already exists (CHECK ALL STRING PARAMS IN CASE OF DETAIL CHANGE, THUS CREATE NEW DOC IF CHANGE OCCURS)
+                Cursor c3 = db.rawQuery("select doc_id from document where o_name = " + doc_o_name + " and o_unit = " + doc_o_unit + " and d_name = " + doc_d_name + " and doc_closed = 0", null);
+                int accessed_doc_id = -1;
+                if(c1.moveToFirst())
+                {
+                    accessed_doc_id = c1.getInt(0);
+                }
+                //if document is not opened, create new doc according to data
+                if(accessed_doc_id == -1)
+                {
+                    ContentValues content = new ContentValues();
+                    content.put(TAG_D_NAME, doc_d_name);
+                    content.put(TAG_O_NAME, doc_o_name);
+                    content.put(TAG_O_UNIT, doc_o_unit);
+                    db.insert("document" ,null,content);
+                    c1 = db.rawQuery("select doc_id from document order by doc_id DESC LIMIT 1", null);
+                    if(c1.moveToFirst())
+                    {
+                        accessed_doc_id = c1.getInt(0);
+                    }
+                }
+
+                //check entry type
                 //issuing
                 if(Integer.valueOf(type) == 1)
                 {
                     //this will change td_issued in transaction_data
 
+                    ContentValues cv = new ContentValues();
                     //form the initial entry
-                    //get o_name, kah, unit date
 
+                    //get td_ammo name from a_id
+                    //c1 = db.rawQuery("select a_name from ammunition a, personnel_ammunition pa where pa.a_id = a.a_id and pa_id =", null);
+                    //get td_personnel_name from pa_id ref p_id
+
+                    //dump issue qty to new entry
+
+                    //dump issue datetime as of realtime
+
+                    //dump issue signature
+
+                    //commit into db
 
                 }
                 //returning
@@ -119,6 +281,9 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
                 {
                     //ignore first
                 }
+
+                //close database
+                db.close();
             }
         });
     }
@@ -314,7 +479,12 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
         });*/
     }
 
-    private void showEditIssueDialog(ArrayList<HashMap<String, String>> IssueAmmoList, int i) {
+    @Override
+    public void onItemClick(int position) {
+
+    }
+
+    /*private void showEditIssueDialog(ArrayList<HashMap<String, String>> IssueAmmoList, int i) {
         Dialog EditIssueDialog = new Dialog(DeclareIssueReturnReceiveInfoActivity.this, android.R.style.Theme_Black_NoTitleBar);
         EditIssueDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
         EditIssueDialog.setContentView(R.layout.dialog_edit_issue_return_receive_ammunition);
@@ -389,5 +559,5 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
                 EditIssueDialog.dismiss();
             }
         });
-    }
+    }*/
 }

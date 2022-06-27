@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/tv_PAID"
+        android:id="@+id/tv_issuing_pa_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
@@ -16,16 +16,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_OPID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tv_AID"
+        android:id="@+id/tv_issuing_a_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
@@ -39,7 +30,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_Ammunition_Name"
+            android:id="@+id/tv_issuing_a_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Ammunition Name"
@@ -57,7 +48,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_ToIssueOrIssued_Qty"
+                    android:id="@+id/tv_issue_or_issued_qty"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="0"
@@ -65,7 +56,7 @@
                     android:textSize="20sp" />
 
                 <TextView
-                    android:id="@+id/tv_ToIssueOrIssued_Text"
+                    android:id="@+id/tv_dynamic_issue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="To Issue Or Issued"
@@ -80,7 +71,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_Expended_Qty"
+                    android:id="@+id/tv_expended_qty"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="0"
@@ -103,7 +94,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_Returned_Qty"
+                    android:id="@+id/tv_returned_qty"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="0"
@@ -126,7 +117,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_Spoilt_Qty"
+                    android:id="@+id/tv_spoilt_qty"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="0"
