@@ -91,15 +91,38 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
 
 
 
-        //redo whole chunk
         btn_Validate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Bitmap bitmap = Signature_Pad.getSignatureBitmap();
                 imageView.setImageBitmap(bitmap);
 
-                
+                //check entry type
+
+                //issuing
+                if(Integer.valueOf(type) == 1)
+                {
+                    //this will change td_issued in transaction_data
+
+                    //form the initial entry
+                    //get o_name, kah, unit date
+
+
+                }
+                //returning
+                else if(Integer.valueOf(type) == 2)
+                {
+                    //this will change td_returned/expended/
+                }
+                //recieving
+                else if(Integer.valueOf(type) == 3)
+                {
+                    //ignore first
+                }
+            }
+        });
+    }
+                /*
                 // SAVE TOISSUE AS ISSUED
                 String FromToIssueToIssued = null;
                 SQLiteDatabase db;
@@ -193,10 +216,8 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
                     Log.i("SelectedAmmunition Reset", String.valueOf(SelectedPersonnel));
                 }
 
-            }
-        });
-        //end redo*/
-    }
+            }*/
+
 
     protected void onResume() {
         super.onResume();

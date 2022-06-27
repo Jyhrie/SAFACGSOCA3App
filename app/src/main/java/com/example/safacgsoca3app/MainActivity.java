@@ -249,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
         db.execSQL("CREATE TABLE IF NOT EXISTS operation_personnel (op_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, p_id integer NOT NULL, o_id integer NOT NULL, d_id integer)");
         db.execSQL("CREATE TABLE IF NOT EXISTS ammunition (a_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_id integer NOT NULL, a_name varchar(255) NOT NULL, a_qty number NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS detail (d_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, d_name text NOT NULL, o_id integer NOT NULL)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS personnel_ammunition (pa_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, op_id integer NOT NULL, a_id integer NOT NULL, pa_issue_qty number NOT NULL)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS personnel_ammunition (pa_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, op_id integer NOT NULL, a_id integer NOT NULL, pa_issue_qty number NOT NULL, pa_issued number, pa_expended number, pa_returned number, pa_spoiled number)");
         db.execSQL("CREATE TABLE IF NOT EXISTS transaction_data (" +
                 "td_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, " +
                 "a_id integer NOT NULL, " +
@@ -547,101 +547,182 @@ public class MainActivity extends AppCompatActivity {
         content.put("op_id", "1");
         content.put("a_id", "1");
         content.put("pa_issue_qty", "120");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
         db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "1");
         content.put("a_id", "3");
         content.put("pa_issue_qty", "2");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
         db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "2");
         content.put("a_id", "1");
         content.put("pa_issue_qty", "120");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
         db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "2");
         content.put("a_id", "3");
         content.put("pa_issue_qty", "2");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
         db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "3");
         content.put("a_id", "1");
         content.put("pa_issue_qty", "120");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
         db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "3");
         content.put("a_id", "3");
         content.put("pa_issue_qty", "2");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
         db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "4");
         content.put("a_id", "1");
         content.put("pa_issue_qty", "120");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
         db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "4");
         content.put("a_id", "3");
         content.put("pa_issue_qty", "2");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
         db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "5");
         content.put("a_id", "2");
         content.put("pa_issue_qty", "200");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
         db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "5");
         content.put("a_id", "3");
         content.put("pa_issue_qty", "2");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
+
         db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "6");
         content.put("a_id", "2");
         content.put("pa_issue_qty", "200");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
         db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "6");
         content.put("a_id", "3");
         content.put("pa_issue_qty", "2");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
         db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "7");
         content.put("a_id", "2");
         content.put("pa_issue_qty", "200");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
         db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "7");
         content.put("a_id", "3");
         content.put("pa_issue_qty", "2");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
         db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "8");
         content.put("a_id", "2");
         content.put("pa_issue_qty", "200");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
         db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "8");
         content.put("a_id", "3");
         content.put("pa_issue_qty", "2");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
         db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "9");
         content.put("a_id", "1");
         content.put("pa_issue_qty", "90");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
         db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "9");
         content.put("a_id", "3");
         content.put("pa_issue_qty", "2");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
         db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "10");
         content.put("a_id", "1");
         content.put("pa_issue_qty", "90");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
         db.insert("personnel_ammunition", null, content);
 
         content.put("op_id", "10");
         content.put("a_id", "3");
         content.put("pa_issue_qty", "2");
+        content.put("pa_issued", "0");
+        content.put("pa_returned", "0");
+        content.put("pa_expended", "0");
+        content.put("pa_spoiled", "0");
         db.insert("personnel_ammunition", null, content);
 
         db.close();
