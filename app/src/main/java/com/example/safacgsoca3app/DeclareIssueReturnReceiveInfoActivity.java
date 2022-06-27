@@ -92,7 +92,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity {
 
 
         //redo whole chunk
-        btn_Validate.setOnClickListener(new View.OnClickListener() {
+        /*btn_Validate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
