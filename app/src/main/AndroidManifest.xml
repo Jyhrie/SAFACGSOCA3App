@@ -13,7 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SAFACGSOCA3App"
-        android:requestLegacyExternalStorage="true">
+        android:requestLegacyExternalStorage="true"
+        android:configChanges="orientation|screenSize"
+        >
         <activity
             android:name=".GenerateDocumentsActivity"
             android:exported="false"

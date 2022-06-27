@@ -145,7 +145,7 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
         btnIssue.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(ViewOperationActivity.this, PersonnelChecklistActivity.class);
-                intent.putExtra("type", 1);
+                intent.putExtra("type", "1");
                 intent.putExtra("o_id", Selected_o_id);
                 intent.putExtra("d_id", Selected_d_id);
                 intent.putExtra("d_name", Selected_d_name);
@@ -153,12 +153,11 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
             }
         });
 
-        /*Button btnReturn= (Button) findViewById(R.id.btn_Return);
+        Button btnReturn= (Button) findViewById(R.id.btn_Return);
         btnReturn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(ViewOperationActivity.this, PersonnelChecklistActivity.class);
-                String Function = "Returning: ";
-                intent.putExtra("Function", Function);
+                intent.putExtra("type", "2");
                 intent.putExtra("o_id", Selected_o_id);
                 intent.putExtra("d_id", Selected_d_id);
                 intent.putExtra("d_name", Selected_d_name);
@@ -171,7 +170,7 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
             public void onClick(View v) {
                 showReceiveDialog();
             }
-        });*/
+        });
     }
 
     @Override

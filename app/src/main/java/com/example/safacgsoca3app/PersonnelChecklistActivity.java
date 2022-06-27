@@ -163,6 +163,7 @@ public class PersonnelChecklistActivity extends AppCompatActivity {
                 intent.putExtra("d_id", d_id);
                 intent.putExtra("PersonnelList", PersonnelListAppended);
                 PersonnelChecklistActivity.this.startActivity(intent);
+                finish();
             }
         });
     }
