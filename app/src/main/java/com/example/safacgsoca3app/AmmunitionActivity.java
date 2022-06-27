@@ -1,7 +1,5 @@
 package com.example.safacgsoca3app;
 
-import static com.example.safacgsoca3app.ViewLoadoutActivity.TAG_ANAME;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
@@ -82,12 +80,37 @@ public class AmmunitionActivity extends AppCompatActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                showViewAmmoDialog(view);
-                String pid = ((TextView) view.findViewById(R.id.tvAmmunitionID)).getText().toString();
+                showEditAmmoDialog(view);
             }
         });
+    }
 
+    private void showEditAmmoDialog(View view)
+    {
+        String a_id = ((TextView) view.findViewById(R.id.tvAmmunitionID)).getText().toString();
+        Button btnDeleteAmmo;
 
+        Dialog DialogFragment = new Dialog(AmmunitionActivity.this, android.R.style.Theme_Black_NoTitleBar);
+        DialogFragment.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
+        DialogFragment.setContentView(R.layout.dialog_edit_ammunition);
+        DialogFragment.setCancelable(true);
+        DialogFragment.show();
+
+        btnDeleteAmmo = (Button) DialogFragment.findViewById(R.id.btnDeleteAmmunition);
+
+        btnDeleteAmmo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SQLiteDatabase db;
+                db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+                db.execSQL("DELETE FROM Ammunition WHERE a_id ="+ a_id);
+                db.execSQL("DELETE FROM Personnel_Ammunition WHERE a_id ="+ a_id);
+                db.close();
+
+                DialogFragment.dismiss();
+                onResume();
+            }
+        });
     }
 
     private void showAddAmmoDialog(View view, String o_id)
@@ -126,18 +149,6 @@ public class AmmunitionActivity extends AppCompatActivity {
             }
         });
     }
-
-    private void showViewAmmoDialog(View view)
-    {
-        String a_id = ((TextView) view.findViewById(R.id.tvAmmunitionID)).getText().toString();
-
-        Dialog DialogFragment = new Dialog(AmmunitionActivity.this, android.R.style.Theme_Black_NoTitleBar);
-        DialogFragment.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
-        DialogFragment.setContentView(R.layout.dialog_view_ammunition);
-        DialogFragment.setCancelable(true);
-        DialogFragment.show();
-
-    }
     
     @Override
     protected void onResume() {
@@ -157,7 +168,7 @@ public class AmmunitionActivity extends AppCompatActivity {
             String line_name = c1.getString(1);
             String line_qty = c1.getString(2);
 
-            map.put(TAG_O_ID, line_id);
+            map.put(TAG_A_ID, line_id);
             map.put(TAG_A_NAME, line_name);
             map.put(TAG_A_QTY, line_qty);
 
