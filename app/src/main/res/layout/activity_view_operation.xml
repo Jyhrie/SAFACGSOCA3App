@@ -30,6 +30,13 @@
                 android:text="Operation Name" />
 
             <TextView
+                android:id="@+id/tv_dateloc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Key Appointment Holder"
+                android:textSize="35dp" />
+
+            <TextView
                 android:id="@+id/tv_kah"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -97,6 +104,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
                     android:text="Edit" />
 
                 <Button
@@ -104,6 +112,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
                     android:text="Delete" />
             </LinearLayout>
 

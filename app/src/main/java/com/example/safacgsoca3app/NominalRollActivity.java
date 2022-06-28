@@ -149,7 +149,24 @@ public class NominalRollActivity extends AppCompatActivity implements RecyclerVi
 
                 db.insert("Personnel", null, content);
                 DialogFragment.dismiss();
-                onResume();
+
+                Cursor c1 = db.rawQuery("select * from personnel order by p_id DESC limit 1", null);
+                if (c1.moveToFirst()) {
+                    HashMap<String, String> map = new HashMap<String, String>();
+                    String line_id = c1.getString(0);
+                    String line_rank = c1.getString(1);
+                    String line_name = c1.getString(2);
+                    String line_nric = c1.getString(3);
+
+                    map.put(TAG_P_ID, line_id);
+                    map.put(TAG_P_NAME, line_rank + " " + line_name);
+                    map.put(TAG_P_NRIC, line_nric);
+
+                    data.add(map);
+                }
+                db.close();
+                rvAdapter.notifyItemInserted(rvAdapter.getItemCount());
+
             }
         });
 
@@ -172,11 +189,26 @@ public class NominalRollActivity extends AppCompatActivity implements RecyclerVi
 
                 db.insert("Personnel", null, content);
 
+                Cursor c1 = db.rawQuery("select * from personnel order by p_id DESC limit 1", null);
+                if (c1.moveToFirst()) {
+                    HashMap<String, String> map = new HashMap<String, String>();
+                    String line_id = c1.getString(0);
+                    String line_rank = c1.getString(1);
+                    String line_name = c1.getString(2);
+                    String line_nric = c1.getString(3);
+
+                    map.put(TAG_P_ID, line_id);
+                    map.put(TAG_P_NAME, line_rank + " " + line_name);
+                    map.put(TAG_P_NRIC, line_nric);
+
+                    data.add(map);
+                }
+                rvAdapter.notifyItemInserted(rvAdapter.getItemCount());
+
                 etName.setText("");
                 etRemarks.setText("");
 
                 db.close();
-                onResume();
             }
         });
 

@@ -23,6 +23,8 @@ import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -83,12 +85,14 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
 
         TextView tvOperationName;
         TextView tvKAH;
+        TextView tvDateLoc;
         Button btnViewOperationNominalRoll;
         Button btnViewAmmunition;
         Button btnAddIssueDetail;
 
         tvOperationName = (TextView) findViewById(R.id.tv_operation_name);
         tvKAH = (TextView) findViewById(R.id.tv_kah);
+        tvDateLoc = (TextView) findViewById(R.id.tv_dateloc);
         btnViewOperationNominalRoll = (Button) findViewById(R.id.btn_view_operation_nominal);
         btnViewAmmunition = (Button) findViewById(R.id.btn_view_ammunition);
         btnAddIssueDetail = (Button) findViewById(R.id.btn_add_issue_detail);
@@ -102,15 +106,15 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
 
         //dump data into thing
         while(c1.moveToNext()) {
-            Log.i("entry found", o_id);
             String line_id = c1.getString(0);
             String line_name = c1.getString(1);
-            //String line_unit = c1.getString(2);
-            //String line_date = c1.getString(3);
-            //String line_location = c1.getString(4);
             String line_kah = c1.getString(2);
+            String line_unit = c1.getString(3);
+            String line_date = c1.getString(4);
+            String line_location = c1.getString(5);
 
-            tvOperationName.setText(line_name);
+            tvOperationName.setText(line_name + " - " + line_unit);
+            tvDateLoc.setText(line_date + " @ " + line_location);
             tvKAH.setText(line_kah);
         }
 

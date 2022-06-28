@@ -113,6 +113,8 @@ public class adapter_Operation_KAH extends RecyclerView.Adapter<adapter_Operatio
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 data.get(gpos).put(TAG_DESIGNATION_NAME, holder.et_op_param_name.getText().toString());
+                Log.i(String.valueOf(data),"data");
+
             }
 
             @Override

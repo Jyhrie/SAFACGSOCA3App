@@ -101,16 +101,11 @@ public class fragment_Assign_Personnel_Ammunition extends DialogFragment impleme
         btn_assign_personnel_ammunition_add_entry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                //get data from previous adapter
-                //adapter_Personnel_Ammunition adapter = (adapter_Personnel_Ammunition) rv_assign_personnel_ammunition.getAdapter();
-                //ArrayList<HashMap<String, String>> existing_data = adapter.getData();
-
                 //initialize new entry for hashmap
                 HashMap<String, String> newEntryHash = new HashMap<String, String>();
                 newEntryHash.put(TAG_PA_ID, "-1");
                 data.add(newEntryHash);
-                assign_personnel_adapter.notifyDataSetChanged();
+                assign_personnel_adapter.notifyItemInserted(assign_personnel_adapter.getItemCount());
 
             }
         });

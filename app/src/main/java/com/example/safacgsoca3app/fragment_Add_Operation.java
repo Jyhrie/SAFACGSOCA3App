@@ -39,6 +39,9 @@ public class fragment_Add_Operation extends DialogFragment implements RecyclerVi
     private static final String TAG_O_ID = "o_id";
     private static final String TAG_O_NAME = "o_name";
     private static final String TAG_O_KAH = "o_kah";
+    private static final String TAG_O_UNIT = "o_unit";
+    private static final String TAG_O_DATE = "o_date";
+    private static final String TAG_O_LOC = "o_loc";
 
     private static final String TAG_OP_ID = "op_id";
 
@@ -73,14 +76,15 @@ public class fragment_Add_Operation extends DialogFragment implements RecyclerVi
 
         Button btnInsertExercise;
         EditText etAddExerciseName;
-        EditText etAddExerciseKAH;
         EditText etDate;
         EditText etLocation;
+        EditText etUnit;
 
         btnInsertExercise = (Button) v.findViewById(R.id.btnInsertExercise);
         etAddExerciseName = (EditText) v.findViewById(R.id.etAddExerciseName);
         etDate = (EditText) v.findViewById(R.id.etDate);
         etLocation = (EditText) v.findViewById(R.id.etLocation);
+        etUnit = (EditText) v.findViewById(R.id.et_unit);
 
         data = new ArrayList<HashMap<String,String>>();
         data.add(new HashMap<String,String>());
@@ -102,11 +106,11 @@ public class fragment_Add_Operation extends DialogFragment implements RecyclerVi
         Button btn_add_designation;
         btn_add_designation = (Button) v.findViewById(R.id.btn_add_new_designation);
         btn_add_designation.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
                 data.add(new HashMap<String,String>());
-                rvAdapter.notifyDataSetChanged();
+                Log.i(data.toString(), "adding empty");
+                rvAdapter.notifyItemInserted(rvAdapter.getItemCount());
             }
         });
 
@@ -117,9 +121,7 @@ public class fragment_Add_Operation extends DialogFragment implements RecyclerVi
                 SQLiteDatabase db;
                 db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
 
-                String locdate;
                 String concatkah = "";
-                String finalData = null;
                 for(HashMap<String, String> entry : data)
                 {
                     String kah;
@@ -127,15 +129,14 @@ public class fragment_Add_Operation extends DialogFragment implements RecyclerVi
                     concatkah += kah;
                 }
 
-                locdate = "DATE: "+etDate.getText().toString() + "\n" + "LOCATION: " + etLocation.getText().toString() + "\n";
-                finalData = locdate + concatkah;
                 //form data
-
-
                 ContentValues content = new ContentValues();
 
                 content.put(TAG_O_NAME, etAddExerciseName.getText().toString());
-                content.put(TAG_O_KAH, finalData);
+                content.put(TAG_O_UNIT, etUnit.getText().toString());
+                content.put(TAG_O_DATE, etDate.getText().toString());
+                content.put(TAG_O_LOC, etLocation.getText().toString());
+                content.put(TAG_O_KAH, concatkah);
 
                 db.insert("operation", null, content);
                 db.close();

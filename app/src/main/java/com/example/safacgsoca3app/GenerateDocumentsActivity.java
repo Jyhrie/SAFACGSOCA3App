@@ -2,6 +2,7 @@ package com.example.safacgsoca3app;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -86,9 +87,12 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
     private static final String TAG_TD_SPOILED = "td_spoiled";
     private static final String TAG_ISSUE_DATETIME = "td_issuedatetime";
     private static final String TAG_RETURN_DATETIME = "td_issuedatetime";
-    private static final String TAG_ISSUE_SIGNATURE_REC = "td_issuesignaturerecieving";
-    private static final String TAG_RETURN_SIGNATURE_REC = "td_returnsignaturerecieving";
+    private static final String TAG_ISSUE_SIGNATURE = "td_issuesignaturerecieving";
+    private static final String TAG_RETURN_SIGNATURE = "td_returnsignaturerecieving";
 
+    private static final String TAG_D_NAME = "d_name";
+    private static final String TAG_O_NAME = "o_name";
+    private static final String TAG_O_UNIT = "o_unit";
 
     // Define some String variables, initialized with empty string
     String filepath = Environment.getExternalStorageDirectory().getPath() + "/Download/Test.pdf";
@@ -96,7 +100,6 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
     private File file = new File(filepath);
 
     private static final String TAG = GenerateDocumentsActivity.class.getSimpleName();
-
 
     // variables for our buttons.
 
@@ -120,33 +123,43 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
         Button btnGenerate = findViewById(R.id.btnGenerate);
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS transaction_dataTest (td_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, td_ammo_name text NOT NULL, td_personnel_name NOT NULL, td_issued number, td_returned number, td_expended number, td_spoiled number, td_issuedatetime text, td_issuesignature image, td_returndatetime text, td_returnsignature image)");
-
         ActivityCompat.requestPermissions(this, new String[]{WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE,}, PackageManager.PERMISSION_GRANTED);
 
         btnGenerate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                btnCreatePDF(view);
+                btnCreatePDF(view, "1");
             }
         });
 
     }
 
-    public void btnCreatePDF(View view) {
-        try {
+    public void btnCreatePDF(View view, String doc_id) {
 
-            ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String,String>>();
+        SQLiteDatabase db;
+        db = openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
+        HashMap<String,String> doc_data = new HashMap<>();
+        Cursor c1;
+        c1 = db.rawQuery("SELECT d_name, o_name, o_unit FROM document WHERE doc_id = ?", new String[]{doc_id});
+        if(c1.moveToFirst())
+        {
+            doc_data.put(TAG_D_NAME, c1.getString(0));
+            doc_data.put(TAG_O_NAME, c1.getString(1));
+            doc_data.put(TAG_O_UNIT, c1.getString(2));
+        }
+
+
+            ArrayList<ContentValues> data = new ArrayList<ContentValues>();
             //get db data
-            SQLiteDatabase db;
-            db = openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
-            Cursor c1 = db.rawQuery("SELECT td_ammo_name, td_personnel_name, td_issued, td_returned, td_expended, td_spoiled, td_issuedatetime ,td_returndatetime from transaction_dataTest", null);
+
+            c1 = db.rawQuery("SELECT td_a_name, td_p_name, td_issued, td_returned, td_expended, td_spoiled, td_issuedatetime, td_issuesignature ,td_returndatetime, td_returnsignature from transaction_data", null);
 
             ByteArrayInputStream imageStream;
 
             while(c1.moveToNext())
             {
-                HashMap<String, String> line_data = new HashMap<>();
+
+                ContentValues line_data = new ContentValues();
                 String line_ammo_name = c1.getString(0);
                 String line_personnel_name = c1.getString(1);
                 String td_issued = c1.getString(2);
@@ -154,23 +167,9 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
                 String td_expended = c1.getString(4);
                 String td_spoiled = c1.getString(5);
                 String td_issuedatetime = c1.getString(6);
-                Log.i("stringy", td_issuedatetime);
-
-                /*Bitmap td_issuesignaturerecieving = null;
-                byte[] td_issuesignaturerecievingblob = c1.getBlob(7);
-                if(td_issuesignaturerecievingblob.equals(null)) {
-                    imageStream = new ByteArrayInputStream(td_issuesignaturerecievingblob);
-                    td_issuesignaturerecieving = BitmapFactory.decodeStream(imageStream);
-                }*/
-
-                String td_returndatetime = c1.getString(7);
-
-                /*Bitmap td_returnsignaturerecieving = null;
-                byte[] td_returnsignaturerecievingblob = c1.getBlob(9);
-                if(!td_returnsignaturerecievingblob.equals(null)) {
-                    imageStream = new ByteArrayInputStream(td_issuesignaturerecievingblob);
-                    td_returnsignaturerecieving = BitmapFactory.decodeStream(imageStream);
-                }*/
+                byte[] td_issuesignatureblob = c1.getBlob(7);
+                String td_returndatetime = c1.getString(8);
+                byte[] td_returnsignatureblob = c1.getBlob(9);
 
                 line_data.put(TAG_AMMO_NAME, line_ammo_name);
                 line_data.put(TAG_PERSONNEL_NAME, line_personnel_name);
@@ -179,19 +178,21 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
                 line_data.put(TAG_TD_EXPENDED, td_expended);
                 line_data.put(TAG_TD_SPOILED, td_spoiled);
                 line_data.put(TAG_ISSUE_DATETIME, td_issuedatetime);
+                line_data.put(TAG_ISSUE_SIGNATURE, td_issuesignatureblob);
                 line_data.put(TAG_RETURN_DATETIME, td_returndatetime);
+                line_data.put(TAG_RETURN_SIGNATURE, td_returnsignatureblob);
 
                 Log.i(line_data.toString(), "test");
                 data.add(line_data);
             }
 
+        try {
             //pdfDocument.writeTo(new FileOutputStream(file));
             Document doc = new Document(PageSize.A4);
             PdfWriter.getInstance(doc, new FileOutputStream(file));
             doc.open();
             addMetaData(doc);
-            //addTitlePage(doc);
-            addContent(doc, data);
+            addContent(doc, data, doc_data);
             doc.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -199,11 +200,11 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
     }
 
     private static void addMetaData(Document document) {
-        document.addTitle("My first PDF");
-        document.addSubject("Using iText");
+        document.addTitle("SAF 1386");
+        document.addSubject("GENERATED USING A3 APP");
         document.addKeywords("Java, PDF, iText");
-        document.addAuthor("Lars Vogel");
-        document.addCreator("Lars Vogel");
+        document.addAuthor("GSAB/PYAD");
+        document.addCreator("SAFAC");
     }
 
 
@@ -237,16 +238,16 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
     }
 
 
-    private static void addContent(Document document, ArrayList<HashMap<String, String>> data) throws DocumentException {
+    private static void addContent(Document document, ArrayList<ContentValues> data, HashMap<String,String> doc_data) throws DocumentException, IOException {
         Anchor anchor = new Anchor("SAF 1386: Records of Ammunition Distribution to Individiual", catFont);
         anchor.setName("SAF 1386");
 
         // Second parameter is the number of the chapter
         Chapter catPart = new Chapter(new Paragraph(anchor), 1);
 
-        Paragraph details = new Paragraph("LESSON/EXERCISE: TBD", subFont);
+        Paragraph details = new Paragraph("LESSON/EXERCISE: " + doc_data.get(TAG_O_NAME), subFont);
         Section subCatPart = catPart.addSection(details);
-        subCatPart.add(new Paragraph("UNIT/ECHELON: TBD             DETAIL: TBD                 DATE: TBD"));
+        subCatPart.add(new Paragraph("UNIT/ECHELON: " + doc_data.get(TAG_O_UNIT) + "             DETAIL: " + doc_data.get(TAG_D_NAME) + "                    DATE: TBD"));
 
         Paragraph paragraph = new Paragraph();
         addEmptyLine(paragraph,2);
@@ -255,19 +256,13 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
         Section subCatPart = catPart.addSection(subPara);
         subCatPart.add(new Paragraph("Hello"));*/
 
-
-        // add a list
-        //createList(subCatPart);
-        //Paragraph paragraph = new Paragraph();
-        //addEmptyLine(paragraph, 5);
-        //subCatPart.add(paragraph);
-
         // add a table
         createTable(subCatPart, data);
 
         // now add all this to the document
         document.add(catPart);
 
+        /*
         // Next section
         anchor = new Anchor("Second Chapter", catFont);
         anchor.setName("Second Chapter");
@@ -275,17 +270,17 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
         // Second parameter is the number of the chapter
         catPart = new Chapter(new Paragraph(anchor), 1);
 
-        /*subPara = new Paragraph("Subcategory", subFont);
+        subPara = new Paragraph("Subcategory", subFont);
         subCatPart = catPart.addSection(subPara);
-        subCatPart.add(new Paragraph("This is a very important message"));*/
+        subCatPart.add(new Paragraph("This is a very important message"));
 
         // now add all this to the document
-        document.add(catPart);
+        document.add(catPart);*/
 
     }
 
-    private static void createTable(Section subCatPart, ArrayList<HashMap<String, String>> data)
-            throws DocumentException {
+    private static void createTable(Section subCatPart, ArrayList<ContentValues> data)
+            throws DocumentException, IOException {
         PdfPTable table = new PdfPTable(10);
         table.setWidthPercentage(100);
         // t.setBorderColor(BaseColor.GRAY);
@@ -340,47 +335,39 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
         table.setHeaderRows(1);
 
 
-
-
         int sn = 0;
 
 
-
-        for(HashMap<String, String> entry : data)
+        for(ContentValues entry : data)
         {
+
+            Image _issuesignature = Image.getInstance((byte[]) entry.get(TAG_ISSUE_SIGNATURE));
+            Image _returnsignature = Image.getInstance((byte[]) entry.get(TAG_RETURN_SIGNATURE));
 
             //S/N
             table.addCell(new PdfPCell(new Phrase(String.valueOf(sn), tableContent)));
             //ammo desc
-            table.addCell(new PdfPCell(new Phrase(entry.get(TAG_AMMO_NAME), tableContent)));
+            table.addCell(new PdfPCell(new Phrase(String.valueOf(entry.get(TAG_AMMO_NAME)), tableContent)));
             //rank & name
-            table.addCell(new PdfPCell(new Phrase(entry.get(TAG_PERSONNEL_NAME), tableContent)));
+            table.addCell(new PdfPCell(new Phrase(String.valueOf(entry.get(TAG_PERSONNEL_NAME)), tableContent)));
             //issued qty
-            table.addCell(new PdfPCell(new Phrase(entry.get(TAG_TD_ISSUED), tableContent)));
+            table.addCell(new PdfPCell(new Phrase(String.valueOf(entry.get(TAG_TD_ISSUED)), tableContent)));
             //issue date
-            table.addCell(new PdfPCell(new Phrase(entry.get(TAG_ISSUE_DATETIME), tableContent)));
+            table.addCell(new PdfPCell(new Phrase(String.valueOf(entry.get(TAG_ISSUE_DATETIME)), tableContent)));
             //signature
-            table.addCell((Image) null);
+            table.addCell(new PdfPCell(_issuesignature, true));
             //expended qty
-            table.addCell(new PdfPCell(new Phrase(entry.get(TAG_TD_EXPENDED), tableContent)));
+            table.addCell(new PdfPCell(new Phrase(String.valueOf(entry.get(TAG_TD_EXPENDED)), tableContent)));
             //returned qty
-            table.addCell(new PdfPCell(new Phrase(entry.get(TAG_TD_RETURNED), tableContent)));
+            table.addCell(new PdfPCell(new Phrase(String.valueOf(entry.get(TAG_TD_RETURNED)), tableContent)));
             //return date
-            table.addCell(new PdfPCell(new Phrase(entry.get(TAG_RETURN_DATETIME), tableContent)));
+            table.addCell(new PdfPCell(new Phrase(String.valueOf(entry.get(TAG_RETURN_DATETIME)), tableContent)));
             //signature
-            table.addCell((Image) null);
+            table.addCell(new PdfPCell(_returnsignature, true));
 
             sn++;
 
         }
-
-
-        table.addCell("1.0");
-        table.addCell("1.1");
-        table.addCell("1.2");
-        table.addCell("2.1");
-        table.addCell("2.2");
-        table.addCell("2.3");
 
         subCatPart.add(table);
 
