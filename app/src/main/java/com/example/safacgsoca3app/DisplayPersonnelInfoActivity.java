@@ -110,7 +110,7 @@ public class DisplayPersonnelInfoActivity extends AppCompatActivity {
         //get data from db
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-        Cursor c1 = db.rawQuery("SELECT a.a_name, pa.pa_id, pa.pa_issue_qty, pa.pa_issued, pa.pa_expended, pa.pa_returned, pa.pa_spoiled FROM personnel_ammunition pa, ammunition a WHERE a.a_id = pa.a_id and pa.op_id = "+op_id, null);
+        Cursor c1 = db.rawQuery("SELECT a.a_name, pa.pa_id, pa.pa_issue_qty, td.td_issued, td.td_returned, td.td_expended, td.td_spoiled FROM ammunition a, personnel_ammunition pa left join transaction_data td on td.pa_id = pa.pa_id WHERE a.a_id = pa.a_id and td.td_exported = 0 and pa.op_id ="+op_id, null);
 
         while(c1.moveToNext()) {
             HashMap<String, String> map = new HashMap<String, String>();
