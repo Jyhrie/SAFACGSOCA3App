@@ -80,7 +80,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_Issue_Ammunition"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="175dp"
         android:layout_marginTop="5dp"
         app:layout_constraintEnd_toStartOf="@+id/guideline10"
         app:layout_constraintStart_toStartOf="@+id/guideline7"
@@ -115,6 +115,7 @@
             android:id="@+id/Signature_Pad"
             android:layout_width="500dp"
             android:layout_height="300dp"
+            android:background="#F4F3F3"
             app:layout_constraintBottom_toTopOf="@+id/btn_Validate"
             app:layout_constraintEnd_toStartOf="@+id/guideline10"
             app:layout_constraintStart_toStartOf="@+id/guideline7"
