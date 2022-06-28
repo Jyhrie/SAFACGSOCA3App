@@ -41,27 +41,6 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/ToIssue_Quantity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="Quantity" />
-
-                <TextView
-                    android:id="@+id/Ammo_ToIssue"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="To Issue" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="30dp"
-                android:layout_marginRight="30dp"
-                android:orientation="vertical">
-
-                <TextView
                     android:id="@+id/Issued_Quantity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

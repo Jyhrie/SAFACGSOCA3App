@@ -30,7 +30,7 @@ public class DisplayPersonnelInfoActivity extends AppCompatActivity {
     private static final String TAG_D_NAME = "d_name";
 
     private static final String TAG_PA_ID = "pa_id";
-    private static final String TAG_PA_TOISSUE = "pa_issue_qty";
+    private static final String TAG_PA_ISSUE_QTY = "pa_issue_qty";
     private static final String TAG_PA_ISSUED = "pa_issued";
     private static final String TAG_PA_RETURNED = "pa_returned";
     private static final String TAG_PA_EXPENEDED = "pa_expended";
@@ -110,25 +110,23 @@ public class DisplayPersonnelInfoActivity extends AppCompatActivity {
         //get data from db
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-        Cursor c1 = db.rawQuery("SELECT a.a_name, pa.pa_id, pa.pa_issue_qty, pa.pa_issued, pa.pa_expended, pa.pa_returned, pa.pa_spoiled FROM personnel_ammunition pa, ammunition a WHERE a.a_id = pa.a_id and pa.op_id = "+op_id, null);
+        Cursor c1 = db.rawQuery("SELECT a.a_name, pa.pa_id, pa.pa_issued, pa.pa_expended, pa.pa_returned, pa.pa_spoiled FROM personnel_ammunition pa, ammunition a WHERE a.a_id = pa.a_id and pa.op_id = "+op_id, null);
 
         while(c1.moveToNext()) {
             HashMap<String, String> map = new HashMap<String, String>();
 
             String Ammunition_Text = c1.getString(0);
             String pa_id = c1.getString(1);
-            String ToIssue_Quantity = c1.getString(2);
-            String Issued_Quantity = c1.getString(3);
-            String Expended_Quantity = c1.getString(4);
-            String Returned_Quantity = c1.getString(5);
-            String Spoiled_Quantity = c1.getString(6);
+            String Issued_Quantity = c1.getString(2);
+            String Expended_Quantity = c1.getString(3);
+            String Returned_Quantity = c1.getString(4);
+            String Spoiled_Quantity = c1.getString(5);
 
             //In reality, the number of entries is not defined by the for loop but by database entries
             //For this example, we will manually create 2 entries containing a hardcoded string
 
             map.put(TAG_A_NAME, Ammunition_Text);
             map.put(TAG_PA_ID, pa_id);
-            map.put(TAG_PA_TOISSUE, ToIssue_Quantity);
             map.put(TAG_PA_ISSUED, Issued_Quantity);
             map.put(TAG_PA_EXPENEDED, Expended_Quantity);
             map.put(TAG_PA_RETURNED, Returned_Quantity);
@@ -158,8 +156,8 @@ public class DisplayPersonnelInfoActivity extends AppCompatActivity {
                 DisplayPersonnelInfoActivity.this, //context
                 Personnel_Ammo_List, //hashmapdata
                 R.layout.list_display_personnel_ammunition, //layout of list
-                new String[]{TAG_A_NAME,TAG_PA_ID,TAG_PA_TOISSUE,TAG_PA_ISSUED,TAG_PA_EXPENEDED,TAG_PA_RETURNED,TAG_PA_SPOILED}, //from array
-                new int[]{R.id.Personnel_Ammunition,R.id.pa_id,R.id.ToIssue_Quantity,R.id.Issued_Quantity,R.id.Expended_Quantity,R.id.Returned_Quantity,R.id.Spoiled_Quantity}); //toarray
+                new String[]{TAG_A_NAME,TAG_PA_ID,TAG_PA_ISSUED,TAG_PA_EXPENEDED,TAG_PA_RETURNED,TAG_PA_SPOILED}, //from array
+                new int[]{R.id.Personnel_Ammunition,R.id.pa_id,R.id.Issued_Quantity,R.id.Expended_Quantity,R.id.Returned_Quantity,R.id.Spoiled_Quantity}); //toarray
         // updating listview
         lv.setAdapter(adapter);
     }
