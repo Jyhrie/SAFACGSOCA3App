@@ -163,67 +163,6 @@ public class MainActivity extends AppCompatActivity {
         Bundle args = new Bundle();
         fragment.setArguments(args);
         fragment.show(getSupportFragmentManager(), "fragment_assign_personnel_ammunition");
-
-
-        /*
-        Dialog DialogFragment = new Dialog(MainActivity.this, android.R.style.Theme_Black_NoTitleBar);
-        DialogFragment.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
-        DialogFragment.setContentView(R.layout.dialog_add_exercise);
-        DialogFragment.setCancelable(true);
-        DialogFragment.show();
-
-        Button btnInsertExercise;
-        EditText etAddExerciseName;
-        EditText etAddExerciseKAH;
-
-        btnInsertExercise = (Button) DialogFragment.findViewById(R.id.btnInsertExercise);
-
-        etAddExerciseName = (EditText) DialogFragment.findViewById(R.id.etAddExerciseName);
-        etAddExerciseKAH = (EditText) DialogFragment.findViewById(R.id.etName);
-
-
-
-
-
-
-        btnInsertExercise.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                SQLiteDatabase db;
-                db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-
-                ContentValues content = new ContentValues();
-
-                content.put(TAG_NAME, String.valueOf(etAddExerciseName.getText()));
-                content.put(TAG_KAH, String.valueOf(etAddExerciseKAH.getText()));
-
-                db.insert("operation", null, content);
-                db.close();
-
-                db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-
-                //get newest id
-                int insertedID = -1;
-                Cursor cursor = db.rawQuery("SELECT o_id FROM operation ORDER BY o_id DESC LIMIT 1 ", null);
-                while(cursor.moveToNext())
-                {
-                    insertedID = cursor.getInt(0);
-                    Log.i("data has entry", String.valueOf(insertedID));
-                }
-
-
-                db.close();
-
-                //start new intent on exercise page
-                Intent i = new Intent(getApplicationContext(), ViewOperationActivity.class);
-                //push id to next page
-                i.putExtra(TAG_ID, String.valueOf(insertedID));
-                startActivity(i);
-
-                DialogFragment.dismiss();
-            }
-        });*/
     }
 
     public void initialize_database(boolean reset)

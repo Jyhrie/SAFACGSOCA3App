@@ -23,7 +23,7 @@
         <entry key="..\:/Users/Admin/AndroidStudioProjects/SAFACGSOCA3App/app/src/main/res/layout/list_nominalroll.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/activity_add_exercise.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/activity_declare_issue_return_receive_info.xml" value="0.21302083333333333" />
-        <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/activity_generate_documents.xml" value="0.18" />
+        <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/activity_generate_documents.xml" value="0.25" />
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/activity_nominal_roll.xml" value="0.2846781504986401" />
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/activity_operation_nominal_roll.xml" value="0.25" />
@@ -42,6 +42,7 @@
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_assign_personnel_ammunition.xml" value="0.19114583333333332" />
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_display_personnel.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_display_personnel_ammunition.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_generate_document_check.xml" value="0.22" />
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_issue_return_receive_ammunition.xml" value="0.21302083333333333" />
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_loadout.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_nominalroll.xml" value="0.36666666666666664" />

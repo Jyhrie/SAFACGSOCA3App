@@ -166,11 +166,15 @@ public class fragment_Add_Edit_Detail extends DialogFragment implements Recycler
                         if(!new_detail_personnel_id.contains(existing_detail_personnel_id.get(i)))
                         {
 <<<<<<< HEAD
+<<<<<<< HEAD
                             db.execSQL("UPDATE d_id from op_id WHERE op_id = " + existing_detail_personnel_id.get(i));
 =======
 
                             db.execSQL("UPDATE operation_personnel set d_id = null WHERE op_id = " + existing_detail_personnel_id.get(i));
 >>>>>>> parent of 925321f (Revert "Merge branch 'main' of https://github.com/Jyhrie/SAFACGSOCA3App")
+=======
+                            db.execSQL("UPDATE operation_personnel set d_id = null WHERE op_id = " + existing_detail_personnel_id.get(i));
+>>>>>>> parent of 609a9fd (Revert "generate doc")
                             db.execSQL("DELETE FROM personnel_ammunition WHERE op_id = " + existing_detail_personnel_id.get(i));
                         }
                     }

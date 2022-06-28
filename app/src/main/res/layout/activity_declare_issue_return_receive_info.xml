@@ -112,7 +112,7 @@
         android:orientation="horizontal">
 
         <com.github.gcacace.signaturepad.views.SignaturePad
-            android:id="@+id/Signature_Pad"
+            android:id="@+id/gen_docSignature_Pad"
             android:layout_width="500dp"
             android:layout_height="300dp"
             android:background="#F4F3F3"
