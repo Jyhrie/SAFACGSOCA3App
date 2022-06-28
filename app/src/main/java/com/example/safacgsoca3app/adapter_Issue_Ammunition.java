@@ -95,7 +95,7 @@ public class adapter_Issue_Ammunition extends RecyclerView.Adapter<adapter_Issue
             {
                 holder.tv_dynamic_issue.setText("Issuing");
             }
-            else if(Integer.parseInt(data.get(position).get(TAG_DYNAMIC_ISSUE)) == 2)
+            else if(Integer.parseInt(data.get(position).get(TAG_DYNAMIC_ISSUE)) == 0)
             {
                 holder.tv_dynamic_issue.setText("Issued");
             }
