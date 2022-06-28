@@ -320,8 +320,8 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
         if(!search_for_detail_id.isEmpty()) {
             SQLiteDatabase db;
             db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-            Log.i("select p.p_id, p.p_rank, p.p_name, p.p_nric from personnel p, operation_personnel op where op.p_id = p.p_id and op.o_id = " + o_id + " and op.d_id = " + search_for_detail_id, "query");
-            Cursor c1 = db.rawQuery("select p.p_id, p.p_rank, p.p_name, p.p_nric from personnel p, operation_personnel op where op.p_id = p.p_id and op.o_id = " + o_id + " and op.d_id = " + search_for_detail_id, null);
+            Log.i("select op.op_id, p.p_rank, p.p_name, p.p_nric from personnel p, operation_personnel op where op.p_id = p.p_id and op.o_id = " + o_id + " and op.d_id = " + search_for_detail_id, "query");
+            Cursor c1 = db.rawQuery("select op.op_id, p.p_rank, p.p_name, p.p_nric from personnel p, operation_personnel op where op.p_id = p.p_id and op.o_id = " + o_id + " and op.d_id = " + search_for_detail_id, null);
 
             ArrayList<HashMap<String, String>> PersonnelList = new ArrayList<HashMap<String, String>>();
             while (c1.moveToNext()) {
@@ -331,7 +331,7 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
                 String line_name = c1.getString(2);
                 String line_nric = c1.getString(3);
 
-                map.put(TAG_PID, line_id);
+                map.put(TAG_OPID, line_id);
                 map.put(TAG_PRANK, line_rank);
                 map.put(TAG_PNAME, line_name);
                 map.put(TAG_P_NRIC, line_nric);
@@ -354,7 +354,7 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
                     ViewOperationActivity.this, //context
                     PersonnelList, //hashmapdata
                     R.layout.list_display_personnel, //layout of list
-                    new String[]{TAG_PID, TAG_PRANK, TAG_PNAME, TAG_P_NRIC}, //from array
+                    new String[]{TAG_OPID, TAG_PRANK, TAG_PNAME, TAG_P_NRIC}, //from array
                     new int[]{R.id.tv_Personnel_ID_Checklist,
                             R.id.tv_Personnel_Rank_Checklist,
                             R.id.tv_Personnel_Name_Checklist,
@@ -368,7 +368,8 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     Intent intent = new Intent(getApplicationContext(), DisplayPersonnelInfoActivity.class);
-                    intent.putExtra("detail_id", i);//replace with detail id from sql
+                    intent.putExtra("op_id", ((TextView) view.findViewById(R.id.tv_Personnel_ID_Checklist)).getText().toString());
+                    Log.i("op_id",  ((TextView) view.findViewById(R.id.tv_Personnel_ID_Checklist)).getText().toString());
                     startActivity(intent);
                 }
 

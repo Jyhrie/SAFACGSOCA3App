@@ -35,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG_O_ID = "o_id";
     private static final String TAG_O_NAME = "o_name";
     private static final String TAG_O_KAH = "o_kah";
+    private static final String TAG_O_DATE = "o_date";
+    private static final String TAG_O_LOC = "o_loc";
+
 
     private static final String TAG_OP_ID = "op_id";
 
@@ -56,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        initialize_database(false);
+        initialize_database(true);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -127,11 +130,15 @@ public class MainActivity extends AppCompatActivity {
             HashMap<String, String> map = new HashMap<String, String>();
             String line_id = c1.getString(0);
             String line_name = c1.getString(1);
-            String line_qty = c1.getString(2);
+            String line_KAH = c1.getString(2);
+            String line_date = c1.getString(4);
+            String line_loc = c1.getString(5);
 
             map.put(TAG_O_ID, line_id);
             map.put(TAG_O_NAME, line_name);
-            map.put(TAG_O_KAH, line_qty);
+            map.put(TAG_O_KAH, line_KAH);
+            map.put(TAG_O_DATE, line_date);
+            map.put(TAG_O_LOC, line_loc);
 
             opsList.add(map);
         }
@@ -142,8 +149,8 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this, //context
                 opsList, //hashmapdata
                 R.layout.list_operation, //layout of list
-                new String[]{TAG_O_ID, TAG_O_NAME, TAG_O_KAH}, //from array
-                new int[]{R.id.tvOperationListId, R.id.tvOperationListName, R.id.tvOperationListKAH}); //toarray
+                new String[]{TAG_O_ID, TAG_O_NAME, TAG_O_KAH, TAG_O_DATE, TAG_O_LOC}, //from array
+                new int[]{R.id.tvOperationListId, R.id.tvOperationListName, R.id.tvOperationListKAH, R.id.tvOperationListDate, R.id.tvOperationListLoc}); //toarray
         // updating listview
         lv.setAdapter(adapter);
 
@@ -272,18 +279,24 @@ public class MainActivity extends AppCompatActivity {
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
 
         content.put("o_name", "OPS GLUON");
-        content.put("o_unit", "SOF PTCO");
-        content.put("o_kah", "Conducting: ME4 Yuen Weng Kin\nSupervising: ME3 Teo Kwee Teck\nSafety: ME3 Raymond Tan\nLocation: Changi Naval Base\nDate: 12/09/2022");
+        content.put("o_unit", "NDU");
+        content.put("o_kah", "Conducting: ME4 Yuen Weng Kin\nSupervising: ME3 Teo Kwee Teck\nSafety: ME3 Raymond Tan");
+        content.put("o_date", "12/09/2022");
+        content.put("o_loc", "Changi Naval Base");
         db.insert("operation", null, content);
 
         content.put("o_name", "OPS GUARDIAN ANGEL");
-        content.put("o_unit", "SOF PTCO");
-        content.put("o_kah", "Conducting: ME4 Khoo Wei Liang\nSupervising: ME2 Fung Xue Ming\nSafety: ME1 Melvin\nLocation: Nee Soon Camp\nDate: 18/07/2022");
+        content.put("o_unit", "ADF");
+        content.put("o_kah", "Conducting: ME4 Khoo Wei Liang\nSupervising: ME2 Fung Xue Ming\nSafety: ME1 Melvin");
+        content.put("o_date", "18/07/2022");
+        content.put("o_loc", "Nee Soon Camp");
         db.insert("operation", null, content);
 
-        content.put("o_name", "RANGE: PULAU HANTU");
+        content.put("o_name", "RANGE: PULAU TEKONG");
         content.put("o_unit", "SOF PTCO");
-        content.put("o_kah", "Conducting: ME2 Fung Xue Ming\nSupervising: ME1 Melvin\nSafety: ME1 Lincoln\nLocation: Pulau Hantu\nDate: 20/04/2023");
+        content.put("o_kah", "Conducting: ME2 Fung Xue Ming\nSupervising: ME1 Melvin\nSafety: ME1 Lincoln");
+        content.put("o_date", "20/04/2023");
+        content.put("o_loc", "Pulau Tekong");
         db.insert("operation", null, content);
         db.close();
     }

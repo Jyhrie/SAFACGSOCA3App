@@ -16,14 +16,6 @@ import java.util.HashMap;
 
 public class DisplayPersonnelInfoActivity extends AppCompatActivity {
 
-
-
-
-    private static final String placeholder_op_id = "1";
-
-
-
-
     private static final String TAG_P_ID = "p_id";
     private static final String TAG_P_NAME = "p_name";
     private static final String TAG_P_NRIC = "p_nric";
@@ -74,7 +66,7 @@ public class DisplayPersonnelInfoActivity extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        String o_id = intent.getStringExtra(TAG_ID);
+        String op_id = intent.getStringExtra("op_id");
 
         TextView Display_Personnel_Info_Ops_Name;
         TextView Display_Personnel_Info_Detail_Name;
@@ -118,7 +110,7 @@ public class DisplayPersonnelInfoActivity extends AppCompatActivity {
         //get data from db
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-        Cursor c1 = db.rawQuery("SELECT a.a_name, pa.pa_id, pa.pa_issued, pa.pa_expended, pa.pa_returned, pa.pa_spoiled FROM personnel_ammunition pa, ammunition a WHERE a.a_id = pa.a_id and pa.op_id = "+placeholder_op_id, null);
+        Cursor c1 = db.rawQuery("SELECT a.a_name, pa.pa_id, pa.pa_issued, pa.pa_expended, pa.pa_returned, pa.pa_spoiled FROM personnel_ammunition pa, ammunition a WHERE a.a_id = pa.a_id and pa.op_id = "+op_id, null);
 
         while(c1.moveToNext()) {
             HashMap<String, String> map = new HashMap<String, String>();
@@ -145,14 +137,14 @@ public class DisplayPersonnelInfoActivity extends AppCompatActivity {
         }
 
         db.execSQL("CREATE TABLE IF NOT EXISTS detail (d_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, d_name text NOT NULL, o_id integer NOT NULL)");
-        c1 = db.rawQuery("select d.d_name, p.p_name, p.p_nric from detail d, personnel p, operation_personnel op where d.d_id = op.d_id and p.p_id = op.p_id and op.op_id = "+placeholder_op_id, null);
+        c1 = db.rawQuery("select d.d_name, p.p_name, p.p_nric from detail d, personnel p, operation_personnel op where d.d_id = op.d_id and p.p_id = op.p_id and op.op_id = "+op_id, null);
         while (c1.moveToNext()) {
             Display_Personnel_Info_Detail_Name.setText(c1.getString(0));
             Display_Personnel_Info_Personnel_Name.setText(c1.getString(1));
             Display_Personnel_Info_Remarks.setText(c1.getString(2));
         }
 
-        c1 = db.rawQuery("select o_name from operation o, operation_personnel op where o.o_id = op.o_id and op.op_id = "+placeholder_op_id, null);
+        c1 = db.rawQuery("select o_name from operation o, operation_personnel op where o.o_id = op.o_id and op.op_id = "+op_id, null);
         while (c1.moveToNext()) {
             Display_Personnel_Info_Ops_Name.setText(c1.getString(0));
         }
