@@ -1,7 +1,6 @@
 package com.example.safacgsoca3app;
 
 import android.app.Dialog;
-import android.app.Person;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,28 +11,20 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.gcacace.signaturepad.views.SignaturePad;
 
-import org.w3c.dom.Text;
-
 import java.io.ByteArrayOutputStream;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -106,12 +97,14 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
     String type;
     String o_id;
     String d_id;
+    String accessed_doc_number;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_declare_issue_return_receive_info);
-
+        accessed_doc_number = "-1";
         Intent intent = getIntent();
 
         //initalization
@@ -130,7 +123,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
         tv_Issue_Return_Receive = (TextView) findViewById(R.id.tv_Issue_Return_Receive);
         btn_ClearPad = (Button) findViewById(R.id.btn_ClearPad);
         btn_Validate = (Button) findViewById(R.id.btn_Validate);
-        Signature_Pad = findViewById(R.id.Signature_Pad);
+        Signature_Pad = findViewById(R.id.gen_docSignature_Pad);
         imageView = findViewById(R.id.imageView);
 
         //init end
@@ -164,7 +157,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
         tv_detail_name = (TextView) findViewById(R.id.tv_Detail_Name);
         btn_ClearPad = (Button) findViewById(R.id.btn_ClearPad);
         btn_Validate = (Button) findViewById(R.id.btn_Validate);
-        Signature_Pad = findViewById(R.id.Signature_Pad);
+        Signature_Pad = findViewById(R.id.gen_docSignature_Pad);
         imageView = findViewById(R.id.imageView);
 
         //clear signature pad
@@ -247,7 +240,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
                         populateNextGuy();
                     }
                     else{
-                        onPersonnelListEnd(Integer.valueOf(type));
+                        onPersonnelListEnd(Integer.valueOf(type), accessed_doc_number);
                     }
 
                 }
@@ -272,7 +265,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
             //TAG_TD_SPOILED = text taken only from transaction detail.
 
             if (current_is_new_entry != 0) {
-                map.put(TAG_DYNAMIC_ISSUE, "Issuing");
+                map.put(TAG_DYNAMIC_ISSUE, "1");
                 map.put(TAG_PA_ID, String.valueOf(current_pa_id));
                 map.put(TAG_TD_ID, current_td_id);
                 c1 = db.rawQuery("select a.a_name, pa.pa_issue_qty from personnel_ammunition pa, ammunition a where a.a_id = pa.a_id and pa.pa_id = " + current_pa_id, null);
@@ -281,7 +274,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
                     map.put(TAG_PA_ISSUE_QTY, c1.getString(1));
                 }
             } else {
-                map.put(TAG_DYNAMIC_ISSUE, "Issued");
+                map.put(TAG_DYNAMIC_ISSUE, "0");
                 map.put(TAG_TD_ID, current_td_id);
                 map.put(TAG_PA_ID, String.valueOf(current_pa_id));
 
@@ -351,13 +344,12 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
                 //check if document already exists (CHECK ALL STRING PARAMS IN CASE OF DETAIL CHANGE, THUS CREATE NEW DOC IF CHANGE OCCURS)
                 //c1 = db.query("document", new String[]{"o_name", "o_unit", "d_name"}, "doc_id", new String[]{doc_o_name, doc_o_unit, doc_d_name},null, null, null);
                 c1 = db.rawQuery("select doc_id from document where o_name = ? and o_unit = ? and d_name = ? and doc_closed = 0", new String[]{doc_o_name, doc_o_unit, doc_d_name});
-                int accessed_doc_id = -1;
-                Log.i(String.valueOf(c1.getCount()), "WTF");
+                accessed_doc_number = "-1";
                 if (c1.moveToNext()) {
-                    accessed_doc_id = c1.getInt(0);
+                    accessed_doc_number = c1.getString(0);
                 }
                 //if document is not opened, create new doc according to data
-                if (accessed_doc_id == -1) {
+                if (Integer.parseInt(accessed_doc_number) == -1) {
                     ContentValues content = new ContentValues();
                     content.put(TAG_D_NAME, doc_d_name);
                     content.put(TAG_O_NAME, doc_o_name);
@@ -366,7 +358,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
                     db.insert("document", null, content);
                     c1 = db.rawQuery("select doc_id from document order by doc_id DESC LIMIT 1", null);
                     if (c1.moveToFirst()) {
-                        accessed_doc_id = c1.getInt(0);
+                        accessed_doc_number = c1.getString(0);
                     }
                 }
 
@@ -400,7 +392,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
                         if (Integer.valueOf(data.get(TAG_TD_ID)) == -1) { //dataset doesnt exist yet
                             //form dataset
                             cv.put(TAG_PA_ID, data.get(TAG_PA_ID));
-                            cv.put(TAG_DOC_NUMBER, accessed_doc_id);
+                            cv.put(TAG_DOC_NUMBER, accessed_doc_number);
                             cv.put(TAG_TD_AMMO_NAME, ammo_name);
                             cv.put(TAG_TD_PERSONNEL_NAME, personnel_name);
                             cv.put(TAG_TD_ISSUED, data.get(TAG_PA_ISSUE_QTY));
@@ -452,7 +444,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
                     populateNextGuy();
                 }
                 else{
-                    onPersonnelListEnd(Integer.valueOf(type));
+                    onPersonnelListEnd(Integer.valueOf(type), accessed_doc_number);
                 }
 
             }
@@ -461,14 +453,19 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
         });
     }
 
-    public void onPersonnelListEnd(int type)
+    public void onPersonnelListEnd(int type, String doc_number)
     {
-        if(type == 1)
+
+
+        if(type == 1 || Integer.valueOf(doc_number) == -1)
         {
             finish();
         }
-        if(type == 2)
+        else if(type == 2)
         {
+            Intent i = new Intent(getApplicationContext(), GenerateDocumentsActivity.class);
+            i.putExtra(TAG_DOC_NUMBER, doc_number);
+            startActivity(i);
             //start new intent allowing ammo ic to sign, followed by generate document.
             finish();
         }
