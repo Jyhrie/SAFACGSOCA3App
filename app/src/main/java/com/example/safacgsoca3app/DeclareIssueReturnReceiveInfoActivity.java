@@ -343,7 +343,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
                 Log.i("select doc_id from document where o_name = ? and o_unit = ? and d_name = ? and doc_closed = 0", String.valueOf(new String[]{doc_o_name, doc_o_unit, doc_d_name}));
                 c1 = db.rawQuery("select doc_id from document where o_name = ? and o_unit = ? and d_name = ? and doc_closed = 0", new String[]{doc_o_name, doc_o_unit, doc_d_name});
                 accessed_doc_number = "-1";
-                if (c1.moveToNext()) {
+                if (c1.moveToFirst()) {
                     accessed_doc_number = c1.getString(0);
                 }else//if document is not opened, create new doc according to data
                     {

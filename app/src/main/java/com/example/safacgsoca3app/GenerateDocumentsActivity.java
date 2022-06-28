@@ -206,7 +206,7 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
         btnGenerate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                btnCreatePDF(view, "1");
+                btnCreatePDF(view, doc_id);
             }
         });
 
@@ -271,6 +271,7 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
             addMetaData(doc);
             addContent(doc, data, doc_data);
             db = openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
+            Log.i("closing doc", doc_id);
             db.execSQL("UPDATE document SET doc_closed = true WHERE doc_id = ?", new String[]{doc_id});
             db.close();
             doc.close();
