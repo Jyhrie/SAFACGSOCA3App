@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        initialize_database(false);
+        initialize_database(true);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -333,18 +333,24 @@ public class MainActivity extends AppCompatActivity {
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
 
         content.put("o_name", "OPS GLUON");
-        content.put("o_unit", "SOF PTCO");
-        content.put("o_kah", "Conducting: ME4 Yuen Weng Kin\nSupervising: ME3 Teo Kwee Teck\nSafety: ME3 Raymond Tan\nLocation: Changi Naval Base\nDate: 12/09/2022");
+        content.put("o_unit", "NDU");
+        content.put("o_kah", "Conducting: ME4 Yuen Weng Kin\nSupervising: ME3 Teo Kwee Teck\nSafety: ME3 Raymond Tan");
+        content.put("o_date", "12/09/2022");
+        content.put("o_loc", "Changi Naval Base");
         db.insert("operation", null, content);
 
         content.put("o_name", "OPS GUARDIAN ANGEL");
-        content.put("o_unit", "SOF PTCO");
-        content.put("o_kah", "Conducting: ME4 Khoo Wei Liang\nSupervising: ME2 Fung Xue Ming\nSafety: ME1 Melvin\nLocation: Nee Soon Camp\nDate: 18/07/2022");
+        content.put("o_unit", "ADF");
+        content.put("o_kah", "Conducting: ME4 Khoo Wei Liang\nSupervising: ME2 Fung Xue Ming\nSafety: ME1 Melvin");
+        content.put("o_date", "18/07/2022");
+        content.put("o_loc", "Nee Soon Camp");
         db.insert("operation", null, content);
 
-        content.put("o_name", "RANGE: PULAU HANTU");
+        content.put("o_name", "RANGE: PULAU TEKONG");
         content.put("o_unit", "SOF PTCO");
-        content.put("o_kah", "Conducting: ME2 Fung Xue Ming\nSupervising: ME1 Melvin\nSafety: ME1 Lincoln\nLocation: Pulau Hantu\nDate: 20/04/2023");
+        content.put("o_kah", "Conducting: ME2 Fung Xue Ming\nSupervising: ME1 Melvin\nSafety: ME1 Lincoln");
+        content.put("o_date", "20/04/2023");
+        content.put("o_loc", "Pulau Tekong");
         db.insert("operation", null, content);
         db.close();
     }
