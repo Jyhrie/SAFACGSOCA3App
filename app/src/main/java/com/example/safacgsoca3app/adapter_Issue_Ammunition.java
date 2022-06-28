@@ -91,7 +91,14 @@ public class adapter_Issue_Ammunition extends RecyclerView.Adapter<adapter_Issue
     @Override
     public void onBindViewHolder(@NonNull adapter_Issue_Ammunition.MyViewHolder holder, int position) {
         if(data.get(position).containsKey(TAG_DYNAMIC_ISSUE)) {
-            holder.tv_dynamic_issue.setText(data.get(position).get(TAG_DYNAMIC_ISSUE));
+            if(Integer.parseInt(data.get(position).get(TAG_DYNAMIC_ISSUE)) == 1)
+            {
+                holder.tv_dynamic_issue.setText("Issuing");
+            }
+            else if(Integer.parseInt(data.get(position).get(TAG_DYNAMIC_ISSUE)) == 2)
+            {
+                holder.tv_dynamic_issue.setText("Issued");
+            }
         }
         if(data.get(position).containsKey(TAG_PA_ID)) {
             holder.tv_issuing_pa_id.setText(data.get(position).get(TAG_PA_ID));
