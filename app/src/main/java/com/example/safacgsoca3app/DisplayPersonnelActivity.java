@@ -101,7 +101,7 @@ public class DisplayPersonnelActivity extends AppCompatActivity {
             }
         });
 
-        Button btnReturn3= (Button) findViewById(R.id.btn_Return);
+        Button btnReturn3= (Button) findViewById(R.id.btn_Recieve);
         btnReturn3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(DisplayPersonnelActivity.this, PersonnelChecklistActivity.class);

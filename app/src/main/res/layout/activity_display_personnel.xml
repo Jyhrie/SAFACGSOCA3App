@@ -85,7 +85,7 @@
             android:text="@string/Issue" />
 
         <Button
-            android:id="@+id/btn_Return"
+            android:id="@+id/btn_Recieve"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

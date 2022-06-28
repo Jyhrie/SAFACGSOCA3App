@@ -153,22 +153,16 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
             }
         });
 
-        Button btnReturn= (Button) findViewById(R.id.btn_Return);
-        btnReturn.setOnClickListener(new View.OnClickListener() {
+        Button btnRecieve= (Button) findViewById(R.id.btn_Recieve);
+        btnRecieve.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(ViewOperationActivity.this, PersonnelChecklistActivity.class);
-                intent.putExtra("type", "2");
-                intent.putExtra("o_id", Selected_o_id);
-                intent.putExtra("d_id", Selected_d_id);
-                intent.putExtra("d_name", Selected_d_name);
-                ViewOperationActivity.this.startActivity(intent);
+                showReceiveDialog();
             }
         });
 
         Button btnReceive= (Button) findViewById(R.id.btn_generate_documents);
         btnReceive.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                showReceiveDialog();
             }
         });
     }
@@ -221,13 +215,11 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
         btn_SelectPersonnel.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(ViewOperationActivity.this, PersonnelChecklistActivity.class);
-                String Function = "Receiving: ";
-                intent.putExtra("Function", Function);
+                intent.putExtra("type", "2");
                 intent.putExtra("o_id", Selected_o_id);
                 intent.putExtra("d_id", Selected_d_id);
                 intent.putExtra("d_name", Selected_d_name);
                 ViewOperationActivity.this.startActivity(intent);
-                ReceiveDialog.dismiss();
             }
         });
 
