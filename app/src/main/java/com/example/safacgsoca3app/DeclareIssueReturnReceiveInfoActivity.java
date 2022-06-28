@@ -131,11 +131,9 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
 
         if (Integer.valueOf(type) == 1)//ammo unissued
         {
-            tv_Issue_Return_Receive.setText("ISSUING");
+            tv_Issue_Return_Receive.setText("ISSUING: ");
         } else if (Integer.valueOf(type) == 2) {
-            tv_Issue_Return_Receive.setText("RETURN");
-        } else if (Integer.valueOf(type) == 3) {
-            tv_Issue_Return_Receive.setText("RECIEVE");
+            tv_Issue_Return_Receive.setText("RECEIVE: ");
         }
         populateNextGuy();
     }
