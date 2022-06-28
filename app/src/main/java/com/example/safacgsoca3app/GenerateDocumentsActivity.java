@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,8 +15,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,7 +39,6 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
 
-import com.github.gcacace.signaturepad.views.SignaturePad;
 import com.itextpdf.text.Anchor;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
@@ -98,8 +94,6 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
     private static final String TAG_O_NAME = "o_name";
     private static final String TAG_O_UNIT = "o_unit";
 
-    private static final String TAG_DOC_NUMBER = "doc_id";
-
     // Define some String variables, initialized with empty string
     String filepath = Environment.getExternalStorageDirectory().getPath() + "/Download/Test.pdf";
     String fileContent = "ASDAD";
@@ -114,93 +108,22 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
     int pageHeight = 1120;
     int pagewidth = 792;
 
+    // creating a bitmap variable
+    // for storing our images
+    Bitmap bmp, scaledbmp;
 
-    ArrayList<ContentValues> data;
-    ArrayList<HashMap<String,String>> dispData;
     // constant code for runtime permissions
     private static final int PERMISSION_REQUEST_CODE = 200;
 
-    String doc_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generate_documents);
 
-        Intent i = getIntent();
-        doc_id = i.getStringExtra(TAG_DOC_NUMBER);
         Button btnGenerate = findViewById(R.id.btnGenerate);
-        SignaturePad signaturePad = findViewById(R.id.gen_docSignature_Pad);
-        ActivityCompat.requestPermissions(this, new String[]{WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE,}, PackageManager.PERMISSION_GRANTED);
-
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
-        HashMap<String,String> doc_data = new HashMap<>();
-        Cursor c1;
-        c1 = db.rawQuery("SELECT d_name, o_name, o_unit FROM document WHERE doc_id = ?", new String[]{String.valueOf(doc_id)});
-        if(c1.moveToFirst())
-        {
-            doc_data.put(TAG_D_NAME, c1.getString(0));
-            doc_data.put(TAG_O_NAME, c1.getString(1));
-            doc_data.put(TAG_O_UNIT, c1.getString(2));
-        }
-
-
-        data = new ArrayList<ContentValues>();
-        dispData = new ArrayList<HashMap<String,String>>();
-
-        //get db data
-        c1 = db.rawQuery("SELECT td_a_name, td_p_name, td_issued, td_returned, td_expended, td_spoiled, td_issuedatetime, td_issuesignature ,td_returndatetime, td_returnsignature from transaction_data", null);
-
-        ByteArrayInputStream imageStream;
-
-        while(c1.moveToNext())
-        {
-            ContentValues line_data = new ContentValues();
-            String line_ammo_name = c1.getString(0);
-            String line_personnel_name = c1.getString(1);
-            String td_issued = c1.getString(2);
-            String td_returned = c1.getString(3);
-            String td_expended = c1.getString(4);
-            String td_spoiled = c1.getString(5);
-            String td_issuedatetime = c1.getString(6);
-            byte[] td_issuesignatureblob = c1.getBlob(7);
-            String td_returndatetime = c1.getString(8);
-            byte[] td_returnsignatureblob = c1.getBlob(9);
-
-            line_data.put(TAG_AMMO_NAME, line_ammo_name);
-            line_data.put(TAG_PERSONNEL_NAME, line_personnel_name);
-            line_data.put(TAG_TD_ISSUED, td_issued);
-            line_data.put(TAG_TD_RETURNED, td_returned);
-            line_data.put(TAG_TD_EXPENDED, td_expended);
-            line_data.put(TAG_TD_SPOILED, td_spoiled);
-            line_data.put(TAG_ISSUE_DATETIME, td_issuedatetime);
-            line_data.put(TAG_ISSUE_SIGNATURE, td_issuesignatureblob);
-            line_data.put(TAG_RETURN_DATETIME, td_returndatetime);
-            line_data.put(TAG_RETURN_SIGNATURE, td_returnsignatureblob);
-
-            HashMap<String,String>map = new HashMap<>();
-            map.put(TAG_AMMO_NAME, line_ammo_name);
-            map.put(TAG_PERSONNEL_NAME, line_personnel_name);
-            map.put(TAG_TD_ISSUED, td_issued);
-            map.put(TAG_TD_RETURNED, td_returned);
-            map.put(TAG_TD_EXPENDED, td_expended);
-            map.put(TAG_TD_SPOILED, td_spoiled);
-
-            Log.i(line_data.toString(), "test");
-            dispData.add(map);
-            data.add(line_data);
-        }
-
-
-        ListView lv_gen_doc = findViewById(R.id.lv_generate_documents);
-        SimpleAdapter lvAdapter = new SimpleAdapter(
-                this, //context
-                dispData, //hashmapdata
-                R.layout.list_generate_document_check, //layout of list
-                new String[] {TAG_AMMO_NAME, TAG_PERSONNEL_NAME, TAG_TD_ISSUED, TAG_TD_RETURNED,TAG_TD_EXPENDED}, //from array
-                new int[] {R.id.tv_gen_doc_ammo, R.id.tv_gen_doc_personnel, R.id.tv_gen_doc_issued, R.id.tv_gen_doc_returned, R.id.tv_gen_doc_expended});  //toarray
-
-        lv_gen_doc.setAdapter(lvAdapter);
+        ActivityCompat.requestPermissions(this, new String[]{WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE,}, PackageManager.PERMISSION_GRANTED);
 
         btnGenerate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -226,7 +149,7 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
         }
 
 
-            /*ArrayList<ContentValues> data = new ArrayList<ContentValues>();
+            ArrayList<ContentValues> data = new ArrayList<ContentValues>();
             //get db data
 
             c1 = db.rawQuery("SELECT td_a_name, td_p_name, td_issued, td_returned, td_expended, td_spoiled, td_issuedatetime, td_issuesignature ,td_returndatetime, td_returnsignature from transaction_data", null);
@@ -261,23 +184,19 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
 
                 Log.i(line_data.toString(), "test");
                 data.add(line_data);
-            }*/
-        db.close();
+            }
+
         try {
+            //pdfDocument.writeTo(new FileOutputStream(file));
             Document doc = new Document(PageSize.A4);
             PdfWriter.getInstance(doc, new FileOutputStream(file));
             doc.open();
             addMetaData(doc);
             addContent(doc, data, doc_data);
-            db = openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
-            db.execSQL("UPDATE document SET doc_closed = true WHERE doc_id = ?", new String[]{doc_id});
-            db.close();
             doc.close();
-            //set doc closed = true
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     private static void addMetaData(Document document) {

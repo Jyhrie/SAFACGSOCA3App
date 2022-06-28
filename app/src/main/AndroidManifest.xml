@@ -15,8 +15,6 @@
         android:theme="@style/Theme.SAFACGSOCA3App"
         android:requestLegacyExternalStorage="true"
         android:configChanges="orientation|screenSize"
-        android:hardwareAccelerated="false"
-        android:largeHeap="true"
         >
         <activity
             android:name=".GenerateDocumentsActivity"
