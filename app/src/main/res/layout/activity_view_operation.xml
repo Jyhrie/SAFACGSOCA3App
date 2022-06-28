@@ -158,20 +158,20 @@
                     android:textSize="20dp"
                     android:text="@string/Return"
                     app:layout_constraintBottom_toTopOf="@+id/guideline8"
-                    app:layout_constraintEnd_toStartOf="@+id/btn_Receive"
+                    app:layout_constraintEnd_toStartOf="@+id/btn_generate_documents"
                     app:layout_constraintStart_toEndOf="@+id/btn_Issue" />
 
                 <Button
-                    android:id="@+id/btn_Receive"
+                    android:id="@+id/btn_generate_documents"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginBottom="3dp"
                     android:layout_marginLeft="5dp"
+                    android:layout_marginTop="3dp"
                     android:layout_marginRight="5dp"
+                    android:layout_marginBottom="3dp"
                     android:layout_weight="1"
+                    android:text="GENERATE DOCUMENTS"
                     android:textSize="20dp"
-                    android:text="@string/Receive"
                     app:layout_constraintBottom_toTopOf="@+id/guideline8"
                     app:layout_constraintEnd_toStartOf="@+id/guideline9" />
 

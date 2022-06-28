@@ -109,7 +109,7 @@ public class DisplayPersonnelActivity extends AppCompatActivity {
             }
         });
 
-        Button btnReceive3= (Button) findViewById(R.id.btn_Receive);
+        Button btnReceive3= (Button) findViewById(R.id.btn_generate_documents);
         btnReceive3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 showReceiveDialog();

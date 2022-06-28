@@ -23,11 +23,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.gcacace.signaturepad.views.SignaturePad;
+
+import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
@@ -146,15 +149,24 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
 
     public void populateNextGuy()
     {
+        //check if data sent in
+        Log.i(String.valueOf(PersonnelList.size()), "test");
+        if(!(PersonnelList.size() > 0))
+        {
+            finish();
+        }
+
         String current_op_id = PersonnelList.remove(0).get(TAG_OP_ID);
 
         TextView tv_Issue_Return_Receive;
+        TextView tv_personnel_name;
         Button btn_ClearPad;
         Button btn_Validate;
         SignaturePad Signature_Pad;
         ImageView imageView;
 
         tv_Issue_Return_Receive = (TextView) findViewById(R.id.tv_Issue_Return_Receive);
+        tv_personnel_name = (TextView) findViewById(R.id.tv_Personnel_Name);
         btn_ClearPad = (Button) findViewById(R.id.btn_ClearPad);
         btn_Validate = (Button) findViewById(R.id.btn_Validate);
         Signature_Pad = findViewById(R.id.Signature_Pad);
@@ -163,13 +175,25 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
         //clear signature pad
         Signature_Pad.clear();
 
+
+
         //query for all pa_id entries with op_id
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-
+        Cursor c1 = null;
+        //get & set personnel name
+        String personnel_name = null;
+        String personnel_rank = null;
+        c1 = db.rawQuery("select p.p_rank, p.p_name from personnel p, operation_personnel op where op.p_id = p.p_id and op.op_id = ?", new String[]{current_op_id});
+        if(c1.moveToFirst())
+        {
+            personnel_rank = c1.getString(0);
+            personnel_name = c1.getString(1);
+            tv_personnel_name.setText(personnel_rank+" "+personnel_name);
+        }
         //add into arraylist of new or opened
         //get data based on type
-        Cursor c1 = null;
+
         if(Integer.valueOf(type) == 1)
         {
             //query for pa_id, new entry, if td_id is existing
@@ -191,9 +215,38 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
             all_pa_id.add(line_map);
         }
 
-        if(rvData.size() == 0)
+
+        if(all_pa_id.size() == 0)
         {
             //display pop up dialog with person has no ammunition to left to draw
+            Dialog alertDialog = new Dialog(DeclareIssueReturnReceiveInfoActivity.this, android.R.style.Theme_Black_NoTitleBar);
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
+            alertDialog.setContentView(R.layout.dialog_warning);
+            alertDialog.setCancelable(true);
+            alertDialog.show();
+
+            Button warning_proceed = (Button) alertDialog.findViewById(R.id.btn_warning_proceed);
+            Button warning_abort = (Button) alertDialog.findViewById(R.id.btn_warning_back);
+            TextView warning_message = (TextView) alertDialog.findViewById(R.id.tv_warning_message);
+
+            warning_proceed.setText("Proceed");
+            warning_abort.setText("Abort");
+            warning_message.setText(personnel_rank + " " + personnel_name + " does not have ammunition to draw");
+
+            warning_abort.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    finish();
+                }
+            });
+
+            warning_proceed.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    alertDialog.dismiss();
+                    populateNextGuy();
+                }
+            });
         }
 
         //form rvData

@@ -92,7 +92,7 @@
             android:text="@string/Return" />
 
         <Button
-            android:id="@+id/btn_Receive"
+            android:id="@+id/btn_generate_documents"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
