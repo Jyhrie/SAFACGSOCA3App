@@ -128,6 +128,7 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
 
         Intent i = getIntent();
         doc_id = i.getStringExtra(TAG_DOC_NUMBER);
+        Log.i("doc id", doc_id);
         Button btnGenerate = findViewById(R.id.btnGenerate);
         SignaturePad signaturePad = findViewById(R.id.gen_docSignature_Pad);
         ActivityCompat.requestPermissions(this, new String[]{WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE,}, PackageManager.PERMISSION_GRANTED);
@@ -149,7 +150,7 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
         dispData = new ArrayList<HashMap<String,String>>();
 
         //get db data
-        c1 = db.rawQuery("SELECT td_a_name, td_p_name, td_issued, td_returned, td_expended, td_spoiled, td_issuedatetime, td_issuesignature ,td_returndatetime, td_returnsignature from transaction_data", null);
+        c1 = db.rawQuery("SELECT td_a_name, td_p_name, td_issued, td_returned, td_expended, td_spoiled, td_issuedatetime, td_issuesignature ,td_returndatetime, td_returnsignature from transaction_data where doc_id = ?", new String[]{doc_id});
 
         ByteArrayInputStream imageStream;
 

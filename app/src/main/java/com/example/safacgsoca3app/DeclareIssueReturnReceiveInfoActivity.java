@@ -123,7 +123,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
         tv_Issue_Return_Receive = (TextView) findViewById(R.id.tv_Issue_Return_Receive);
         btn_ClearPad = (Button) findViewById(R.id.btn_ClearPad);
         btn_Validate = (Button) findViewById(R.id.btn_Validate);
-        Signature_Pad = findViewById(R.id.gen_docSignature_Pad);
+        Signature_Pad = findViewById(R.id.Signature_Pad);
         imageView = findViewById(R.id.imageView);
 
         //init end
@@ -157,7 +157,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
         tv_detail_name = (TextView) findViewById(R.id.tv_Detail_Name);
         btn_ClearPad = (Button) findViewById(R.id.btn_ClearPad);
         btn_Validate = (Button) findViewById(R.id.btn_Validate);
-        Signature_Pad = findViewById(R.id.gen_docSignature_Pad);
+        Signature_Pad = findViewById(R.id.Signature_Pad);
         imageView = findViewById(R.id.imageView);
 
         //clear signature pad
@@ -339,17 +339,16 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
                 if (c1.moveToFirst()) {
                     doc_d_name = c1.getString(0);
                 }
-                Log.i("whynull", "select d.d_name from detail d, personnel_ammunition pa, operation_personnel op where pa.op_id = op.op_id and d.d_id = op.d_id and pa.pa_id = " + pa_id);
                 Log.i("bindvalues", doc_o_name + doc_o_unit + doc_d_name);
                 //check if document already exists (CHECK ALL STRING PARAMS IN CASE OF DETAIL CHANGE, THUS CREATE NEW DOC IF CHANGE OCCURS)
                 //c1 = db.query("document", new String[]{"o_name", "o_unit", "d_name"}, "doc_id", new String[]{doc_o_name, doc_o_unit, doc_d_name},null, null, null);
+                Log.i("select doc_id from document where o_name = ? and o_unit = ? and d_name = ? and doc_closed = 0", String.valueOf(new String[]{doc_o_name, doc_o_unit, doc_d_name}));
                 c1 = db.rawQuery("select doc_id from document where o_name = ? and o_unit = ? and d_name = ? and doc_closed = 0", new String[]{doc_o_name, doc_o_unit, doc_d_name});
                 accessed_doc_number = "-1";
                 if (c1.moveToNext()) {
                     accessed_doc_number = c1.getString(0);
-                }
-                //if document is not opened, create new doc according to data
-                if (Integer.parseInt(accessed_doc_number) == -1) {
+                }else//if document is not opened, create new doc according to data
+                    {
                     ContentValues content = new ContentValues();
                     content.put(TAG_D_NAME, doc_d_name);
                     content.put(TAG_O_NAME, doc_o_name);
