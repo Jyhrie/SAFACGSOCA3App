@@ -149,17 +149,11 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
 
     public void populateNextGuy()
     {
-        //check if data sent in
-        Log.i(String.valueOf(PersonnelList.size()), "test");
-        if(!(PersonnelList.size() > 0))
-        {
-            finish();
-        }
-
         String current_op_id = PersonnelList.remove(0).get(TAG_OP_ID);
 
         TextView tv_Issue_Return_Receive;
         TextView tv_personnel_name;
+        TextView tv_detail_name;
         Button btn_ClearPad;
         Button btn_Validate;
         SignaturePad Signature_Pad;
@@ -167,6 +161,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
 
         tv_Issue_Return_Receive = (TextView) findViewById(R.id.tv_Issue_Return_Receive);
         tv_personnel_name = (TextView) findViewById(R.id.tv_Personnel_Name);
+        tv_detail_name = (TextView) findViewById(R.id.tv_Detail_Name);
         btn_ClearPad = (Button) findViewById(R.id.btn_ClearPad);
         btn_Validate = (Button) findViewById(R.id.btn_Validate);
         Signature_Pad = findViewById(R.id.Signature_Pad);
@@ -184,12 +179,15 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
         //get & set personnel name
         String personnel_name = null;
         String personnel_rank = null;
-        c1 = db.rawQuery("select p.p_rank, p.p_name from personnel p, operation_personnel op where op.p_id = p.p_id and op.op_id = ?", new String[]{current_op_id});
+        String detail_name = null;
+        c1 = db.rawQuery("select p.p_rank, p.p_name, d.d_name from personnel p, operation_personnel op, detail d where op.d_id = d.d_id and op.p_id = p.p_id and op.op_id = ?", new String[]{current_op_id});
         if(c1.moveToFirst())
         {
             personnel_rank = c1.getString(0);
             personnel_name = c1.getString(1);
+            detail_name = c1.getString(2);
             tv_personnel_name.setText(personnel_rank+" "+personnel_name);
+            tv_detail_name.setText(detail_name);
         }
         //add into arraylist of new or opened
         //get data based on type
@@ -244,7 +242,14 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
                 @Override
                 public void onClick(View view) {
                     alertDialog.dismiss();
-                    populateNextGuy();
+                    if(PersonnelList.size() > 0)
+                    {
+                        populateNextGuy();
+                    }
+                    else{
+                        onPersonnelListEnd(Integer.valueOf(type));
+                    }
+
                 }
             });
         }
@@ -267,7 +272,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
             //TAG_TD_SPOILED = text taken only from transaction detail.
 
             if (current_is_new_entry != 0) {
-                map.put(TAG_DYNAMIC_ISSUE, "1");
+                map.put(TAG_DYNAMIC_ISSUE, "Issuing");
                 map.put(TAG_PA_ID, String.valueOf(current_pa_id));
                 map.put(TAG_TD_ID, current_td_id);
                 c1 = db.rawQuery("select a.a_name, pa.pa_issue_qty from personnel_ammunition pa, ammunition a where a.a_id = pa.a_id and pa.pa_id = " + current_pa_id, null);
@@ -276,7 +281,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
                     map.put(TAG_PA_ISSUE_QTY, c1.getString(1));
                 }
             } else {
-                map.put(TAG_DYNAMIC_ISSUE, "0");
+                map.put(TAG_DYNAMIC_ISSUE, "Issued");
                 map.put(TAG_TD_ID, current_td_id);
                 map.put(TAG_PA_ID, String.valueOf(current_pa_id));
 
@@ -287,7 +292,6 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
                     map.put(TAG_PA_ISSUE_QTY, c1.getString(1));
                 }
             }
-            Log.i(map.toString(), "YESSIR");
             rvData.add(map);
         }
 
@@ -433,11 +437,12 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
 
                     }
                 }
-                //recieving
-                else if (Integer.valueOf(type) == 3) {
-                    //ignore first
-                }
                 //check if document can close
+
+
+                //
+
+
 
                 //close database
                 db.close();
@@ -447,13 +452,26 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
                     populateNextGuy();
                 }
                 else{
-                    finish();
+                    onPersonnelListEnd(Integer.valueOf(type));
                 }
 
             }
 
             //check if document can be closed
         });
+    }
+
+    public void onPersonnelListEnd(int type)
+    {
+        if(type == 1)
+        {
+            finish();
+        }
+        if(type == 2)
+        {
+            //start new intent allowing ammo ic to sign, followed by generate document.
+            finish();
+        }
     }
 
 
