@@ -6,8 +6,10 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -91,26 +93,6 @@ public class NominalRollActivity extends AppCompatActivity implements RecyclerVi
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(rv);
 
-        /*
-
-        Button btnDeletePersonnel;
-
-        btnDeletePersonnel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                String pid = ((TextView) view.findViewById(R.id.tvPersonnelId)).getText().toString();
-                SQLiteDatabase db;
-                db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-                db.execSQL("CREATE TABLE IF NOT EXISTS personnel (p_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, p_rank varchar(255) NOT NULL, p_name varchar(255) NOT NULL, p_nric text)");
-                db.execSQL("DELETE FROM operation WHERE p_id = " + pid);
-                db.close();
-                onResume();
-
-            }
-        });
-
-        */
     }
 
     private void openAddNominalRollDialog(View view)
@@ -138,6 +120,32 @@ public class NominalRollActivity extends AppCompatActivity implements RecyclerVi
                 String rank = dropdownRank.getSelectedItem().toString();
                 String name = etName.getText().toString();
                 String nric = etRemarks.getText().toString();
+
+                //data validation
+                boolean _dataValidationPass = true;
+                String _errorMessage = "there is no empty field, something went wrong";
+                if(rank.isEmpty())
+                {
+                    _dataValidationPass = false;
+                    _errorMessage = "this is a dropdown field, something went wrong";
+                }
+                else if(name.isEmpty())
+                {
+                    _dataValidationPass = false;
+                    _errorMessage = "Please insert a personnel name";
+                }
+                else if(nric.isEmpty())
+                {
+                    _dataValidationPass = false;
+                    _errorMessage = "Please insert an NRIC number";
+                }
+
+                if(_dataValidationPass = false)
+                {
+                    showErrorAlertDialog(view, _errorMessage);
+                    return;
+                }
+
 
                 SQLiteDatabase db;
                 db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
@@ -214,10 +222,9 @@ public class NominalRollActivity extends AppCompatActivity implements RecyclerVi
 
     }
 
-    public void openEditDeleteNominalRoll(View v)
+    /*public void openEditDeleteNominalRoll(View v)
     {
         //get person id
-
         Dialog DialogFragment = new Dialog(NominalRollActivity.this, android.R.style.Theme_Black_NoTitleBar);
         DialogFragment.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
         DialogFragment.setContentView(R.layout.dialog_editdelete_nominal_roll);
@@ -238,45 +245,6 @@ public class NominalRollActivity extends AppCompatActivity implements RecyclerVi
         String name = etName.getText().toString();
         String remarks = etRemarks.getText().toString();
 
-
-
-    }
-
-    /*
-    protected void onNeverCall() {
-        SQLiteDatabase db;
-
-
-        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-        Cursor c1 = db.rawQuery("SELECT * FROM personnel", null);
-
-        ArrayList<HashMap<String, String>> ammoList = new ArrayList<HashMap<String, String>>();
-        while (c1.moveToNext()) {
-            HashMap<String, String> map = new HashMap<String, String>();
-            String line_id = c1.getString(0);
-            String line_rank = c1.getString(1);
-            String line_name = c1.getString(2);
-            String line_nric = c1.getString(3);
-
-            map.put(TAG_ID, line_id);
-            map.put(TAG_P_NAME, line_rank + " " + line_name);
-            map.put(TAG_P_NRIC, line_nric);
-
-            ammoList.add(map);
-        }
-        db.close();
-
-
-
-        ListView lv = findViewById(R.id.lvNominalRoll);
-        ListAdapter adapter = new SimpleAdapter(
-                NominalRollActivity.this, //context
-                ammoList, //hashmapdata
-                R.layout.list_nominalroll, //layout of list
-                new String[] { TAG_ID, TAG_P_NAME, TAG_P_NRIC}, //from array
-                new int[] {R.id.tvPersonnelId, R.id.tvPersonnelName, R.id.tvPersonnelRemarks});  //toarray
-        // updating listview
-        lv.setAdapter(adapter);
     }*/
 
     ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
@@ -301,6 +269,20 @@ public class NominalRollActivity extends AppCompatActivity implements RecyclerVi
             }
         }
     };
+
+    public void showErrorAlertDialog(View v, String message)
+    {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Error");
+        alert.setMessage(message);
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i){
+                dialogInterface.dismiss();
+            }});
+        alert.show();
+    }
+
 
     public void removeGuyFromDb(int position)
     {

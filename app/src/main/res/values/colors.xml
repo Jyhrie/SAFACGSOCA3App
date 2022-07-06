@@ -11,4 +11,15 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="teal">#008080</color>
+    <color name="blueciel">#7dcbdc</color>
+    <color name="myosotis">#50aad8</color>
+    <color name="orseille">#f3a7ac</color>
+
+
+    <color name="issue_return_primary">#3ba38a</color>
+    <color name="issue_return_secondary">#049885</color>
+    <color name="issue_return_text_color">#FFFFFF</color>
+
+    <color name="default_listview_item_color">#7dcbdc</color>
+
 </resources>

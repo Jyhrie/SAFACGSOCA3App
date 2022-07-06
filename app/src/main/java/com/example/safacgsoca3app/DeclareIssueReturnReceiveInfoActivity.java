@@ -1,7 +1,9 @@
 package com.example.safacgsoca3app;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -98,6 +100,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
     String o_id;
     String d_id;
     String accessed_doc_number;
+    int o_type;
 
 
     @Override
@@ -120,6 +123,18 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
         SignaturePad Signature_Pad;
         ImageView imageView;
 
+        SQLiteDatabase db;
+        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+        Cursor c1 = db.rawQuery("select o_ops from operation where o_id = ?", new String[]{o_id});
+        if(c1.moveToFirst())
+        {
+            o_type = Integer.parseInt(c1.getString(0));
+        }
+        else
+        {
+            finish();
+        }
+
         tv_Issue_Return_Receive = (TextView) findViewById(R.id.tv_Issue_Return_Receive);
         btn_ClearPad = (Button) findViewById(R.id.btn_ClearPad);
         btn_Validate = (Button) findViewById(R.id.btn_Validate);
@@ -127,7 +142,6 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
         imageView = findViewById(R.id.imageView);
 
         //init end
-
 
         if (Integer.valueOf(type) == 1)//ammo unissued
         {
@@ -160,7 +174,6 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
 
         //clear signature pad
         Signature_Pad.clear();
-
 
 
         //query for all pa_id entries with op_id
@@ -225,6 +238,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
             warning_abort.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    alertDialog.dismiss();
                     finish();
                 }
             });
@@ -281,11 +295,26 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
                 if (c1.moveToFirst()) {
                     map.put(TAG_A_NAME, c1.getString(0));
                     map.put(TAG_PA_ISSUE_QTY, c1.getString(1));
+
+                    //check auto put issue/ret qty based on ops/range
+                    if(o_type == 0)
+                    {
+                        map.put(TAG_TD_EXPENDED, "0");
+                        map.put(TAG_TD_RETURNED,  c1.getString(1));
+                        map.put(TAG_TD_SPOILED, "0");
+                    }
+                    else if(o_type == 1)
+                    {
+                        map.put(TAG_TD_EXPENDED,  c1.getString(1));
+                        map.put(TAG_TD_RETURNED, "0");
+                        map.put(TAG_TD_SPOILED, "0");
+                    }
+
+
                 }
             }
             rvData.add(map);
         }
-
 
         Log.i(rvData.toString(), String.valueOf(rvData.size()));
         RecyclerView rv;
@@ -314,8 +343,25 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
         btn_Validate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                //data validation
                 Bitmap bitmap = Signature_Pad.getSignatureBitmap();
                 imageView.setImageBitmap(bitmap);
+
+                boolean _dataValidationPass = true;
+                String _errorMessage = "there is no empty field, something went wrong";
+                if(Signature_Pad.isEmpty())
+                {
+                    _dataValidationPass = false;
+                    _errorMessage = "Please sign on the signature pad before continuing";
+                }
+
+                if(_dataValidationPass == false)
+                {
+                    showErrorAlertDialog(view, _errorMessage);
+                    return;
+                }
+                //end
 
                 int doc = -1;
                 int pa_id = -1;
@@ -339,7 +385,6 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
                 }
                 Log.i("bindvalues", doc_o_name + doc_o_unit + doc_d_name);
                 //check if document already exists (CHECK ALL STRING PARAMS IN CASE OF DETAIL CHANGE, THUS CREATE NEW DOC IF CHANGE OCCURS)
-                //c1 = db.query("document", new String[]{"o_name", "o_unit", "d_name"}, "doc_id", new String[]{doc_o_name, doc_o_unit, doc_d_name},null, null, null);
                 Log.i("select doc_id from document where o_name = ? and o_unit = ? and d_name = ? and doc_closed = 0", String.valueOf(new String[]{doc_o_name, doc_o_unit, doc_d_name}));
                 c1 = db.rawQuery("select doc_id from document where o_name = ? and o_unit = ? and d_name = ? and doc_closed = 0", new String[]{doc_o_name, doc_o_unit, doc_d_name});
                 accessed_doc_number = "-1";
@@ -365,6 +410,18 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
                     //iterate through dataset
                     for (HashMap<String, String> data : rvData) {
                         //this will change td_issued in transaction_data
+
+                        if(data.get(TAG_PA_ISSUE_QTY).isEmpty())
+                        {
+                            _dataValidationPass = false;
+                            _errorMessage = "Issue quantity cannot be empty";
+                        }
+
+                        if(!_dataValidationPass)
+                        {
+                            showErrorAlertDialog(view, _errorMessage);
+                            return;
+                        }
 
                         ContentValues cv = new ContentValues();
                         //form the initial entry
@@ -411,6 +468,21 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
                     for (HashMap<String, String> data : rvData) {
                         //update based on new values
 
+                        //data validation
+                        Log.i("Data", data.toString());
+                        //Log.i(data.get(TAG_TD_RETURNED) + " " + data.get(TAG_TD_EXPENDED) + " " + data.get(TAG_TD_SPOILED) + " " + data.get(TAG_PA_ISSUE_QTY), "test");
+                        if(!(Integer.parseInt(data.get(TAG_TD_RETURNED)) + Integer.parseInt(data.get(TAG_TD_EXPENDED)) + Integer.parseInt(data.get(TAG_TD_SPOILED)) == Integer.parseInt(data.get(TAG_PA_ISSUE_QTY))))
+                        {
+                            _dataValidationPass = false;
+                            _errorMessage = "Issue and return quantity not equal for " + data.get(TAG_A_NAME);
+                        }
+
+                        if(!_dataValidationPass)
+                        {
+                            showErrorAlertDialog(view, _errorMessage);
+                            return;
+                        }
+
                         //get transaction date
                         SimpleDateFormat dateFormat = new SimpleDateFormat("DD/MM/YYYY @HHmm", Locale.getDefault());
                         String currentDateTime = dateFormat.format(new Date());
@@ -428,10 +500,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
                 }
                 //check if document can close
 
-
                 //
-
-
 
                 //close database
                 db.close();
@@ -446,14 +515,11 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
 
             }
 
-            //check if document can be closed
         });
     }
 
     public void onPersonnelListEnd(int type, String doc_number)
     {
-
-
         if(type == 1 || Integer.valueOf(doc_number) == -1)
         {
             finish();
@@ -467,7 +533,6 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
             finish();
         }
     }
-
 
     ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
         @Override
@@ -565,6 +630,19 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
             }
         });
         //EditIssueDialog.dismiss();
+    }
+
+    public void showErrorAlertDialog(View v, String message)
+    {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Error");
+        alert.setMessage(message);
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i){
+                dialogInterface.dismiss();
+            }});
+        alert.show();
     }
 
     public static byte[] getBitmapAsByteArray(Bitmap bitmap) {

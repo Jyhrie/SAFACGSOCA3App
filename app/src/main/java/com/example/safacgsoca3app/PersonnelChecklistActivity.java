@@ -14,6 +14,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import java.util.ArrayList;
@@ -94,19 +95,19 @@ public class PersonnelChecklistActivity extends AppCompatActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                ConstraintLayout layout = ((ConstraintLayout) view.findViewById(R.id.ConstraintLayout));
+                CardView layout = ((CardView) view.findViewById(R.id.cv_list_personnel_checklist));
                 TextView select = (TextView) view.findViewById(R.id.tv_Personnel_Selected_Status);
                 TextView selectid = (TextView) view.findViewById(R.id.tv_Personnel_ID_Checklist);
 
                 if (select.getText().toString() == "false") {
                     select.setText("true");
-                    layout.setBackgroundResource(R.color.teal);
+                    layout.setCardBackgroundColor(layout.getContext().getResources().getColor(R.color.teal));
                     PersonnelSelectionMap.put(selectid.getText().toString(), "1");
                     Log.i(" ", String.valueOf(PersonnelSelectionMap));
                     ;
                 } else {
                     select.setText("false");
-                    layout.setBackgroundResource(R.color.white);
+                    layout.setCardBackgroundColor(layout.getContext().getResources().getColor(R.color.white));
                     PersonnelSelectionMap.put(selectid.getText().toString(), "0");
                     Log.i(" ", String.valueOf(PersonnelSelectionMap));
                 }

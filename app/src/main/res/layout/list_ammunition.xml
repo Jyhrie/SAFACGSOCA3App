@@ -1,21 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/mainLyt"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
+    <androidx.cardview.widget.CardView
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#FFFFFF"
-        android:paddingTop="10dp" >
+        android:layout_width="match_parent"
+        app:cardBackgroundColor="@color/default_listview_item_color"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="8dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginEnd="3dp"
+        android:layout_weight="1"  >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginEnd="6dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="5dp">
 
             <TextView
                 android:id="@+id/tvAmmunition"
@@ -28,7 +36,7 @@
                 android:id="@+id/tvQuantity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:text="TextView" />
 
             <TextView
@@ -40,5 +48,5 @@
                 android:visibility="gone" />
         </LinearLayout>
 
-    </RelativeLayout>
+    </androidx.cardview.widget.CardView>
 </RelativeLayout>

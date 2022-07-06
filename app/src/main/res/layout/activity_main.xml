@@ -79,7 +79,8 @@
                 android:id="@+id/btnTesting"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="testing" />
+                android:text="testing"
+                android:visibility="gone"/>
 
             <Button
                 android:id="@+id/btn_view_nominal_roll"

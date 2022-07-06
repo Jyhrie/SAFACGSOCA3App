@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         db.execSQL("CREATE TABLE IF NOT EXISTS personnel (p_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, p_rank varchar(255) NOT NULL, p_name varchar(255) NOT NULL, p_nric text)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS operation (o_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_name varchar(255) NOT NULL, o_kah text NOT NULL, o_unit text, o_date text, o_loc text)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS operation (o_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_name varchar(255) NOT NULL, o_kah text NOT NULL, o_unit text, o_date text, o_loc text, o_ops bool)");
         db.execSQL("CREATE TABLE IF NOT EXISTS operation_personnel (op_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, p_id integer NOT NULL, o_id integer NOT NULL, d_id integer)");
         db.execSQL("CREATE TABLE IF NOT EXISTS ammunition (a_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_id integer NOT NULL, a_name varchar(255) NOT NULL, a_qty number NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS detail (d_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, d_name text NOT NULL, o_id integer NOT NULL)");
@@ -248,7 +248,6 @@ public class MainActivity extends AppCompatActivity {
 
         SQLiteDatabase db;
         db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS operation (o_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_name varchar(255) NOT NULL, o_kah text NOT NULL)");
         Cursor cursor = db.rawQuery("SELECT o_name FROM operation WHERE o_id = " + oid, null);
         while(cursor.moveToNext())
         {
@@ -264,7 +263,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 SQLiteDatabase db;
                 db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-                db.execSQL("CREATE TABLE IF NOT EXISTS operation (o_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_name varchar(255) NOT NULL, o_kah text NOT NULL)");
                 db.execSQL("DELETE FROM operation WHERE o_id = " + oid);
                 db.close();
                 DialogFragment.dismiss();
@@ -283,6 +281,7 @@ public class MainActivity extends AppCompatActivity {
         content.put("o_kah", "Conducting: ME4 Yuen Weng Kin\nSupervising: ME3 Teo Kwee Teck\nSafety: ME3 Raymond Tan");
         content.put("o_date", "12/09/2022");
         content.put("o_loc", "Changi Naval Base");
+        content.put("o_ops", "0");
         db.insert("operation", null, content);
 
         content.put("o_name", "OPS GUARDIAN ANGEL");
@@ -290,6 +289,7 @@ public class MainActivity extends AppCompatActivity {
         content.put("o_kah", "Conducting: ME4 Khoo Wei Liang\nSupervising: ME2 Fung Xue Ming\nSafety: ME1 Melvin");
         content.put("o_date", "18/07/2022");
         content.put("o_loc", "Nee Soon Camp");
+        content.put("o_ops", "0");
         db.insert("operation", null, content);
 
         content.put("o_name", "RANGE: PULAU TEKONG");
@@ -297,6 +297,7 @@ public class MainActivity extends AppCompatActivity {
         content.put("o_kah", "Conducting: ME2 Fung Xue Ming\nSupervising: ME1 Melvin\nSafety: ME1 Lincoln");
         content.put("o_date", "20/04/2023");
         content.put("o_loc", "Pulau Tekong");
+        content.put("o_ops", "1");
         db.insert("operation", null, content);
         db.close();
     }

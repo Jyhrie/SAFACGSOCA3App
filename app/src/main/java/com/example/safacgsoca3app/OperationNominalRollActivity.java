@@ -6,8 +6,10 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -294,7 +296,6 @@ public class OperationNominalRollActivity extends AppCompatActivity implements R
                 this,
                 data,
                 this
-
         );
 
         rv = findViewById(R.id.rv_operation_nominal_roll);

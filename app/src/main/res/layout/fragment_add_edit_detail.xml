@@ -24,15 +24,17 @@
             android:layout_height="wrap_content" />
 
         <Button
+            android:id="@+id/btnSelectPersonnel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Personnel" />
+
+        <Button
             android:id="@+id/btnCreateDetail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Save Detail" />
 
-        <Button
-            android:id="@+id/btnSelectPersonnel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Select Personnel" />
+
     </LinearLayout>
 </LinearLayout>

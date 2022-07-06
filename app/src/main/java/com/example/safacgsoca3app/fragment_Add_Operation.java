@@ -24,7 +24,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,6 +47,7 @@ public class fragment_Add_Operation extends DialogFragment implements RecyclerVi
     private static final String TAG_O_UNIT = "o_unit";
     private static final String TAG_O_DATE = "o_date";
     private static final String TAG_O_LOC = "o_loc";
+    private static final String TAG_O_OPS = "o_ops";
 
     private static final String TAG_OP_ID = "op_id";
 
@@ -79,15 +85,43 @@ public class fragment_Add_Operation extends DialogFragment implements RecyclerVi
         EditText etDate;
         EditText etLocation;
         EditText etUnit;
+        TextView tv_ops_or_range;
+        Switch sw_ops_or_range;
+        TextView tv_sw_togglestate;
 
         btnInsertExercise = (Button) v.findViewById(R.id.btnInsertExercise);
         etAddExerciseName = (EditText) v.findViewById(R.id.etAddExerciseName);
         etDate = (EditText) v.findViewById(R.id.etDate);
         etLocation = (EditText) v.findViewById(R.id.etLocation);
         etUnit = (EditText) v.findViewById(R.id.et_unit);
+        tv_ops_or_range = (TextView) v.findViewById(R.id.tv_ops_or_range);
+        sw_ops_or_range = (Switch) v.findViewById(R.id.sw_ops_or_range);
+        tv_sw_togglestate = (TextView) v.findViewById(R.id.tv_switch_togglestate);
+
+        sw_ops_or_range.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b == false)
+                {
+                    tv_ops_or_range.setText(" Ops");
+                    tv_sw_togglestate.setText("0");
+                }
+                if(b == true)
+                {
+                    tv_ops_or_range.setText(" Range");
+                    tv_sw_togglestate.setText("1");
+                }
+            }
+        });
+
+
+        HashMap<String,String> _emptymap = new HashMap<String,String>();
+        _emptymap.put(TAG_DESIGNATION, "");
+        _emptymap.put(TAG_DESIGNATION_NAME, "");
+
 
         data = new ArrayList<HashMap<String,String>>();
-        data.add(new HashMap<String,String>());
+        data.add(new HashMap<String,String>(_emptymap));
 
         rvAdapter = new adapter_Operation_KAH(
                 context,
@@ -108,7 +142,7 @@ public class fragment_Add_Operation extends DialogFragment implements RecyclerVi
         btn_add_designation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                data.add(new HashMap<String,String>());
+                data.add(new HashMap<String,String>(_emptymap));
                 Log.i(data.toString(), "adding empty");
                 rvAdapter.notifyItemInserted(rvAdapter.getItemCount());
             }
@@ -117,6 +151,47 @@ public class fragment_Add_Operation extends DialogFragment implements RecyclerVi
         btnInsertExercise.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                //data validation
+                boolean _dataValidationPass = true;
+                String _errorMessage = "there is no empty field, something went wrong";
+                if(etAddExerciseName.getText().toString().isEmpty())
+                {
+                    _dataValidationPass = false;
+                    _errorMessage = "Please add an exercise name, then try again";
+                }
+                else if(etUnit.getText().toString().isEmpty())
+                {
+                    _dataValidationPass = false;
+                    _errorMessage = "Please add a unit name, then try again";
+                }
+                else if(etDate.getText().toString().isEmpty())
+                {
+                    _dataValidationPass = false;
+                    _errorMessage = "Please add a date, then try again";
+                }
+                else if(etLocation.getText().toString().isEmpty())
+                {
+                    _dataValidationPass = false;
+                    _errorMessage = "Please add a location, then try again";
+                }
+                if(_dataValidationPass != false) {
+                    for (HashMap<String, String> entry : data) {
+                        if (entry.get(TAG_DESIGNATION_NAME).isEmpty() || entry.get(TAG_DESIGNATION).isEmpty()) {
+                            _dataValidationPass = false;
+                            _errorMessage = "Please fill in all required fields in designation & designation personnel name, then try again";
+                        }
+                    }
+                }
+
+                Log.i(String.valueOf(_dataValidationPass), "yes");
+
+                if(_dataValidationPass == false)
+                {
+                    showErrorAlertDialog(view, _errorMessage);
+                    return;
+                }
+
 
                 SQLiteDatabase db;
                 db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
@@ -137,6 +212,7 @@ public class fragment_Add_Operation extends DialogFragment implements RecyclerVi
                 content.put(TAG_O_DATE, etDate.getText().toString());
                 content.put(TAG_O_LOC, etLocation.getText().toString());
                 content.put(TAG_O_KAH, concatkah);
+                content.put(TAG_O_OPS, tv_sw_togglestate.getText().toString());
 
                 db.insert("operation", null, content);
                 db.close();
@@ -167,8 +243,6 @@ public class fragment_Add_Operation extends DialogFragment implements RecyclerVi
         return v;
     }
 
-
-
     public void showErrorAlertDialog(View v, String message)
     {
         AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
@@ -178,8 +252,8 @@ public class fragment_Add_Operation extends DialogFragment implements RecyclerVi
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i){
                     dialogInterface.dismiss();
-                }
-    });
+                }});
+            alert.show();
     }
 
     ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {

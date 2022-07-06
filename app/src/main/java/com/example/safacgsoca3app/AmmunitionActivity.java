@@ -2,8 +2,10 @@ package com.example.safacgsoca3app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -129,9 +131,32 @@ public class AmmunitionActivity extends AppCompatActivity {
         tvAmmoQty = (EditText) DialogFragment.findViewById(R.id.tvAmmoQty);
         btnInsertAmmo = (Button) DialogFragment.findViewById(R.id.btnInsertAmmunition);
 
+
+
         btnInsertAmmo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+                boolean _dataValidationPass = true;
+                String _errorMessage = "there is no empty field, something went wrong";
+                if(tvAmmoDescription.getText().toString().isEmpty())
+                {
+                    _dataValidationPass = false;
+                    _errorMessage = "Please enter an ammo description";
+                }
+                else if(tvAmmoQty.getText().toString().isEmpty())
+                {
+                    _dataValidationPass = false;
+                    _errorMessage = "Please enter an ammo quantity";
+                }
+
+                if(_dataValidationPass == false)
+                {
+                    showErrorAlertDialog(view, _errorMessage);
+                    return;
+                }
+
                 ContentValues content = new ContentValues();
 
                 content.put(TAG_A_NAME, String.valueOf(tvAmmoDescription.getText()));
@@ -185,6 +210,20 @@ public class AmmunitionActivity extends AppCompatActivity {
                 new int[] {R.id.tvAmmunitionID, R.id.tvAmmunition, R.id.tvQuantity}); //toarray
         // updating listview
         lv.setAdapter(adapter);
-
     }
+
+    public void showErrorAlertDialog(View v, String message)
+    {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Error");
+        alert.setMessage(message);
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i){
+                dialogInterface.dismiss();
+            }});
+        alert.show();
+    }
+
+
 }

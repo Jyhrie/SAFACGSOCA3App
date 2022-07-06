@@ -2,9 +2,11 @@ package com.example.safacgsoca3app;
 
 import static java.lang.Integer.parseInt;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -122,17 +124,25 @@ public class fragment_Add_Edit_Detail extends DialogFragment implements Recycler
         refreshData();
 
 
-
-
-
         btnSaveDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                boolean _dataValidationPass = true;
+                String _errorMessage = "there is no empty field, something went wrong";
+                if(etDetailName.getText().toString().isEmpty())
+                {
+                    _dataValidationPass = false;
+                    _errorMessage = "Please insert a detail name, then try again";
+                }
+
+                if(_dataValidationPass == false)
+                {
+                    showErrorAlertDialog(view, _errorMessage);
+                    return;
+                }
 
                 SQLiteDatabase db;
-                db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
-
                 if (d_id != -1) {
                     //update detail name
                     ContentValues content = new ContentValues();
@@ -282,6 +292,19 @@ public class fragment_Add_Edit_Detail extends DialogFragment implements Recycler
             op_list.add(map);
         }
         db.close();
+    }
+
+    public void showErrorAlertDialog(View v, String message)
+    {
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+        alert.setTitle("Error");
+        alert.setMessage(message);
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i){
+                dialogInterface.dismiss();
+            }});
+        alert.show();
     }
 
     @Override

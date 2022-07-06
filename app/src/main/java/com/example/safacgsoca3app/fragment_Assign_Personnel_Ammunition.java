@@ -1,7 +1,9 @@
 package com.example.safacgsoca3app;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -116,38 +118,63 @@ public class fragment_Assign_Personnel_Ammunition extends DialogFragment impleme
             public void onClick(View view) {
 
 
-                    //get all data stored within adapter
-                    ArrayList<HashMap<String, String>> existing_data = data;
-                    for (HashMap<String, String> entry : existing_data) {
-                        //check if TAG_PA_ID is new/old
-                        Log.i(entry.get(TAG_PA_ID), "paid");
-                        if (entry.get(TAG_PA_ID).equals("-1")) {
-                            //new entry
-                            ContentValues content = new ContentValues();
-                            content.put(TAG_OP_ID, String.valueOf(op_id));
-                            content.put(TAG_A_ID, entry.get(TAG_A_ID));
-                            content.put(TAG_PA_ISSUE_QTY, entry.get(TAG_PA_ISSUE_QTY));
+                //iterate through data arraylist;
+                boolean _dataValidationPass = true;
+                String _errorMessage = "there is no empty field, something went wrong";
 
-                            SQLiteDatabase db;
-                            db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
-                            db.insert("personnel_ammunition", null, content);
-                            db.close();
-                        } else {
-                            ContentValues content = new ContentValues();
-                            content.put(TAG_A_ID, entry.get(TAG_A_ID));
-                            content.put(TAG_PA_ISSUE_QTY, entry.get(TAG_PA_ISSUE_QTY));
-
-                            SQLiteDatabase db;
-                            db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
-                            db.update("personnel_ammunition", content, "pa_id = ?", new String[]{entry.get(TAG_PA_ID)});
-                            db.close();
+                for(HashMap<String,String> entry: data) {
+                    if  (entry.containsKey(TAG_PA_ISSUE_QTY)) {
+                        if(TAG_PA_ISSUE_QTY.isEmpty())
+                        {
+                            _dataValidationPass = false;
+                            _errorMessage = "Please input a ammo issue quantity";
                         }
-
-
-                        //check if existing TAG_PA_IDs have been removed
-                        Log.i(entry.get(TAG_A_ID) + "AID", entry.get(TAG_PA_ISSUE_QTY) + "AQTY");
                     }
-                dismiss();
+                    else
+                    {
+                        _dataValidationPass = false;
+                    }
+
+                    if  (_dataValidationPass == false) {
+                        showErrorAlertDialog(view, _errorMessage);
+                        return;
+                    }
+                }
+
+
+
+                //get all data stored within adapter
+                ArrayList<HashMap<String, String>> existing_data = data;
+                for (HashMap<String, String> entry : existing_data) {
+                    //check if TAG_PA_ID is new/old
+                    Log.i(entry.get(TAG_PA_ID), "paid");
+                    if (entry.get(TAG_PA_ID).equals("-1")) {
+                        //new entry
+                        ContentValues content = new ContentValues();
+                        content.put(TAG_OP_ID, String.valueOf(op_id));
+                        content.put(TAG_A_ID, entry.get(TAG_A_ID));
+                        content.put(TAG_PA_ISSUE_QTY, entry.get(TAG_PA_ISSUE_QTY));
+
+                        SQLiteDatabase db;
+                        db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
+                        db.insert("personnel_ammunition", null, content);
+                        db.close();
+                    } else {
+                        ContentValues content = new ContentValues();
+                        content.put(TAG_A_ID, entry.get(TAG_A_ID));
+                        content.put(TAG_PA_ISSUE_QTY, entry.get(TAG_PA_ISSUE_QTY));
+
+                        SQLiteDatabase db;
+                        db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
+                        db.update("personnel_ammunition", content, "pa_id = ?", new String[]{entry.get(TAG_PA_ID)});
+                        db.close();
+                    }
+
+
+                    //check if existing TAG_PA_IDs have been removed
+                    Log.i(entry.get(TAG_A_ID) + "AID", entry.get(TAG_PA_ISSUE_QTY) + "AQTY");
+                }
+            dismiss();
             }
         });
 
@@ -223,6 +250,20 @@ public class fragment_Assign_Personnel_Ammunition extends DialogFragment impleme
         }
         return personnel_ammo_list;
     }
+
+    public void showErrorAlertDialog(View v, String message)
+    {
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+        alert.setTitle("Error");
+        alert.setMessage(message);
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i){
+                dialogInterface.dismiss();
+            }});
+        alert.show();
+    }
+
 
     @Override
     public void onItemClick(int position) {
