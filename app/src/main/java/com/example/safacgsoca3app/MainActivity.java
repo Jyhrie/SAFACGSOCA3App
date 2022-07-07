@@ -2,8 +2,10 @@ package com.example.safacgsoca3app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -20,6 +22,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -59,17 +62,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        initialize_database(true);
+        initialize_database(false);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         ListView lvExercises;
-        FloatingActionButton btnFloatingAddExercise;
+        ExtendedFloatingActionButton btnFloatingAddExercise;
         Button btnViewNominalRoll;
 
         lvExercises = (ListView) findViewById(R.id.lvOperations);
-        btnFloatingAddExercise = (FloatingActionButton) findViewById(R.id.btnFloatingAddExercise);
+        btnFloatingAddExercise = (ExtendedFloatingActionButton) findViewById(R.id.btnFloatingAddExercise);
         btnViewNominalRoll = (Button) findViewById(R.id.btn_view_nominal_roll);
 
 
@@ -238,11 +241,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void DeleteDialog(String oid) {
-        Dialog DialogFragment = new Dialog(MainActivity.this, android.R.style.Theme_Black_NoTitleBar);
-        DialogFragment.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
-        DialogFragment.setContentView(R.layout.dialog_delete_exercise);
-        DialogFragment.setCancelable(true);
-        DialogFragment.show();
+
 
         String OperationName = null;
 
@@ -255,20 +254,21 @@ public class MainActivity extends AppCompatActivity {
         }
         db.close();
 
-        TextView tv_OperationName = (TextView) DialogFragment.findViewById(R.id.tv_ExerciseName);
-        tv_OperationName.setText(OperationName + "?");
-
-        Button btn_confirm = (Button) DialogFragment.findViewById(R.id.btn_confirm);
-        btn_confirm.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Confirmation");
+        alert.setMessage("ARE YOU SURE YOU WANT TO DELETE \n " + OperationName);
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i){
                 SQLiteDatabase db;
                 db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
                 db.execSQL("DELETE FROM operation WHERE o_id = " + oid);
                 db.close();
-                DialogFragment.dismiss();
                 onResume();
-            }
-        });
+                dialogInterface.dismiss();
+            }});
+        alert.show();
+
     }
 
     private void addexampleOperation(){
@@ -293,6 +293,30 @@ public class MainActivity extends AppCompatActivity {
         db.insert("operation", null, content);
 
         content.put("o_name", "RANGE: PULAU TEKONG");
+        content.put("o_unit", "SOF PTCO");
+        content.put("o_kah", "Conducting: ME2 Fung Xue Ming\nSupervising: ME1 Melvin\nSafety: ME1 Lincoln");
+        content.put("o_date", "20/04/2023");
+        content.put("o_loc", "Pulau Tekong");
+        content.put("o_ops", "1");
+        db.insert("operation", null, content);
+
+        content.put("o_name", "RANGE: PULAU TEKONG2");
+        content.put("o_unit", "SOF PTCO");
+        content.put("o_kah", "Conducting: ME2 Fung Xue Ming\nSupervising: ME1 Melvin\nSafety: ME1 Lincoln");
+        content.put("o_date", "20/04/2023");
+        content.put("o_loc", "Pulau Tekong");
+        content.put("o_ops", "1");
+        db.insert("operation", null, content);
+
+        content.put("o_name", "RANGE: PULAU TEKONG4");
+        content.put("o_unit", "SOF PTCO");
+        content.put("o_kah", "Conducting: ME2 Fung Xue Ming\nSupervising: ME1 Melvin\nSafety: ME1 Lincoln");
+        content.put("o_date", "20/04/2023");
+        content.put("o_loc", "Pulau Tekong");
+        content.put("o_ops", "1");
+        db.insert("operation", null, content);
+
+        content.put("o_name", "RANGE: PULAU TEKONG3");
         content.put("o_unit", "SOF PTCO");
         content.put("o_kah", "Conducting: ME2 Fung Xue Ming\nSupervising: ME1 Melvin\nSafety: ME1 Lincoln");
         content.put("o_date", "20/04/2023");
@@ -360,6 +384,11 @@ public class MainActivity extends AppCompatActivity {
         content.put("p_rank", "LCP");
         content.put("p_name", "Jing Yan");
         content.put("p_nric", "666F");
+        db.insert("personnel", null, content);
+
+        content.put("p_rank", "LCP");
+        content.put("p_name", "SUPER LONG NAME");
+        content.put("p_nric", "LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG ");
         db.insert("personnel", null, content);
 
         db.close();

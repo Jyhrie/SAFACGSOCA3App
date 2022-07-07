@@ -2,6 +2,7 @@ package com.example.safacgsoca3app;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,6 +28,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -68,7 +70,7 @@ public class OperationNominalRollActivity extends AppCompatActivity implements R
         Intent intent = getIntent();
         String o_id = intent.getStringExtra(TAG_O_ID);
 
-        FloatingActionButton btn_operation_nominal_add_personnel;
+        ExtendedFloatingActionButton btn_operation_nominal_add_personnel;
         btn_operation_nominal_add_personnel = findViewById(R.id.btn_operation_nominal_add_personnel);
 
         btn_operation_nominal_add_personnel.setOnClickListener(new View.OnClickListener() {
@@ -193,16 +195,16 @@ public class OperationNominalRollActivity extends AppCompatActivity implements R
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                CardView layout = ((CardView) view.findViewById(R.id.cv_list_operation_nominal_roll));
                 CheckBox cb = view.findViewById(R.id.cb_add_operation_personnel_isselected);
                 cb.setChecked(!cb.isChecked());
 
-                LinearLayout layout = view.findViewById(R.id.layout_list_add_operation_personnel);
                 if(cb.isChecked()) {
-                    layout.setBackgroundResource(R.color.teal_200);
+                    layout.setCardBackgroundColor(layout.getContext().getResources().getColor(R.color.personnel_checklist_enabled));
                 }
                 else
                 {
-                    layout.setBackgroundResource(R.color.white);
+                    layout.setCardBackgroundColor(layout.getContext().getResources().getColor(R.color.personnel_checklist_disabled));
                 }
             }
 

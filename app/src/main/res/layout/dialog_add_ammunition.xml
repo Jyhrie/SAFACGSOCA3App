@@ -7,36 +7,35 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#FFFFFF"
-        android:paddingTop="10dp" >
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/background">
 
             <EditText
                 android:id="@+id/tvAmmoDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="ammoname"
+                android:hint="Ammunition Description"
                 android:inputType="textPersonName"
-                android:text=""
-                tools:ignore="MissingConstraints" />
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:text="" />
 
             <EditText
                 android:id="@+id/tvAmmoQty"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="qty"
-                android:inputType="textPersonName"
+                android:hint="Quantity"
+                android:inputType="numberDecimal"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 android:text=""
                 tools:ignore="MissingConstraints" />
 
@@ -44,9 +43,11 @@
                 android:id="@+id/btnInsertAmmunition"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="8dp"
                 android:text="CONFIRM" />
         </LinearLayout>
-
-    </RelativeLayout>
 
     </RelativeLayout>

@@ -4,7 +4,9 @@ import static java.lang.Integer.parseInt;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -295,6 +297,11 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
         btn_edit_selected_detail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(detail_list.size()==0)
+                {
+                    showErrorAlertDialog(view, "Please Create a new Detail");
+                    return;
+                }
                 showAddEditDetailDialog(Integer.parseInt(detail_list.get((int) ddl_select_operation_detail.getSelectedItemId()).get(TAG_D_ID)), o_id, true);
             }
         });
@@ -304,6 +311,11 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
         btn_delete_selected_detail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(detail_list.size()==0)
+                {
+                    showErrorAlertDialog(view, "Please Create a new Detail");
+                    return;
+                }
                 SQLiteDatabase db;
                 db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
                 db.execSQL("DELETE FROM Detail WHERE d_id = "+ detail_list.get((int) ddl_select_operation_detail.getSelectedItemId()).get(TAG_D_ID));
@@ -402,6 +414,19 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
     @Override
     public void onItemClick(int position) {
 
+    }
+
+    public void showErrorAlertDialog(View v, String message)
+    {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Error");
+        alert.setMessage(message);
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i){
+                dialogInterface.dismiss();
+            }});
+        alert.show();
     }
 }
 

@@ -434,12 +434,12 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
                             ammo_name = c1.getString(0);
                         }
                         //get td_personnel_name from pa_id ref p_id
-                        c1 = db.rawQuery("select p.p_name from personnel p, personnel_ammunition pa, operation_personnel op where op.p_id = p.p_id and op.op_id = pa.op_id and pa.pa_id = " + data.get(TAG_PA_ID), null);
+                        c1 = db.rawQuery("select p.p_rank, p.p_name, p.p_nric from personnel p, personnel_ammunition pa, operation_personnel op where op.p_id = p.p_id and op.op_id = pa.op_id and pa.pa_id = " + data.get(TAG_PA_ID), null);
                         if (c1.moveToFirst()) {
-                            personnel_name = c1.getString(0);
+                            personnel_name = c1.getString(0) + " " + c1.getString(1) + "\n" + c1.getString(2);
                         }
                         //get transaction date
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("DD/MM/YYYY @HHmm", Locale.getDefault());
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/YYYY @HHmm", Locale.getDefault());
                         String currentDateTime = dateFormat.format(new Date());
 
                         Log.i("id", data.toString());
@@ -484,7 +484,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
                         }
 
                         //get transaction date
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("DD/MM/YYYY @HHmm", Locale.getDefault());
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/YYYY @HHmm", Locale.getDefault());
                         String currentDateTime = dateFormat.format(new Date());
 
                         ContentValues cv = new ContentValues();

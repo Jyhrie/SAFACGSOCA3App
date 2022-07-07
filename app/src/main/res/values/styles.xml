@@ -6,4 +6,9 @@
         <item name="colorPrimaryDark">@color/myosotis</item>
         <item name="colorAccent">@color/orseille</item>
     </style>
+
+    <style name="Button.Light" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/default_button_color</item>
+        <item name="android:textColor">@color/orseille</item>
+    </style>
 </resources>

@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
@@ -108,14 +109,13 @@ public class fragment_Assign_Detail_Personnel extends DialogFragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 TextView tvListPersonnelId = (TextView) view.findViewById(R.id.tv_assign_detail_personnel_id);
                 //toggle and add id to array;
+                CardView layout = (CardView) view.findViewById(R.id.cv_assign_detail_list);
                 CheckBox cb = view.findViewById(R.id.cb_assign_detail_personnel_bool);
                 cb.setChecked(!cb.isChecked());
-
-                LinearLayout layout = view.findViewById(R.id.layout_list_assign_detail_personnel);
                 if (cb.isChecked()) {
-                    layout.setBackgroundResource(R.color.teal_200);
+                    layout.setCardBackgroundColor(layout.getContext().getResources().getColor(R.color.personnel_checklist_enabled));
                 } else {
-                    layout.setBackgroundResource(R.color.white);
+                    layout.setCardBackgroundColor(layout.getContext().getResources().getColor(R.color.personnel_checklist_disabled));
                 }
 
             }

@@ -14,6 +14,10 @@
     <color name="blueciel">#7dcbdc</color>
     <color name="myosotis">#50aad8</color>
     <color name="orseille">#f3a7ac</color>
+    <color name="bleudepatinir">#00679f</color>
+    <color name="fauxblanc">#f7f9fc</color>
+    <color name="vertprintemps">#049885</color>
+    <color name="charbonneux">#212222</color>
 
 
     <color name="issue_return_primary">#3ba38a</color>
@@ -21,5 +25,9 @@
     <color name="issue_return_text_color">#FFFFFF</color>
 
     <color name="default_listview_item_color">#7dcbdc</color>
+    <color name="default_button_color">#00679f</color>
+
+    <color name="personnel_checklist_enabled">@color/vertprintemps</color>
+    <color name="personnel_checklist_disabled">@color/fauxblanc</color>
 
 </resources>

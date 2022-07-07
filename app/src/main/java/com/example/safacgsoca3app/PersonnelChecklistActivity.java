@@ -1,5 +1,7 @@
 package com.example.safacgsoca3app;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -101,13 +103,13 @@ public class PersonnelChecklistActivity extends AppCompatActivity {
 
                 if (select.getText().toString() == "false") {
                     select.setText("true");
-                    layout.setCardBackgroundColor(layout.getContext().getResources().getColor(R.color.teal));
+                    layout.setCardBackgroundColor(layout.getContext().getResources().getColor(R.color.personnel_checklist_enabled));
                     PersonnelSelectionMap.put(selectid.getText().toString(), "1");
                     Log.i(" ", String.valueOf(PersonnelSelectionMap));
                     ;
                 } else {
                     select.setText("false");
-                    layout.setCardBackgroundColor(layout.getContext().getResources().getColor(R.color.white));
+                    layout.setCardBackgroundColor(layout.getContext().getResources().getColor(R.color.personnel_checklist_disabled));
                     PersonnelSelectionMap.put(selectid.getText().toString(), "0");
                     Log.i(" ", String.valueOf(PersonnelSelectionMap));
                 }
@@ -156,16 +158,34 @@ public class PersonnelChecklistActivity extends AppCompatActivity {
 
                 Log.i(" ", String.valueOf(PersonnelListAppended));
 
-
-
-                Intent intent = new Intent(PersonnelChecklistActivity.this, DeclareIssueReturnReceiveInfoActivity.class);
-                intent.putExtra("type", type);
-                intent.putExtra("o_id", o_id);
-                intent.putExtra("d_id", d_id);
-                intent.putExtra("PersonnelList", PersonnelListAppended);
-                PersonnelChecklistActivity.this.startActivity(intent);
-                finish();
+                if(PersonnelListAppended.size()==0)
+                {
+                    showErrorAlertDialog(v, "Please select at least 1 personnel");
+                }
+                else {
+                    Intent intent = new Intent(PersonnelChecklistActivity.this, DeclareIssueReturnReceiveInfoActivity.class);
+                    intent.putExtra("type", type);
+                    intent.putExtra("o_id", o_id);
+                    intent.putExtra("d_id", d_id);
+                    intent.putExtra("PersonnelList", PersonnelListAppended);
+                    PersonnelChecklistActivity.this.startActivity(intent);
+                    finish();
+                }
             }
         });
     }
+
+    public void showErrorAlertDialog(View v, String message)
+    {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Error");
+        alert.setMessage(message);
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i){
+                dialogInterface.dismiss();
+            }});
+        alert.show();
+    }
+
 }

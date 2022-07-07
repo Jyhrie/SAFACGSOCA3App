@@ -9,19 +9,24 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_weight="99999">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/btnFloatingAddExercise"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="170dp"
-            android:layout_weight="1"
             android:clickable="true"
+            android:text="ADD Operation"
+            app:icon="@drawable/ic_baseline_add_24_white"
+            app:iconTint="@color/white"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="15dp"
             app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
             app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/ic_launcher_background" />
+            android:backgroundTint="@color/default_button_color"
+            android:textColor="@color/white"/>
+
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -62,6 +67,10 @@
                     android:textSize="24sp" />
 
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
 
             <ListView
                 android:id="@+id/lvOperations"
@@ -70,40 +79,48 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="3dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginBottom="3dp"
-                android:layout_weight="1">
-
+                android:layout_marginBottom="3dp">
             </ListView>
+            </LinearLayout>
 
-            <Button
-                android:id="@+id/btnTesting"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="testing"
-                android:visibility="gone"/>
-
-            <Button
-                android:id="@+id/btn_view_nominal_roll"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="3dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="3dp"
-                android:text="Unit Nominal Roll" />
-
-            <Button
-                android:id="@+id/btn_export_db_to_excel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="3dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="3dp"
-                android:text="Export to .xlsx" />
 
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="1">
+        <Button
+            android:id="@+id/btnTesting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="testing"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/btn_view_nominal_roll"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="3dp"
+            android:text="Unit Nominal Roll"
+            android:theme="@style/Button.Light"/>
+
+        <Button
+            android:id="@+id/btn_export_db_to_excel"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="3dp"
+            android:text="Export to .xlsx"
+            android:theme="@style/Button.Light"/>
+    </LinearLayout>
 
 </LinearLayout>

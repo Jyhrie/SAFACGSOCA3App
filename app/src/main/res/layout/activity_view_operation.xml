@@ -53,27 +53,38 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
             <Button
                 android:id="@+id/btn_view_operation_nominal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="5dp"
                 android:layout_weight="1"
-                android:text="Exercise Nominal Roll" />
+                android:text="Exercise Nominal Roll"
+                android:theme="@style/Button.Light"/>
 
             <Button
                 android:id="@+id/btn_view_ammunition"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="5dp"
                 android:layout_weight="1"
-                android:text="Ammunition" />
+                android:text="Ammunition"
+                android:theme="@style/Button.Light"
+                />
         </LinearLayout>
 
         <Button
             android:id="@+id/btn_add_issue_detail"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:theme="@style/Button.Light"
             android:text="Create Issuing Detail" />
 
         <LinearLayout
@@ -91,6 +102,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 android:orientation="horizontal">
 
                 <Spinner
@@ -105,6 +118,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
+                    android:theme="@style/Button.Light"
                     android:text="Edit" />
 
                 <Button
@@ -113,6 +127,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
+                    android:theme="@style/Button.Light"
                     android:text="Delete" />
             </LinearLayout>
 
@@ -130,7 +145,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
                 <Button
                     android:id="@+id/btn_Issue"
@@ -143,8 +159,7 @@
                     android:layout_weight="1"
                     android:textSize="20dp"
                     android:text="@string/Issue"
-                    app:layout_constraintBottom_toTopOf="@+id/guideline8"
-                    app:layout_constraintStart_toStartOf="@+id/guideline4" />
+                    android:theme="@style/Button.Light"/>
 
                 <Button
                     android:id="@+id/btn_Recieve"
@@ -157,9 +172,7 @@
                     android:layout_weight="1"
                     android:text="Receive"
                     android:textSize="20dp"
-                    app:layout_constraintBottom_toTopOf="@+id/guideline8"
-                    app:layout_constraintEnd_toStartOf="@+id/btn_generate_documents"
-                    app:layout_constraintStart_toEndOf="@+id/btn_Issue" />
+                    android:theme="@style/Button.Light"/>
 
                 <Button
                     android:id="@+id/btn_generate_documents"
@@ -172,8 +185,7 @@
                     android:layout_weight="1"
                     android:text="GENERATE DOCUMENTS"
                     android:textSize="20dp"
-                    app:layout_constraintBottom_toTopOf="@+id/guideline8"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline9" />
+                    android:theme="@style/Button.Light"/>
 
             </LinearLayout>
 

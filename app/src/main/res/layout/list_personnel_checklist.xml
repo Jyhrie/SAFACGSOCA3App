@@ -10,7 +10,7 @@
         android:id="@+id/cv_list_personnel_checklist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/default_listview_item_color"
+        app:cardBackgroundColor="@color/fauxblanc"
         app:cardCornerRadius="10dp"
         app:cardElevation="8dp"
         android:layout_marginStart="3dp"

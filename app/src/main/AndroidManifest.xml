@@ -12,7 +12,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.SAFACGSOCA3App"
+        android:theme="@style/Theme.SAFACGSOCA3App.NoActionBar"
         android:requestLegacyExternalStorage="true"
         android:configChanges="orientation|screenSize"
         android:largeHeap="true"
@@ -30,9 +30,6 @@
             android:exported="false" />
         <activity
             android:name=".ViewOperationActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AddExerciseActivity"
             android:exported="false" />
         <activity
             android:name=".AmmunitionActivity"

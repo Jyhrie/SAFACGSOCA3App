@@ -34,9 +34,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Blob;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 import android.graphics.Bitmap;
@@ -81,6 +85,7 @@ import com.itextpdf.text.pdf.PdfWriter;*/
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
+import kotlin.text.Regex;
 
 
 public class GenerateDocumentsActivity extends AppCompatActivity {
@@ -116,9 +121,8 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
     private static final String TAG_DOC_NUMBER = "doc_id";
 
     // Define some String variables, initialized with empty string
-    String filepath = Environment.getExternalStorageDirectory().getPath() + "/Download/Test.pdf";
-    String fileContent = "ASDAD";
-    private File file = new File(filepath);
+    String filepath;
+    private File file;
 
     private static final String TAG = GenerateDocumentsActivity.class.getSimpleName();
 
@@ -256,25 +260,39 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
             doc_data.put(TAG_O_NAME, c1.getString(1));
             doc_data.put(TAG_O_UNIT, c1.getString(2));
         }
-
         db.close();
 
         try{
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/YYYY", Locale.getDefault());
+            SimpleDateFormat dateFileFormat = new SimpleDateFormat("ddMMYYYYHHmmssSSS", Locale.getDefault());
+
+            String currentDateTime = dateFormat.format(new Date());
+            String currentDateFile = dateFileFormat.format(new Date());
+            String fileName = "SAF1386" + (doc_data.get(TAG_D_NAME)).replaceAll("[^\\p{L}\\d\\s_\\n]", "") +  doc_data.get(TAG_O_NAME).replaceAll("[^\\p{L}\\d\\s_\\n]", "") +  doc_data.get(TAG_O_UNIT).replaceAll("[^\\p{L}\\d\\s_\\n]", "") +currentDateFile +  ".pdf";
+
+            filepath = Environment.getExternalStorageDirectory().getPath() + "/Download/" + fileName;
+            file = new File(filepath);
             OutputStream outputStream = new FileOutputStream(file);
 
             PdfWriter writer = new PdfWriter(file);
             PdfDocument pdfDocument = new PdfDocument(writer);
             Document document = new Document(pdfDocument);
 
+
             pdfDocument.setDefaultPageSize(PageSize.A4);
-            document.setMargins(0,0,0,0);
+            document.setMargins(5,0,0,0);
             Paragraph _documentTitle = new Paragraph("SAF 1386: Records of Ammunition Distribution to Individiual").setBold().setFontSize(12).setTextAlignment(TextAlignment.LEFT);
             document.add(_documentTitle);
 
-            Paragraph _details = new Paragraph("UNIT/ECHELON: " + doc_data.get(TAG_O_UNIT) + "             DETAIL: " + doc_data.get(TAG_D_NAME) + "                    DATE: TBD").setFontSize(12).setTextAlignment(TextAlignment.LEFT);
+
+            Paragraph _details = new Paragraph("UNIT/ECHELON: " + doc_data.get(TAG_O_UNIT) + "             DETAIL: " + doc_data.get(TAG_D_NAME) + "                    DATE: " + currentDateTime).setFontSize(12).setTextAlignment(TextAlignment.LEFT);
             document.add(_details);
 
             document.add(createTable(data));
+
+            Paragraph _certify = new Paragraph("Certified Correct By:");
+            _certify.setMargin(10);
+            document.add(_certify);
 
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bitmap.compress((Bitmap.CompressFormat.PNG), 100, stream);
@@ -284,7 +302,11 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
             img.setWidth(img.getImageWidth()/7);
             document.add(img).setHorizontalAlignment(HorizontalAlignment.LEFT).setLeftMargin(5);
 
-            Paragraph _endorsed = new Paragraph("Endorsed By: Name");
+
+            EditText et_endorsedBy = findViewById(R.id.et_endorsedByName);
+
+
+            Paragraph _endorsed = new Paragraph("Rank & Name \n" +et_endorsedBy.getText().toString());
             _endorsed.setMargin(10);
             document.add(_endorsed);
 
@@ -298,21 +320,7 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
         {
 
         }
-
         finish();
-        /*try {
-            Document doc = new Document(PageSize.A4);
-            PdfWriter.getInstance(doc, new FileOutputStream(file));
-            doc.open();
-            addMetaData(doc);
-            addContent(doc, data, doc_data);
-
-            doc.close();
-            //set doc closed = true
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
-
     }
 
     public void showErrorAlertDialog(View v, String message)
