@@ -45,6 +45,13 @@
             android:theme="@style/Button.Light"/>
 
         <Button
+            android:id="@+id/btn_issue_to_all_in_detail"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="ISSUE TO ALL IN DETAIL"
+            android:theme="@style/Button.Light" />
+
+        <Button
             android:id="@+id/btnCreateDetail"
             android:layout_width="match_parent"
             android:layout_height="60dp"

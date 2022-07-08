@@ -33,6 +33,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -180,7 +181,6 @@ public class fragment_Add_Edit_Detail extends DialogFragment implements Recycler
                         }
                     }
                         //remove their ammo as well
-
                     //add all people with detail -1 to current detail
                     ContentValues content2 = new ContentValues();
                     content2.put(TAG_D_ID, d_id);
@@ -218,6 +218,19 @@ public class fragment_Add_Edit_Detail extends DialogFragment implements Recycler
                 dismiss();
             }
 
+        });
+
+        Button btn_issue_to_all = (Button) v.findViewById(R.id.btn_issue_to_all_in_detail);
+        btn_issue_to_all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<String> arrList = new ArrayList<>();
+                for(HashMap<String,String> entry : op_list)
+                {
+                    arrList.add(entry.get(TAG_OP_ID));
+                }
+                source.showAssignPersonnelAmmo(null, parseInt(o_id), arrList, true);
+            }
         });
 
         btnSelectPersonnel.setOnClickListener(new View.OnClickListener() {
@@ -311,6 +324,6 @@ public class fragment_Add_Edit_Detail extends DialogFragment implements Recycler
     public void onItemClick(int position) {
         Log.i(String.valueOf(position), "pos");
         Log.i(op_list.get(position).get(TAG_OP_ID), o_id);
-        source.showAssignPersonnelAmmo(op_list.get(position).get(TAG_OP_ID), parseInt(o_id));
+        source.showAssignPersonnelAmmo(op_list.get(position).get(TAG_OP_ID), parseInt(o_id), null, false);
     }
 }

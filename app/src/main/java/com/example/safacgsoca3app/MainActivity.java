@@ -1,17 +1,21 @@
 package com.example.safacgsoca3app;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -24,10 +28,33 @@ import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Image;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.property.HorizontalAlignment;
+import com.itextpdf.layout.property.TextAlignment;
+import com.opencsv.CSVWriter;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.lang.reflect.Array;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -59,6 +86,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG_A_QTY = "a_qty";
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -75,6 +104,8 @@ public class MainActivity extends AppCompatActivity {
         btnFloatingAddExercise = (ExtendedFloatingActionButton) findViewById(R.id.btnFloatingAddExercise);
         btnViewNominalRoll = (Button) findViewById(R.id.btn_view_nominal_roll);
 
+
+        ActivityCompat.requestPermissions(this, new String[]{WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE,}, PackageManager.PERMISSION_GRANTED);
 
         btnFloatingAddExercise.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -106,6 +137,23 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v)
             {
                 Intent i = new Intent(getApplicationContext(), NominalRollActivity.class);
+                startActivity(i);
+            }
+        });
+
+        Button btn_export_to_csv =(Button) findViewById(R.id.btn_export_to_csv);
+        btn_export_to_csv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                exportEntireDb();
+            }
+        });
+
+        Button btn_view_past_documents = (Button) findViewById(R.id.btn_view_past_documents);
+        btn_view_past_documents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), ViewPastDocumentsActivity.class);
                 startActivity(i);
             }
         });
@@ -166,6 +214,65 @@ public class MainActivity extends AppCompatActivity {
         Bundle args = new Bundle();
         fragment.setArguments(args);
         fragment.show(getSupportFragmentManager(), "fragment_assign_personnel_ammunition");
+    }
+
+    public void exportEntireDb()
+    {
+        SQLiteDatabase db;
+        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+        Cursor c = db.rawQuery("SELECT name FROM sqlite_master WHERE type ='table'", null);
+        List<String> tables = new ArrayList<>();
+        while (c.moveToNext()) {
+            if (!(c.getString(0).equals("sqlite_sequence")) && !c.getString(0).equals("android_metadata")) {
+                tables.add(c.getString(0));
+            }
+        }
+
+        for(String table : tables)
+        {
+            //form filename
+            String fileName = table + ".csv";
+            //query data
+            c = db.rawQuery("SELECT * FROM " + table + " LIMIT 1", null);
+            ArrayList<String[]> dbData = new ArrayList<>();
+            if(c.moveToFirst())
+            {
+                int _colCount;
+                _colCount = c.getColumnCount();
+                Cursor c1 = db.rawQuery("select * from " + table, null);
+                while(c1.moveToNext())
+                {
+                    ArrayList<String> line = new ArrayList<>();
+                    for(int i =0; i < _colCount; i++) {
+                        if(c1.getType(i) != Cursor.FIELD_TYPE_BLOB) {
+                            line.add(c1.getString(i));
+                        }
+                        else
+                        {
+                            line.add(c1.getBlob(i).toString());
+                        }
+                    }
+                    dbData.add(line.toArray(new String[0]));
+                }
+            }
+            try {
+                arrListToCSV(dbData, fileName);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        db.close();
+    }
+
+    public void arrListToCSV(ArrayList<String[]> stringArray, String path) throws Exception {
+
+        String filepath = Environment.getExternalStorageDirectory().getPath() + "/Download/" + path;
+        CSVWriter writer = new CSVWriter(new FileWriter(filepath));
+        for(String[] array: stringArray)
+        {
+            writer.writeNext(array);
+        }
+        writer.close();
     }
 
     public void initialize_database(boolean reset)

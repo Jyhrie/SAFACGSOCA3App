@@ -8,15 +8,17 @@
 
     <application
         android:allowBackup="true"
+        android:configChanges="orientation|screenSize"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.SAFACGSOCA3App.NoActionBar"
-        android:requestLegacyExternalStorage="true"
-        android:configChanges="orientation|screenSize"
-        android:largeHeap="true"
-        >
+        android:theme="@style/Theme.SAFACGSOCA3App.NoActionBar">
+        <activity
+            android:name=".ViewPastDocumentsActivity"
+            android:exported="false" />
         <activity
             android:name=".GenerateDocumentsActivity"
             android:exported="false"

@@ -111,16 +111,37 @@
             android:text="Unit Nominal Roll"
             android:theme="@style/Button.Light"/>
 
-        <Button
-            android:id="@+id/btn_export_db_to_excel"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="3dp"
-            android:text="Export to .xlsx"
-            android:theme="@style/Button.Light"/>
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center" >
+
+
+            <Button
+                android:id="@+id/btn_export_to_csv"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="3dp"
+                android:layout_weight="1"
+                android:text="Export As .csv"
+                android:theme="@style/Button.Light" />
+
+            <Button
+                android:id="@+id/btn_view_past_documents"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="3dp"
+                android:text="View Past Documents"
+                android:theme="@style/Button.Light" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

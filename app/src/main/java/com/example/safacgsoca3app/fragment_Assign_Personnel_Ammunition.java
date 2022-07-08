@@ -20,7 +20,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -73,12 +75,32 @@ public class fragment_Assign_Personnel_Ammunition extends DialogFragment impleme
         Bundle args = getArguments();
         String o_id = args.getString(TAG_O_ID);
         String op_id = args.getString(TAG_OP_ID);
+        boolean all = args.getBoolean("WHOLEDETAIL");
+        ArrayList<String> op_id_list = args.getStringArrayList("OP_ID_LIST");
 
         RecyclerViewInterface recyclerViewInterface = this;
         RecyclerView rv_assign_personnel_ammunition;
         rv_assign_personnel_ammunition = (RecyclerView) v.findViewById(R.id.rv_assign_personnel_ammunition);
 
         SQLiteDatabase db;
+
+        //populate top textview
+        TextView tv_assigned_ammo_personnel = v.findViewById(R.id.tv_assigned_ammo_personnel);
+        if(all == true)
+        {
+            tv_assigned_ammo_personnel.setText("ASSIGNING TO DETAIL");
+        }
+        else
+        {
+            //get personnel_name
+            db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
+            Cursor c1 = db.rawQuery("select p.p_rank, p.p_name from personnel p, operation_personnel op where op.p_id = p.p_id and op.op_id = ?", new String[]{op_id});
+            if(c1.moveToFirst()) {
+                tv_assigned_ammo_personnel.setText(c1.getString(0) + " " + c1.getString(1));
+            }
+
+        }
+
 
         //get ammo list
         ArrayList<HashMap<String,String>> ammo_list = getAmmoList(o_id);
@@ -122,59 +144,92 @@ public class fragment_Assign_Personnel_Ammunition extends DialogFragment impleme
                 boolean _dataValidationPass = true;
                 String _errorMessage = "there is no empty field, something went wrong";
 
-                for(HashMap<String,String> entry: data) {
-                    if  (entry.containsKey(TAG_PA_ISSUE_QTY)) {
-                        if(TAG_PA_ISSUE_QTY.isEmpty())
-                        {
+                for (HashMap<String, String> entry : data) {
+                    if (entry.containsKey(TAG_PA_ISSUE_QTY)) {
+                        if (TAG_PA_ISSUE_QTY.isEmpty()) {
                             _dataValidationPass = false;
                             _errorMessage = "Please input a ammo issue quantity";
                         }
-                    }
-                    else
-                    {
+                    } else {
                         _dataValidationPass = false;
                     }
 
-                    if  (_dataValidationPass == false) {
+                    if (_dataValidationPass == false) {
                         showErrorAlertDialog(view, _errorMessage);
                         return;
                     }
                 }
 
 
-
                 //get all data stored within adapter
                 ArrayList<HashMap<String, String>> existing_data = data;
-                for (HashMap<String, String> entry : existing_data) {
-                    //check if TAG_PA_ID is new/old
-                    Log.i(entry.get(TAG_PA_ID), "paid");
-                    if (entry.get(TAG_PA_ID).equals("-1")) {
-                        //new entry
-                        ContentValues content = new ContentValues();
-                        content.put(TAG_OP_ID, String.valueOf(op_id));
-                        content.put(TAG_A_ID, entry.get(TAG_A_ID));
-                        content.put(TAG_PA_ISSUE_QTY, entry.get(TAG_PA_ISSUE_QTY));
 
-                        SQLiteDatabase db;
-                        db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
-                        db.insert("personnel_ammunition", null, content);
-                        db.close();
-                    } else {
-                        ContentValues content = new ContentValues();
-                        content.put(TAG_A_ID, entry.get(TAG_A_ID));
-                        content.put(TAG_PA_ISSUE_QTY, entry.get(TAG_PA_ISSUE_QTY));
+                if (all == true) {
+                    for(String op_id_from_arr : op_id_list) {
+                        for (HashMap<String, String> entry : existing_data) {
+                            //check if TAG_PA_ID is new/old
+                            Log.i(entry.get(TAG_PA_ID), "paid");
+                            if (entry.get(TAG_PA_ID).equals("-1")) {
+                                //new entry
+                                ContentValues content = new ContentValues();
+                                content.put(TAG_OP_ID, op_id_from_arr);
+                                content.put(TAG_A_ID, entry.get(TAG_A_ID));
+                                content.put(TAG_PA_ISSUE_QTY, entry.get(TAG_PA_ISSUE_QTY));
 
-                        SQLiteDatabase db;
-                        db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
-                        db.update("personnel_ammunition", content, "pa_id = ?", new String[]{entry.get(TAG_PA_ID)});
-                        db.close();
+                                SQLiteDatabase db;
+                                db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
+                                db.insert("personnel_ammunition", null, content);
+                                db.close();
+                            } else {
+                                ContentValues content = new ContentValues();
+                                content.put(TAG_A_ID, entry.get(TAG_A_ID));
+                                content.put(TAG_PA_ISSUE_QTY, entry.get(TAG_PA_ISSUE_QTY));
+
+                                SQLiteDatabase db;
+                                db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
+                                db.update("personnel_ammunition", content, "pa_id = ?", new String[]{entry.get(TAG_PA_ID)});
+                                db.close();
+                            }
+
+
+                            //check if existing TAG_PA_IDs have been removed
+                            Log.i(entry.get(TAG_A_ID) + "AID", entry.get(TAG_PA_ISSUE_QTY) + "AQTY");
+                        }
                     }
+                    dismiss();
+
+                } else {
+                    for (HashMap<String, String> entry : existing_data) {
+                        //check if TAG_PA_ID is new/old
+                        Log.i(entry.get(TAG_PA_ID), "paid");
+                        if (entry.get(TAG_PA_ID).equals("-1")) {
+                            //new entry
+                            ContentValues content = new ContentValues();
+                            content.put(TAG_OP_ID, String.valueOf(op_id));
+                            content.put(TAG_A_ID, entry.get(TAG_A_ID));
+                            content.put(TAG_PA_ISSUE_QTY, entry.get(TAG_PA_ISSUE_QTY));
+
+                            SQLiteDatabase db;
+                            db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
+                            db.insert("personnel_ammunition", null, content);
+                            db.close();
+                        } else {
+                            ContentValues content = new ContentValues();
+                            content.put(TAG_A_ID, entry.get(TAG_A_ID));
+                            content.put(TAG_PA_ISSUE_QTY, entry.get(TAG_PA_ISSUE_QTY));
+
+                            SQLiteDatabase db;
+                            db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
+                            db.update("personnel_ammunition", content, "pa_id = ?", new String[]{entry.get(TAG_PA_ID)});
+                            db.close();
+                        }
 
 
-                    //check if existing TAG_PA_IDs have been removed
-                    Log.i(entry.get(TAG_A_ID) + "AID", entry.get(TAG_PA_ISSUE_QTY) + "AQTY");
+                        //check if existing TAG_PA_IDs have been removed
+                        Log.i(entry.get(TAG_A_ID) + "AID", entry.get(TAG_PA_ISSUE_QTY) + "AQTY");
+                    }
+                    dismiss();
                 }
-            dismiss();
             }
         });
 

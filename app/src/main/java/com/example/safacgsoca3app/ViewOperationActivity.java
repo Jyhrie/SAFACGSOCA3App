@@ -60,6 +60,7 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
     private static final String TAG_KAH = "o_kah";
     private static final String TAG_ANAME = "a_name";
     private static final String TAG_OPID = "op_id";
+    private static final String TAG_DOC_NUMBER = "doc_id";
 
     public String Selected_o_id;
     public String Selected_d_id;
@@ -165,6 +166,38 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
         Button btnReceive= (Button) findViewById(R.id.btn_generate_documents);
         btnReceive.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), GenerateDocumentsActivity.class);
+                String doc_o_name = null;
+                String doc_o_unit = null;
+                String doc_d_name = null;
+
+                SQLiteDatabase db;
+                db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+                Cursor c1 = db.rawQuery("select o_name, o_unit from operation where o_id = " + o_id, null);
+                if (c1.moveToFirst()) {
+                    doc_o_name = c1.getString(0);
+                    doc_o_unit = c1.getString(1);
+                }
+                c1 = db.rawQuery("select d_name from detail d where d_id = ?", new String[]{Selected_d_id});
+                if (c1.moveToFirst()) {
+                    doc_d_name = c1.getString(0);
+                }
+                Log.i("bindvalues", doc_o_name + doc_o_unit + doc_d_name);
+                //check if document already exists (CHECK ALL STRING PARAMS IN CASE OF DETAIL CHANGE, THUS CREATE NEW DOC IF CHANGE OCCURS)
+                Log.i("select doc_id from document where o_name = ? and o_unit = ? and d_name = ? and doc_closed = 0", String.valueOf(new String[]{doc_o_name, doc_o_unit, doc_d_name}));
+                c1 = db.rawQuery("select doc_id from document where o_name = ? and o_unit = ? and d_name = ? and doc_closed = 0", new String[]{doc_o_name, doc_o_unit, doc_d_name});
+
+                if(c1.moveToFirst())
+                {
+                    i.putExtra(TAG_DOC_NUMBER, c1.getString(0));
+                    startActivity(i);
+                }
+                else
+                {
+                    showErrorAlertDialog(v, "No current open documents for this detail");
+                }
+                db.close();
+
             }
         });
     }
@@ -222,6 +255,7 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
                 intent.putExtra("d_id", Selected_d_id);
                 intent.putExtra("d_name", Selected_d_name);
                 ViewOperationActivity.this.startActivity(intent);
+                ReceiveDialog.dismiss();
             }
         });
 
@@ -389,12 +423,14 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
         }
     }
 
-    public void showAssignPersonnelAmmo(String op_id, int o_id)
+    public void showAssignPersonnelAmmo(String op_id, int o_id, ArrayList<String> op_ids, boolean all)
     {
         fragment_Assign_Personnel_Ammunition fragment = new fragment_Assign_Personnel_Ammunition();
         Bundle args = new Bundle();
         args.putString(TAG_OP_ID, op_id);
         args.putString(TAG_O_ID, String.valueOf(o_id));
+        args.putStringArrayList("OP_ID_LIST", op_ids);
+        args.putBoolean("WHOLEDETAIL",all);
         fragment.setArguments(args);
         fragment.show(getSupportFragmentManager(), "fragment_assign_personnel_ammunition");
 
