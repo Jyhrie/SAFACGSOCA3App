@@ -34,20 +34,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/textView3"
+        <SearchView
+            android:id="@+id/sv_operation_nominal_roll"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Slide left to delete personnel"
-            android:textSize="20sp" />
+            android:layout_height="60dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_operation_nominal_roll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginEnd="1dp"
-            android:layout_weight="100"
+            android:layout_weight="1"
             tools:ignore="MissingConstraints">
 
         </androidx.recyclerview.widget.RecyclerView>

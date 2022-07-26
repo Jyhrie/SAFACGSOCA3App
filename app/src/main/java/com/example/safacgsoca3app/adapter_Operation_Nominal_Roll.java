@@ -75,6 +75,13 @@ public class adapter_Operation_Nominal_Roll extends RecyclerView.Adapter<adapter
         return data.size();
     }
 
+    public void filterList(ArrayList<HashMap<String, String>> filteredList)
+    {
+        data = filteredList;
+        notifyDataSetChanged();
+    }
+
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView tv_personnel_o_id_list_operation_nominal_roll;

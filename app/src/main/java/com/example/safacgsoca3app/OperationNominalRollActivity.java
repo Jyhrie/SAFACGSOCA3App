@@ -7,10 +7,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -22,14 +20,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,6 +58,8 @@ public class OperationNominalRollActivity extends AppCompatActivity implements R
 
     ArrayList<HashMap<String,String>> data;
     adapter_Operation_Nominal_Roll rvAdapter;
+    fragment_add_operation_personnel fragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +108,19 @@ public class OperationNominalRollActivity extends AppCompatActivity implements R
         db.close();
         Log.i(String.valueOf(data.size()), "str");
 
+        SearchView sv_operation_nominal_roll = (SearchView) findViewById(R.id.sv_operation_nominal_roll);
+        sv_operation_nominal_roll.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                filter(s);
+                return false;
+            }
+        });
 
         RecyclerView rv;
         rvAdapter = new adapter_Operation_Nominal_Roll(
@@ -139,6 +151,20 @@ public class OperationNominalRollActivity extends AppCompatActivity implements R
 
     }
 
+    private void filter(String text)
+    {
+        ArrayList<HashMap<String,String>> filteredList = new ArrayList<>();
+        for(HashMap<String,String> item : data)
+        {
+            if(item.get(TAG_P_NAME).toLowerCase().contains(text.toLowerCase()))
+            {
+                filteredList.add(item);
+            }
+        }
+
+        rvAdapter.filterList(filteredList);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -150,9 +176,16 @@ public class OperationNominalRollActivity extends AppCompatActivity implements R
     }
 
     private void show_add_operation_personnel_dialog(String o_id) {
+        fragment = new fragment_add_operation_personnel();
+        Bundle args = new Bundle();
+        args.putString(TAG_O_ID, o_id);
+        fragment.setArguments(args);
+        fragment.show(getSupportFragmentManager(), "fragment_add_edit_detail");
+
+        /*
         Dialog DialogFragment = new Dialog(OperationNominalRollActivity.this, android.R.style.Theme_Black_NoTitleBar);
         DialogFragment.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
-        DialogFragment.setContentView(R.layout.dialog_add_operation_personnel);
+        DialogFragment.setContentView(R.layout.fragment_add_operation_personnel);
         DialogFragment.setCancelable(true);
         DialogFragment.show();
 
@@ -237,7 +270,7 @@ public class OperationNominalRollActivity extends AppCompatActivity implements R
                 refreshData(o_id);
                 DialogFragment.dismiss();
             }
-        });
+        });*/
     }
 
     ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
