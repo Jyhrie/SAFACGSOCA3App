@@ -632,6 +632,11 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
         //EditIssueDialog.dismiss();
     }
 
+    @Override
+    public void onLongItemClick(int position) {
+
+    }
+
     public void showErrorAlertDialog(View v, String message)
     {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);

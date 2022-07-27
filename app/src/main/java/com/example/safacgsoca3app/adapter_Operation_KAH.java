@@ -159,6 +159,19 @@ public class adapter_Operation_KAH extends RecyclerView.Adapter<adapter_Operatio
                 }
             });
 
+            itemView.setOnLongClickListener(new View.OnLongClickListener(){
+                @Override
+                public boolean onLongClick(View view)
+                {
+                    int pos = getAdapterPosition();
+                    if(pos!=RecyclerView.NO_POSITION)
+                    {
+                        recyclerViewInterface.onLongItemClick(pos);
+                    }
+                    return true;
+                }
+            });
+
 
 
         }

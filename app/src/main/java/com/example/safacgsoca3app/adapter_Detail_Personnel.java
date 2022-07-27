@@ -120,6 +120,20 @@ public class adapter_Detail_Personnel extends RecyclerView.Adapter<adapter_Detai
                 }
             });
 
+            itemView.setOnLongClickListener(new View.OnLongClickListener(){
+                @Override
+                public boolean onLongClick(View view)
+                {
+                    int pos = getAdapterPosition();
+                    if(pos!=RecyclerView.NO_POSITION)
+                    {
+                        recyclerViewInterface.onLongItemClick(pos);
+                    }
+                    return true;
+                }
+            });
+
+
 
 
         }

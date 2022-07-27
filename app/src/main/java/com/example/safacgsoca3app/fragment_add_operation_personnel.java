@@ -166,4 +166,9 @@ public class fragment_add_operation_personnel extends DialogFragment implements 
         data.get(position).put(TAG_CHECKED, !Boolean.parseBoolean(data.get(position).get(TAG_CHECKED)) ? String.valueOf(true): String.valueOf(false) );
         rvAdapter.notifyItemChanged(position);
     }
+
+    @Override
+    public void onLongItemClick(int position) {
+
+    }
 }

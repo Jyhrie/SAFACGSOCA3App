@@ -87,6 +87,19 @@ public class adapter_Nominal_Roll extends RecyclerView.Adapter<adapter_Nominal_R
             tvPersonnelId = itemView.findViewById(R.id.tvPersonnelId);
             tvPersonnelName = itemView.findViewById(R.id.tvPersonnelName);
             tvPersonnelRemarks = itemView.findViewById(R.id.tvPersonnelRemarks);
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener(){
+                @Override
+                public boolean onLongClick(View view)
+                {
+                    int pos = getAdapterPosition();
+                    if(pos!=RecyclerView.NO_POSITION)
+                    {
+                        recyclerViewInterface.onLongItemClick(pos);
+                    }
+                    return true;
+                }
+            });
         }
     }
 }

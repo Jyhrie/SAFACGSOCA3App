@@ -96,6 +96,19 @@ public class adapter_Operation_Nominal_Roll extends RecyclerView.Adapter<adapter
             tv_personnel_nric_list_operation_nominal_roll = itemView.findViewById(R.id.tv_personnel_nric_list_operation_nominal_roll);
             tv_personnel_detail_list_operation_nominal_roll = itemView.findViewById(R.id.tv_personnel_detail_list_operation_nominal_roll);
 
+            itemView.setOnLongClickListener(new View.OnLongClickListener(){
+                @Override
+                public boolean onLongClick(View view)
+                {
+                    int pos = getAdapterPosition();
+                    if(pos!=RecyclerView.NO_POSITION)
+                    {
+                        recyclerViewInterface.onLongItemClick(pos);
+                    }
+                    return true;
+                }
+            });
+
             }
         }
 }

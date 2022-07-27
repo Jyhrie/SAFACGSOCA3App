@@ -326,4 +326,9 @@ public class fragment_Add_Edit_Detail extends DialogFragment implements Recycler
         Log.i(op_list.get(position).get(TAG_OP_ID), o_id);
         source.showAssignPersonnelAmmo(op_list.get(position).get(TAG_OP_ID), parseInt(o_id), null, false);
     }
+
+    @Override
+    public void onLongItemClick(int position) {
+
+    }
 }

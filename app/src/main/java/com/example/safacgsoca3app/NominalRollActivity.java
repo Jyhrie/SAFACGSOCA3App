@@ -308,4 +308,11 @@ public class NominalRollActivity extends AppCompatActivity implements RecyclerVi
     public void onItemClick(int position) {
 
     }
+
+    @Override
+    public void onLongItemClick(int position) {
+        removeGuyFromDb(position);
+        data.remove(position);
+        rvAdapter.notifyItemRemoved(position);
+    }
 }

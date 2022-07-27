@@ -324,4 +324,10 @@ public class fragment_Assign_Personnel_Ammunition extends DialogFragment impleme
     public void onItemClick(int position) {
 
     }
+
+    @Override
+    public void onLongItemClick(int position) {
+        data.remove(position);
+        assign_personnel_adapter.notifyItemRemoved(position);
+    }
 }

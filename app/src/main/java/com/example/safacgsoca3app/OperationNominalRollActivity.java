@@ -357,5 +357,12 @@ public class OperationNominalRollActivity extends AppCompatActivity implements R
     public void onItemClick(int position) {
 
     }
+
+    @Override
+    public void onLongItemClick(int position) {
+        removeGuyFromDB(position);
+        data.remove(position);
+        rvAdapter.notifyItemRemoved(position);
+    }
 }
 

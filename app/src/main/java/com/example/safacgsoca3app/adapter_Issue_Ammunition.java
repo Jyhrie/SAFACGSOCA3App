@@ -162,6 +162,19 @@ public class adapter_Issue_Ammunition extends RecyclerView.Adapter<adapter_Issue
                 }
             });
 
+            itemView.setOnLongClickListener(new View.OnLongClickListener(){
+                @Override
+                public boolean onLongClick(View view)
+                {
+                    int pos = getAdapterPosition();
+                    if(pos!=RecyclerView.NO_POSITION)
+                    {
+                        recyclerViewInterface.onLongItemClick(pos);
+                    }
+                    return true;
+                }
+            });
+
         }
     }
 }
