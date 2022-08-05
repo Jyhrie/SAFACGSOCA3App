@@ -88,7 +88,7 @@ public class fragment_Assign_Personnel_Ammunition extends DialogFragment impleme
         TextView tv_assigned_ammo_personnel = v.findViewById(R.id.tv_assigned_ammo_personnel);
         if(all == true)
         {
-            tv_assigned_ammo_personnel.setText("ASSIGNING TO DETAIL");
+            tv_assigned_ammo_personnel.setText("ASSIGN TO ENTIRE DETAIL");
         }
         else
         {
@@ -119,6 +119,7 @@ public class fragment_Assign_Personnel_Ammunition extends DialogFragment impleme
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(rv_assign_personnel_ammunition);
+
 
         Button btn_assign_personnel_ammunition_add_entry;
         btn_assign_personnel_ammunition_add_entry = (Button) v.findViewById(R.id.btn_assign_personnel_ammunition_add_entry);
@@ -232,33 +233,9 @@ public class fragment_Assign_Personnel_Ammunition extends DialogFragment impleme
                 }
             }
         });
-
-
         return v;
     }
 
-    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-        @Override
-        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-            return false;
-        }
-
-        @Override
-        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
-            int position = viewHolder.getAdapterPosition();
-
-            switch(direction){
-                case ItemTouchHelper.LEFT:
-                    Log.i(String.valueOf(data.size()), String.valueOf(position));
-                    data.remove(position);
-                    assign_personnel_adapter.notifyItemRemoved(position);
-                    break;
-                case ItemTouchHelper.RIGHT:
-                    break;
-            }
-        }
-    };
 
     private ArrayList<HashMap<String,String>> getAmmoList(String o_id)
     {
@@ -319,6 +296,26 @@ public class fragment_Assign_Personnel_Ammunition extends DialogFragment impleme
         alert.show();
     }
 
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+            int position = viewHolder.getAdapterPosition();
+
+            switch(direction){
+                case ItemTouchHelper.LEFT:
+                    showErrorAlertDialog("Are you sure you want to remove this ammunition", position);
+                    break;
+                case ItemTouchHelper.RIGHT:
+                    break;
+            }
+        }
+    };
 
     @Override
     public void onItemClick(int position) {
@@ -327,7 +324,27 @@ public class fragment_Assign_Personnel_Ammunition extends DialogFragment impleme
 
     @Override
     public void onLongItemClick(int position) {
-        data.remove(position);
-        assign_personnel_adapter.notifyItemRemoved(position);
+        showErrorAlertDialog("Are you sure you want to remove this ammunition", position);
     }
+
+    public void showErrorAlertDialog(String message, int position)
+    {
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+        alert.setMessage(message);
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i){
+                data.remove(position);
+                assign_personnel_adapter.notifyItemRemoved(position);
+            }});
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                assign_personnel_adapter.notifyItemChanged(position);
+                dialogInterface.dismiss();
+            }
+        });
+        alert.show();
+    }
+
 }

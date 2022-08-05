@@ -40,6 +40,8 @@
         android:id="@+id/ddl_assign_personnel_ammunition"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/ammo_ddl_bg"
+        app:cardCornerRadius="10dp"
         android:layout_weight="1" />
 
     <EditText

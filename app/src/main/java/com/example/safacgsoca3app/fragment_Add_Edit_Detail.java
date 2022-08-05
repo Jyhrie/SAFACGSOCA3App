@@ -236,35 +236,22 @@ public class fragment_Add_Edit_Detail extends DialogFragment implements Recycler
         btnSelectPersonnel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                source.showSelectPersonnelDialog(o_id, d_id);
+                SQLiteDatabase db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
+                Cursor c1 = db.rawQuery("select op.op_id, p.p_rank, p.p_name from operation_personnel op, personnel p where op.d_id is null and p.p_id = op.p_id and op.o_id = " + o_id, null);
+                ArrayList<HashMap<String, String>> personnelList = new ArrayList<HashMap<String, String>>();
+                if(!c1.moveToFirst())
+                {
+                    showErrorAlertDialogNoPersonnel("No personnel found in operation");
+                }
+                else {
+                    source.showSelectPersonnelDialog(o_id, d_id);
+                }
             }
         });
 
         return v;
     }
 
-    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-        @Override
-        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-            return false;
-        }
-
-        @Override
-        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
-            int position = viewHolder.getAdapterPosition();
-
-            switch(direction){
-                case ItemTouchHelper.LEFT:
-                    Log.i(String.valueOf(op_list.size()), String.valueOf(position));
-                    op_list.remove(position);
-                    rvAdapter.notifyItemRemoved(position);
-                    break;
-                case ItemTouchHelper.RIGHT:
-                    break;
-            }
-        }
-    };
 
     public void refreshData()
     {
@@ -278,9 +265,6 @@ public class fragment_Add_Edit_Detail extends DialogFragment implements Recycler
         );
         rv.setAdapter(rvAdapter);
         rv.setLayoutManager(new LinearLayoutManager(context));
-
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
-        itemTouchHelper.attachToRecyclerView(rv);
 
     }
 
@@ -329,6 +313,41 @@ public class fragment_Add_Edit_Detail extends DialogFragment implements Recycler
 
     @Override
     public void onLongItemClick(int position) {
-
+        showErrorAlertDialog("Are you sure you want to remove this person", position);
     }
+
+    public void showErrorAlertDialog(String message, int position)
+    {
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+        alert.setMessage(message);
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i){
+                op_list.remove(position);
+                rvAdapter.notifyItemRemoved(position);
+            }});
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        alert.show();
+    }
+
+    public void showErrorAlertDialogNoPersonnel(String message)
+    {
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+        alert.setMessage(message);
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i){
+                dialogInterface.dismiss();
+                dismiss();
+            }});
+        alert.show();
+    }
+
+
+
 }

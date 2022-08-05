@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:ems="10"
-            android:hint="Exercise Name"
+            android:hint=" * Exercise Name"
             android:inputType="textPersonName"
             android:text="" />
 
@@ -48,7 +48,7 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:hint="Location" />
+                android:hint="* Location" />
 
         </LinearLayout>
 
@@ -72,7 +72,7 @@
                 android:layout_height="48dp"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="Date"
+                android:hint="* Date"
                 android:inputType="textPersonName" />
 
         </LinearLayout>
@@ -97,7 +97,7 @@
                 android:layout_height="48dp"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="Unit/Echelon"
+                android:hint="* Unit/Echelon"
                 android:inputType="textPersonName" />
 
         </LinearLayout>

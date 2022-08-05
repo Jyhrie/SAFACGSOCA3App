@@ -19,12 +19,13 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
-        android:hint="Name" />
+        android:hint="* Ammo IC Name" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center">
+        android:gravity="center"
+        android:background="@color/greylight">
     <com.github.gcacace.signaturepad.views.SignaturePad
         android:id="@+id/gen_docSignature_Pad"
         android:layout_width="500dp"
@@ -36,5 +37,5 @@
         android:id="@+id/btnGenerate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:text="Generate Document"/>
 </LinearLayout>

@@ -2,7 +2,6 @@ package com.example.safacgsoca3app;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -90,8 +89,6 @@ public class NominalRollActivity extends AppCompatActivity implements RecyclerVi
         rv.setAdapter(rvAdapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
 
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
-        itemTouchHelper.attachToRecyclerView(rv);
 
     }
 
@@ -140,7 +137,7 @@ public class NominalRollActivity extends AppCompatActivity implements RecyclerVi
                     _errorMessage = "Please insert an NRIC number";
                 }
 
-                if(_dataValidationPass = false)
+                if(_dataValidationPass == false)
                 {
                     showErrorAlertDialog(view, _errorMessage);
                     return;
@@ -186,6 +183,30 @@ public class NominalRollActivity extends AppCompatActivity implements RecyclerVi
                 String rank = dropdownRank.getSelectedItem().toString();
                 String name = etName.getText().toString();
                 String nric = etRemarks.getText().toString();
+
+                boolean _dataValidationPass = true;
+                String _errorMessage = "there is no empty field, something went wrong";
+                if(rank.isEmpty())
+                {
+                    _dataValidationPass = false;
+                    _errorMessage = "this is a dropdown field, something went wrong";
+                }
+                else if(name.isEmpty())
+                {
+                    _dataValidationPass = false;
+                    _errorMessage = "Please insert a personnel name";
+                }
+                else if(nric.isEmpty())
+                {
+                    _dataValidationPass = false;
+                    _errorMessage = "Please insert an NRIC number";
+                }
+
+                if(_dataValidationPass == false)
+                {
+                    showErrorAlertDialog(view, _errorMessage);
+                    return;
+                }
 
                 SQLiteDatabase db;
                 db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
@@ -247,28 +268,6 @@ public class NominalRollActivity extends AppCompatActivity implements RecyclerVi
 
     }*/
 
-    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-        @Override
-        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-            return false;
-        }
-
-        @Override
-        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
-            int position = viewHolder.getAdapterPosition();
-
-            switch(direction){
-                case ItemTouchHelper.LEFT:
-                    removeGuyFromDb(position);
-                    data.remove(position);
-                    rvAdapter.notifyItemRemoved(position);
-                    break;
-                case ItemTouchHelper.RIGHT:
-                    break;
-            }
-        }
-    };
 
     public void showErrorAlertDialog(View v, String message)
     {
@@ -311,8 +310,26 @@ public class NominalRollActivity extends AppCompatActivity implements RecyclerVi
 
     @Override
     public void onLongItemClick(int position) {
-        removeGuyFromDb(position);
-        data.remove(position);
-        rvAdapter.notifyItemRemoved(position);
+        showErrorAlertDialog("Are you sure you want to remove this person", position);
+    }
+
+    public void showErrorAlertDialog(String message, int position)
+    {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setMessage(message);
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i){
+                removeGuyFromDb(position);
+                data.remove(position);
+                rvAdapter.notifyItemRemoved(position);
+            }});
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        alert.show();
     }
 }

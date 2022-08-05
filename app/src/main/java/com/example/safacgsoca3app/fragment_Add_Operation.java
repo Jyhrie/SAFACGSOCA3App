@@ -288,4 +288,5 @@ public class fragment_Add_Operation extends DialogFragment implements RecyclerVi
     public void onLongItemClick(int position) {
 
     }
+
 }

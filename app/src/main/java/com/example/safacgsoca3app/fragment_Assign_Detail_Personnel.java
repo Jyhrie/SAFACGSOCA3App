@@ -1,7 +1,9 @@
 package com.example.safacgsoca3app;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -67,7 +69,6 @@ public class fragment_Assign_Detail_Personnel extends DialogFragment {
         View v = inflater.inflate(R.layout.fragment_assign_detail_personnel, container, false);
         Context context = getContext();
         ViewOperationActivity source = (ViewOperationActivity) getActivity();
-
         Bundle args = getArguments();
 
 
@@ -80,6 +81,9 @@ public class fragment_Assign_Detail_Personnel extends DialogFragment {
 
         Cursor c1 = db.rawQuery("select op.op_id, p.p_rank, p.p_name from operation_personnel op, personnel p where op.d_id is null and p.p_id = op.p_id and op.o_id = " + o_id, null);
         ArrayList<HashMap<String, String>> personnelList = new ArrayList<HashMap<String, String>>();
+
+
+
         while (c1.moveToNext()) {
             Log.i("data found", "test");
             HashMap<String, String> map = new HashMap<String, String>();
@@ -93,6 +97,7 @@ public class fragment_Assign_Detail_Personnel extends DialogFragment {
             personnelList.add(map);
         }
         db.close();
+
 
         ListView lv = v.findViewById(R.id.lv_assign_personnel_to_detail);
         ListAdapter adapter = new SimpleAdapter(
@@ -153,4 +158,6 @@ public class fragment_Assign_Detail_Personnel extends DialogFragment {
 
         return v;
     }
+
+
 }

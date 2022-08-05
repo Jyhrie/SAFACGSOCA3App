@@ -47,14 +47,14 @@
                 android:layout_height="60dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:text="ammunition_add_entry"
+                android:text="Select Ammunition"
                 android:theme="@style/Button.Light"/>
 
             <Button
                 android:id="@+id/btn_save_assigned_ammunition"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:text="save_assigned_ammunition"
+                android:text="Save Ammunition List"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:theme="@style/Button.Light"/>

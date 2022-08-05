@@ -163,8 +163,8 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
             }
         });
 
-        Button btnReceive= (Button) findViewById(R.id.btn_generate_documents);
-        btnReceive.setOnClickListener(new View.OnClickListener() {
+        Button btnGenerateDocuments= (Button) findViewById(R.id.btn_generate_documents);
+        btnGenerateDocuments.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), GenerateDocumentsActivity.class);
                 String doc_o_name = null;
@@ -259,12 +259,12 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
             }
         });
 
-        Button btn_ScanQRCode = (Button) ReceiveDialog.findViewById(R.id.btn_ScanQRCode);
+        /*Button btn_ScanQRCode = (Button) ReceiveDialog.findViewById(R.id.btn_ScanQRCode);
         btn_ScanQRCode.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 ReceiveDialog.dismiss();
             }
-        });
+        });*/
 
     }
 

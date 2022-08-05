@@ -316,7 +316,8 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
             document.add(_endorsed);
 
             document.close();
-            finish();
+            showSuccessAlertDialog("Success! Data saved at: " + filepath);
+            //show popup
         }
         catch(Exception e)
         {
@@ -487,25 +488,17 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
 
     }
 
-    /*
-    private static void createList(Section subCatPart) {
-        List list = new List(true, false, 10);
-        list.add(new ListItem("First point"));
-        list.add(new ListItem("Second point"));
-        list.add(new ListItem("Third point"));
-        subCatPart.add(list);
-    }*/
+    public void showSuccessAlertDialog(String message)
+    {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setMessage(message);
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i){
+                finish();
+            }});
+        alert.show();
+    }
 
-
-
-
-    /*
-    private static void addEmptyLine(Paragraph paragraph, int number) {
-        for (int i = 0; i < number; i++) {
-            paragraph.add(new Paragraph(" "));
-        }
-
-
-    }*/
 }
 

@@ -12,11 +12,11 @@
     <EditText
         android:id="@+id/etDetailName"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:ems="10"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"
-        android:hint="Detail Name"
+        android:hint="* Detail Name"
         android:inputType="textPersonName"
         android:text="" />
 
@@ -41,14 +41,14 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginTop="10dp"
-            android:text="Select Personnel"
+            android:text="Add Personnel"
             android:theme="@style/Button.Light"/>
 
         <Button
             android:id="@+id/btn_issue_to_all_in_detail"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:text="ISSUE TO ALL IN DETAIL"
+            android:text="Issue Ammo To Detail"
             android:theme="@style/Button.Light" />
 
         <Button

@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ViewOperationActivity">
+    tools:context=".ViewOperationActivity"
+    android:orientation="vertical">
+
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="1dp"
@@ -26,8 +28,8 @@
                 android:id="@+id/tv_operation_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="50dp"
-                android:text="Operation Name" />
+                android:text="Operation Name"
+                android:textSize="50dp" />
 
             <TextView
                 android:id="@+id/tv_dateloc"
@@ -40,21 +42,23 @@
                 android:id="@+id/tv_kah"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="Key Appointment Holder" />
+                android:text="Key Appointment Holder"
+                android:textSize="20dp" />
 
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="8dp"
+                android:text="Edit Operation Details" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"></LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/btn_view_operation_nominal"
@@ -64,19 +68,19 @@
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:text="Exercise Nominal Roll"
-                android:theme="@style/Button.Light"/>
+                android:theme="@style/Button.Light" />
 
             <Button
                 android:id="@+id/btn_view_ammunition"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_marginEnd="10dp"
                 android:layout_marginStart="5dp"
+                android:layout_marginEnd="10dp"
                 android:layout_weight="1"
                 android:text="Ammunition"
-                android:theme="@style/Button.Light"
-                />
+                android:theme="@style/Button.Light" />
         </LinearLayout>
+
 
         <Button
             android:id="@+id/btn_add_issue_detail"
@@ -84,8 +88,20 @@
             android:layout_height="60dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:theme="@style/Button.Light"
-            android:text="Create Issuing Detail" />
+            android:text="Create Detail"
+            android:theme="@style/Button.Light" />
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/greydefault">
+
+        </LinearLayout>
+
+    </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -99,6 +115,7 @@
                 android:text=""
                 android:visibility="gone" />
 
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -110,6 +127,7 @@
                     android:id="@+id/ddl_select_operation_detail"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@color/default_ddl_bg"
                     android:layout_weight=".25" />
 
                 <Button
@@ -131,16 +149,13 @@
                     android:text="Delete" />
             </LinearLayout>
 
+
             <ListView
                 android:id="@+id/lv_Issue_Detail_Info"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="5dp"
-                android:layout_weight="1"
-                app:layout_constraintEnd_toStartOf="@+id/guideline9"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/guideline4"
-                app:layout_constraintTop_toBottomOf="@+id/tv_Personnel_Text" />
+                android:layout_weight="1" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -192,4 +207,3 @@
         </LinearLayout>
 
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
