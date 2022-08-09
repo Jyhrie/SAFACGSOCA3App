@@ -67,6 +67,7 @@ public class fragment_Add_Operation extends DialogFragment implements RecyclerVi
 
     private static final String TAG_DESIGNATION_NAME = "designation_name";
     private static final String TAG_DESIGNATION = "designation";
+    private static final String TAG_STATE = "state";
 
 
     public ArrayList<HashMap<String,String>> data;
@@ -76,9 +77,16 @@ public class fragment_Add_Operation extends DialogFragment implements RecyclerVi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+
         View v = inflater.inflate(R.layout.fragment_add_operation, container, false);
         Context context = getContext();
         recyclerViewInterface = this;
+
+        Bundle args = getArguments();
+
+        String obtained_o_id = args.getString(TAG_O_ID);
+        String state = args.getString(TAG_STATE);
+
 
         Button btnInsertExercise;
         EditText etAddExerciseName;
@@ -204,6 +212,8 @@ public class fragment_Add_Operation extends DialogFragment implements RecyclerVi
                     concatkah += kah;
                 }
 
+
+
                 //form data
                 ContentValues content = new ContentValues();
 
@@ -214,7 +224,18 @@ public class fragment_Add_Operation extends DialogFragment implements RecyclerVi
                 content.put(TAG_O_KAH, concatkah);
                 content.put(TAG_O_OPS, tv_sw_togglestate.getText().toString());
 
-                db.insert("operation", null, content);
+
+                if(state == "0") {
+
+                    db.insert("operation", null, content);
+                }
+                else if(state == "1")
+                {
+                    ViewOperationActivity source;
+                    source = (ViewOperationActivity) getActivity();
+                    db.update("operation", content, "o_id = ?", new String[]{obtained_o_id});
+                    source.finish();
+                }
                 db.close();
 
                 db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);

@@ -85,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG_A_NAME = "a_name";
     private static final String TAG_A_QTY = "a_qty";
 
+    private static final String TAG_STATE = "state";
+
 
 
 
@@ -212,6 +214,8 @@ public class MainActivity extends AppCompatActivity {
     private void showAddExerciseDialog() {
         fragment_Add_Operation fragment = new fragment_Add_Operation();
         Bundle args = new Bundle();
+        args.putString(TAG_STATE, "0");
+        args.putString(TAG_O_ID, "-1");
         fragment.setArguments(args);
         fragment.show(getSupportFragmentManager(), "fragment_assign_personnel_ammunition");
     }

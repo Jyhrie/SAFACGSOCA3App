@@ -90,29 +90,8 @@ public class AmmunitionActivity extends AppCompatActivity {
     private void showEditAmmoDialog(View view)
     {
         String a_id = ((TextView) view.findViewById(R.id.tvAmmunitionID)).getText().toString();
-        Button btnDeleteAmmo;
+        showDeleteAmmoDialog("Are you sure you want to remove this ammunition?", a_id);
 
-        Dialog DialogFragment = new Dialog(AmmunitionActivity.this, android.R.style.Theme_Black_NoTitleBar);
-        DialogFragment.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
-        DialogFragment.setContentView(R.layout.dialog_edit_ammunition);
-        DialogFragment.setCancelable(true);
-        DialogFragment.show();
-
-        btnDeleteAmmo = (Button) DialogFragment.findViewById(R.id.btnDeleteAmmunition);
-
-        btnDeleteAmmo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SQLiteDatabase db;
-                db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-                db.execSQL("DELETE FROM Ammunition WHERE a_id ="+ a_id);
-                db.execSQL("DELETE FROM Personnel_Ammunition WHERE a_id ="+ a_id);
-                db.close();
-
-                DialogFragment.dismiss();
-                onResume();
-            }
-        });
     }
 
     private void showAddAmmoDialog(View view, String o_id)
@@ -222,6 +201,31 @@ public class AmmunitionActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i){
                 dialogInterface.dismiss();
             }});
+        alert.show();
+    }
+
+    public void showDeleteAmmoDialog(String message, String a_id)
+    {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Remove Ammunition?");
+        alert.setMessage(message);
+        alert.setPositiveButton("Remove", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i){
+                SQLiteDatabase db;
+                db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+                db.execSQL("DELETE FROM Ammunition WHERE a_id ="+ a_id);
+                db.execSQL("DELETE FROM Personnel_Ammunition WHERE a_id ="+ a_id);
+                db.close();
+                onResume();
+
+            }});
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
         alert.show();
     }
 

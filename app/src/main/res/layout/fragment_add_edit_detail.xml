@@ -48,7 +48,7 @@
             android:id="@+id/btn_issue_to_all_in_detail"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:text="Issue Ammo To Detail"
+            android:text="Allocate Ammo To Detail"
             android:theme="@style/Button.Light" />
 
         <Button
@@ -57,7 +57,7 @@
             android:layout_height="60dp"
             android:layout_marginTop="2dp"
             android:layout_marginBottom="10dp"
-            android:text="Save Detail"
+            android:text="Confirm"
             android:theme="@style/Button.Light"/>
     </LinearLayout>
 

@@ -47,7 +47,7 @@
                 android:layout_height="60dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:text="Select Ammunition"
+                android:text="Add Ammunition"
                 android:theme="@style/Button.Light"/>
 
             <Button

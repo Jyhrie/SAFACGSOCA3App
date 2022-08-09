@@ -61,6 +61,7 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
     private static final String TAG_ANAME = "a_name";
     private static final String TAG_OPID = "op_id";
     private static final String TAG_DOC_NUMBER = "doc_id";
+    private static final String TAG_STATE = "state";
 
     public String Selected_o_id;
     public String Selected_d_id;
@@ -118,6 +119,19 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
         }
 
         db.close();
+
+        Button btnEditOperationDetails = findViewById(R.id.btn_edit_operation_details);
+        btnEditOperationDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fragment_Add_Operation fragment = new fragment_Add_Operation();
+                Bundle args = new Bundle();
+                args.putString(TAG_STATE, "1");
+                args.putString(TAG_O_ID, o_id);
+                fragment.setArguments(args);
+                fragment.show(getSupportFragmentManager(), "fragment_assign_personnel_ammunition");
+            }
+        });
 
         btnViewOperationNominalRoll.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v)

@@ -63,7 +63,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:text="Long press operation to delete"
+                    android:text="Long press on operation to delete"
                     android:textSize="24sp" />
 
             </LinearLayout>
