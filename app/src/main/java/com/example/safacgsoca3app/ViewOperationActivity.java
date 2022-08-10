@@ -62,6 +62,7 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
     private static final String TAG_OPID = "op_id";
     private static final String TAG_DOC_NUMBER = "doc_id";
     private static final String TAG_STATE = "state";
+    private static final String TAG_PAST_DOC = "past_doc";
 
     public String Selected_o_id;
     public String Selected_d_id;
@@ -204,6 +205,7 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
                 if(c1.moveToFirst())
                 {
                     i.putExtra(TAG_DOC_NUMBER, c1.getString(0));
+                    i.putExtra(TAG_PAST_DOC, "0");
                     startActivity(i);
                 }
                 else

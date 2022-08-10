@@ -24,6 +24,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -85,10 +88,9 @@ import com.itextpdf.text.pdf.PdfWriter;*/
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
-import kotlin.text.Regex;
 
 
-public class GenerateDocumentsActivity extends AppCompatActivity {
+public class GenerateDocumentsActivity extends AppCompatActivity implements RecyclerViewInterface{
 
     /*private static Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18,
             Font.BOLD);
@@ -113,10 +115,12 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
     private static final String TAG_RETURN_DATETIME = "td_returndatetime";
     private static final String TAG_ISSUE_SIGNATURE = "td_issuesignaturerecieving";
     private static final String TAG_RETURN_SIGNATURE = "td_returnsignaturerecieving";
+    private static final String TAG_TD_ID = "td_id";
 
     private static final String TAG_D_NAME = "d_name";
     private static final String TAG_O_NAME = "o_name";
     private static final String TAG_O_UNIT = "o_unit";
+    private static final String TAG_PAST_DOC = "past_doc";
 
     private static final String TAG_DOC_NUMBER = "doc_id";
 
@@ -133,21 +137,26 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
     int pageHeight = 1120;
     int pagewidth = 792;
 
+    adapter_generate_documents rvAdapter;
 
     ArrayList<ContentValues> data;
     ArrayList<HashMap<String,String>> dispData;
     // constant code for runtime permissions
     private static final int PERMISSION_REQUEST_CODE = 200;
+    private String close;
 
     String doc_id;
     String regenerated;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        close = "1";
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generate_documents);
 
         Intent i = getIntent();
         doc_id = i.getStringExtra(TAG_DOC_NUMBER);
+        String pastdoc = i.getStringExtra(TAG_PAST_DOC);
+        Log.i(pastdoc, "dock");
         Log.i("doc id", doc_id);
         Button btnGenerate = findViewById(R.id.btnGenerate);
         SignaturePad signaturePad = findViewById(R.id.gen_docSignature_Pad);
@@ -169,12 +178,20 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
         dispData = new ArrayList<HashMap<String,String>>();
 
         //get db data
-        c1 = db.rawQuery("SELECT td_a_name, td_p_name, td_issued, td_returned, td_expended, td_spoiled, td_issuedatetime, td_issuesignature ,td_returndatetime, td_returnsignature from transaction_data where doc_id = ?", new String[]{doc_id});
+        String td_exported_query = "0";
+        if(pastdoc.equals("1"))
+        {
+            c1 = db.rawQuery("SELECT td_a_name, td_p_name, td_issued, td_returned, td_expended, td_spoiled, td_issuedatetime, td_issuesignature ,td_returndatetime, td_returnsignature, td_id from transaction_data where doc_id = ?", new String[]{doc_id});
 
+        }
+        else {
+            c1 = db.rawQuery("SELECT td_a_name, td_p_name, td_issued, td_returned, td_expended, td_spoiled, td_issuedatetime, td_issuesignature ,td_returndatetime, td_returnsignature, td_id from transaction_data where doc_id = ? and td_exported = ?", new String[]{doc_id, td_exported_query});
+        }
         ByteArrayInputStream imageStream;
 
         while(c1.moveToNext())
         {
+
             ContentValues line_data = new ContentValues();
             String line_ammo_name = c1.getString(0);
             String line_personnel_name = c1.getString(1);
@@ -186,6 +203,7 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
             byte[] td_issuesignatureblob = c1.getBlob(7);
             String td_returndatetime = c1.getString(8);
             byte[] td_returnsignatureblob = c1.getBlob(9);
+            String td_id = c1.getString(10);
 
 
             Log.i("Information | issuedatetime", td_issuedatetime);
@@ -199,8 +217,10 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
             line_data.put(TAG_ISSUE_SIGNATURE, td_issuesignatureblob);
             line_data.put(TAG_RETURN_DATETIME, td_returndatetime);
             line_data.put(TAG_RETURN_SIGNATURE, td_returnsignatureblob);
+            line_data.put(TAG_TD_ID, td_id);
 
             HashMap<String,String>map = new HashMap<>();
+            map.put(TAG_TD_ID, td_id);
             map.put(TAG_AMMO_NAME, line_ammo_name);
             map.put(TAG_PERSONNEL_NAME, line_personnel_name);
             map.put(TAG_TD_ISSUED, td_issued);
@@ -215,15 +235,15 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
         }
 
 
-        ListView lv_gen_doc = findViewById(R.id.lv_generate_documents);
-        SimpleAdapter lvAdapter = new SimpleAdapter(
-                this, //context
-                dispData, //hashmapdata
-                R.layout.list_generate_document_check, //layout of list
-                new String[] {TAG_AMMO_NAME, TAG_PERSONNEL_NAME, TAG_TD_ISSUED, TAG_TD_RETURNED,TAG_TD_EXPENDED}, //from array
-                new int[] {R.id.tv_gen_doc_ammo, R.id.tv_gen_doc_personnel, R.id.tv_gen_doc_issued, R.id.tv_gen_doc_returned, R.id.tv_gen_doc_expended});  //toarray
+        RecyclerView rv_gen_doc = findViewById(R.id.lv_generate_documents);
+        rvAdapter = new adapter_generate_documents(
+                this,
+                dispData,
+                this
+        );
+        rv_gen_doc.setAdapter(rvAdapter);
+        rv_gen_doc.setLayoutManager(new LinearLayoutManager(this));
 
-        lv_gen_doc.setAdapter(lvAdapter);
 
         btnGenerate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -338,8 +358,13 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
         }
         if(checkclose)
         {
+            for(ContentValues line : data)
+            {
+                String td_id = (String) line.get(TAG_TD_ID);
+                db.execSQL("UPDATE transaction_data SET td_exported = ? WHERE td_id = ?", new String[]{"1", td_id});
+            }
             Log.i("closing doc", doc_id);
-            db.execSQL("UPDATE document SET doc_closed = true WHERE doc_id = ?", new String[]{doc_id});
+            db.execSQL("UPDATE document SET doc_closed = ? WHERE doc_id = ?", new String[]{String.valueOf(close), doc_id});
             db.close();
         }
 
@@ -500,5 +525,35 @@ public class GenerateDocumentsActivity extends AppCompatActivity {
         alert.show();
     }
 
+    @Override
+    public void onItemClick(int position) {
+
+    }
+
+    @Override
+    public void onLongItemClick(int position) {
+        showErrorAlertDialog("Do not authorize this entry?", position);
+    }
+
+    public void showErrorAlertDialog(String message, int position)
+    {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setMessage(message);
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i){
+                close = "0";
+                dispData.remove(position);
+                data.remove(position);
+                rvAdapter.notifyItemRemoved(position);
+            }});
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        alert.show();
+    }
 }
 

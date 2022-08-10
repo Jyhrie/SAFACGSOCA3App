@@ -334,11 +334,12 @@ public class MainActivity extends AppCompatActivity {
                 "td_returnsignature image, " +
 
                 // Exported or not
+                "td_closed bool DEFAULT 0 NOT NULL, " +
                 "td_exported bool DEFAULT 0 NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS document (doc_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, d_name text NOT NULL, o_name text NOT NULL, o_unit text NOT NULL, doc_date text, doc_closed bool DEFAULT 0 NOT NULL )");
 
 
-
+        /*
         if(reset == true) {
             addexampleOperation();
             addexamplePersonnel();
@@ -346,7 +347,7 @@ public class MainActivity extends AppCompatActivity {
             addexampleAmmunition();
             addexamplePersonnelAmmunition();
             addexampleDetail();
-        }
+        }*/
 
         db.close();
     }

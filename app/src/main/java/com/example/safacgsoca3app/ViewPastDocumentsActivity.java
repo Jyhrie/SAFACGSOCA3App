@@ -23,6 +23,7 @@ public class ViewPastDocumentsActivity extends AppCompatActivity {
     private static final String TAG_D_NAME = "d_name";
     private static final String TAG_O_NAME = "o_name";
     private static final String TAG_O_UNIT = "o_unit";
+    private static final String TAG_PAST_DOC = "past_doc";
 
     ArrayList<HashMap<String,String>> data;
     @Override
@@ -36,6 +37,7 @@ public class ViewPastDocumentsActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getApplicationContext(), GenerateDocumentsActivity.class);
                 intent.putExtra(TAG_DOC_ID, ((TextView) view.findViewById(R.id.tv_list_doc_id)).getText().toString());
+                intent.putExtra(TAG_PAST_DOC, "1");
                 startActivity(intent);
                 //start new intent allowing ammo ic to sign, followed by generate document.
                 finish();

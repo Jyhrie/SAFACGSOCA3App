@@ -92,6 +92,8 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
     private static final String TAG_OPID = "op_id";
 
     private static final String TAG_NEW_ENTRY = "new_entry";
+    private static final String TAG_TD_CLOSED = "td_closed";
+    private static final String TAG_PAST_DOC = "past_doc";
 
     ArrayList<HashMap<String, String>> rvData = new ArrayList<HashMap<String, String>>();
     adapter_Issue_Ammunition rvAdapter;
@@ -200,11 +202,11 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
         {
             //query for pa_id, new entry, if td_id is existing
             //select pa.pa_id, 1, -1 from personnel_ammunition pa left join transaction_data on pa.pa_id = td.pa_id where pa.op_id = ? and td_exported = 0
-            c1 = db.rawQuery("select pa.pa_id, 1 createnew, -1 td_id from personnel_ammunition pa where pa.op_id = ? and pa.pa_id not in (select pa_id from transaction_data where td_exported = 0)", new String[]{current_op_id});
+            c1 = db.rawQuery("select pa.pa_id, 1 createnew, -1 td_id from personnel_ammunition pa where pa.op_id = ? and pa.pa_id not in (select pa_id from transaction_data where td_closed = 0)", new String[]{current_op_id});
         }
         else if(Integer.valueOf(type) == 2)
         {
-            c1 = db.rawQuery("select td.pa_id, 0 createnew, td.td_id from transaction_data td, personnel_ammunition pa where td.pa_id = pa.pa_id and pa.op_id = ? and td.td_exported = 0", new String[]{current_op_id});
+            c1 = db.rawQuery("select td.pa_id, 0 createnew, td.td_id from transaction_data td, personnel_ammunition pa where td.pa_id = pa.pa_id and pa.op_id = ? and td.td_closed = 0", new String[]{current_op_id});
         }
 
         //c1 = db.rawQuery("select pa.pa_id, iif(td.td_exported is null, 1, td.td_exported) new_entry, iif(td.td_id is null, -1, td.td_id) td_id  from personnel_ammunition pa left join transaction_data td on pa.pa_id = td.pa_id where pa.op_id = " + current_op_id, null);
@@ -493,7 +495,8 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
                         cv.put(TAG_TD_SPOILED, data.get(TAG_TD_SPOILED));
                         cv.put(TAG_TD_RETURNDATETIME, currentDateTime);
                         cv.put(TAG_TD_RETURNSIGNATURE, getBitmapAsByteArray(Signature_Pad.getSignatureBitmap()));
-                        cv.put(TAG_TD_EXPORTED, 1);
+                        cv.put(TAG_TD_CLOSED, 1);
+                        cv.put(TAG_TD_EXPORTED, 0);
                         db.update("transaction_data", cv, "td_id = ?", new String[]{data.get(TAG_TD_ID)});
 
                     }
@@ -528,6 +531,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
         {
             Intent i = new Intent(getApplicationContext(), GenerateDocumentsActivity.class);
             i.putExtra(TAG_DOC_NUMBER, doc_number);
+            i.putExtra(TAG_PAST_DOC, "0");
             startActivity(i);
             //start new intent allowing ammo ic to sign, followed by generate document.
             finish();
