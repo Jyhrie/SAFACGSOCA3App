@@ -86,6 +86,12 @@ public int getItemCount() {
         return data.size();
         }
 
+    public void filterList(ArrayList<HashMap<String, String>> filteredList)
+    {
+        data = filteredList;
+        notifyDataSetChanged();
+    }
+
 public class MyViewHolder extends RecyclerView.ViewHolder{
 
     //declare view object var

@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,6 +65,7 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.property.HorizontalAlignment;
 import com.itextpdf.layout.property.TextAlignment;
+import com.itextpdf.layout.property.VerticalAlignment;
 
 /*import com.itextpdf.text.Anchor;
 import com.itextpdf.text.BadElementException;
@@ -245,6 +247,20 @@ public class GenerateDocumentsActivity extends AppCompatActivity implements Recy
         rv_gen_doc.setLayoutManager(new LinearLayoutManager(this));
 
 
+        SearchView sv_operation_nominal_roll = (SearchView) findViewById(R.id.sv_gen_doc);
+        sv_operation_nominal_roll.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                filter(s);
+                return false;
+            }
+        });
+
         btnGenerate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -252,6 +268,19 @@ public class GenerateDocumentsActivity extends AppCompatActivity implements Recy
             }
         });
 
+    }
+
+    private void filter(String text)
+    {
+        ArrayList<HashMap<String,String>> filteredList = new ArrayList<>();
+        for(HashMap<String,String> item : dispData)
+        {
+            if(item.get(TAG_AMMO_NAME).toLowerCase().contains(text.toLowerCase()))
+            {
+                filteredList.add(item);
+            }
+        }
+        rvAdapter.filterList(filteredList);
     }
 
     public void btnCreatePDF(View view, String doc_id) {
@@ -304,6 +333,10 @@ public class GenerateDocumentsActivity extends AppCompatActivity implements Recy
 
             pdfDocument.setDefaultPageSize(PageSize.A4);
             document.setMargins(5,0,0,0);
+
+            Paragraph _header = new Paragraph("RESTRICTED").setFontSize(12).setTextAlignment(TextAlignment.CENTER).setVerticalAlignment(VerticalAlignment.TOP);
+            document.add(_header);
+
             Paragraph _documentTitle = new Paragraph("SAF 1386: Records of Ammunition Distribution to Individiual").setBold().setFontSize(12).setTextAlignment(TextAlignment.LEFT);
             document.add(_documentTitle);
 
@@ -334,6 +367,9 @@ public class GenerateDocumentsActivity extends AppCompatActivity implements Recy
             Paragraph _endorsed = new Paragraph("Rank & Name \n" +et_endorsedBy.getText().toString());
             _endorsed.setMargin(10);
             document.add(_endorsed);
+
+            Paragraph _footer = new Paragraph("RESTRICTED").setFontSize(12).setTextAlignment(TextAlignment.CENTER).setVerticalAlignment(VerticalAlignment.BOTTOM);
+            document.add(_footer);
 
             document.close();
             showSuccessAlertDialog("Success! Data saved at: " + filepath);
@@ -543,8 +579,20 @@ public class GenerateDocumentsActivity extends AppCompatActivity implements Recy
             @Override
             public void onClick(DialogInterface dialogInterface, int i){
                 close = "0";
-                dispData.remove(position);
-                data.remove(position);
+                String removed_td_id = rvAdapter.data.remove(position).get(TAG_TD_ID);
+                int iterator = 0;
+                int removed_index = -1;
+                for(ContentValues value : data)
+                {
+                    if(value.get(TAG_TD_ID).equals(removed_td_id))
+                    {
+                        removed_index = iterator;
+                    }
+                    iterator++;
+                }
+                if(removed_index != -1) {
+                    data.remove(removed_index);
+                }
                 rvAdapter.notifyItemRemoved(position);
             }});
         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

@@ -3,6 +3,7 @@ package com.example.safacgsoca3app;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -12,24 +13,32 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-public class PersonnelChecklistActivity extends AppCompatActivity {
+public class PersonnelChecklistActivity extends AppCompatActivity implements RecyclerViewInterface {
 
     public static final String TAG_ID = "op_id";
     public static final String TAG_RANK = "p_rank";
     public static final String TAG_NAME = "p_name";
     public static final String TAG_REMARKS = "p_remarks";
+    private static final String TAG_ENABLED = "enabled";
+    private static final String TAG_OP_ID = "op_id";
     int initialisationvalue = 0;
+
+    ArrayList<HashMap<String, String>> data;
+    adapter_personnel_checklist rvAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +60,7 @@ public class PersonnelChecklistActivity extends AppCompatActivity {
         tv_D_ID.setText(d_id);
         tv_Personnel_Checklist_Detail_Name.setText(d_name);
 
-        ArrayList<HashMap<String, String>> PersonnelList = new ArrayList<HashMap<String, String>>();
+        data = new ArrayList<HashMap<String, String>>();
         HashMap<String, String> PersonnelSelectionMap = new HashMap<String, String>();
 
         SQLiteDatabase db;
@@ -67,97 +76,53 @@ public class PersonnelChecklistActivity extends AppCompatActivity {
             String line_name = c1.getString(2);
             String line_remarks = c1.getString(3);
 
-            map.put("initialvalue", "false");
             map.put(TAG_ID, line_id);
             map.put(TAG_RANK, line_rank);
             map.put(TAG_NAME, line_name);
             map.put(TAG_REMARKS, line_remarks);
-            map.put("SELECTED", "FALSE");
-            PersonnelSelectionMap.put(line_id, "0");
+            map.put(TAG_ENABLED, "0");
 
-            PersonnelList.add(map);
+            data.add(map);
         }
         db.close();
 
-        ListView lv = findViewById(R.id.lv_Personnel_Checklist);
-        ListAdapter adapter = new SimpleAdapter(
-                PersonnelChecklistActivity.this, //context
-                PersonnelList, //hashmapdata
-                R.layout.list_personnel_checklist, //layout of list
-                new String[]{"initialvalue", TAG_ID, TAG_RANK, TAG_NAME, TAG_REMARKS}, //from array
-                new int[]{R.id.tv_Personnel_Selected_Status,
-                        R.id.tv_Personnel_ID_Checklist,
-                        R.id.tv_Personnel_Rank_Checklist,
-                        R.id.tv_Personnel_Name_Checklist,
-                        R.id.tv_Personnel_NRIC_Checklist});//toarray
+        RecyclerView rv = findViewById(R.id.rv_Personnel_Checklist);
+        rvAdapter = new adapter_personnel_checklist(
+                this,
+                data,
+                this
+        );
 
-        // updating listview
-        lv.setAdapter(adapter);
+        rv.setAdapter(rvAdapter);
+        rv.setLayoutManager(new LinearLayoutManager(this));
 
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        SearchView sv_operation_nominal_roll = (SearchView) findViewById(R.id.sv_personnel_checklist);
+        sv_operation_nominal_roll.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                CardView layout = ((CardView) view.findViewById(R.id.cv_list_personnel_checklist));
-                TextView select = (TextView) view.findViewById(R.id.tv_Personnel_Selected_Status);
-                TextView selectid = (TextView) view.findViewById(R.id.tv_Personnel_ID_Checklist);
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
 
-                if (select.getText().toString() == "false") {
-                    select.setText("true");
-                    layout.setCardBackgroundColor(layout.getContext().getResources().getColor(R.color.personnel_checklist_enabled));
-                    PersonnelSelectionMap.put(selectid.getText().toString(), "1");
-                    Log.i(" ", String.valueOf(PersonnelSelectionMap));
-                    ;
-                } else {
-                    select.setText("false");
-                    layout.setCardBackgroundColor(layout.getContext().getResources().getColor(R.color.personnel_checklist_disabled));
-                    PersonnelSelectionMap.put(selectid.getText().toString(), "0");
-                    Log.i(" ", String.valueOf(PersonnelSelectionMap));
-                }
+            @Override
+            public boolean onQueryTextChange(String s) {
+                filter(s);
+                return false;
             }
         });
 
         Button btnProceed = (Button) findViewById(R.id.btn_Proceed_Declare_Issue_Expend);
         btnProceed.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
-                for(Entry<String, String> entry: PersonnelSelectionMap.entrySet())
-                {
-                    if (entry.getValue() == "1")
-                    {
-                        for (int i = 0; i<PersonnelList.size(); i++)
-                        {
-                            if(PersonnelList.get(i).get(TAG_ID).equals(entry.getKey()))
-                            {
-                                PersonnelList.get(i).put("SELECTED", "TRUE");
-                                Log.i(" ", "Selected id: " + entry.getKey());
-                            }
-                        }
-                    }
-                    else
-                    {
-                        for (int i = 0; i<PersonnelList.size(); i++)
-                        {
-                            if(PersonnelList.get(i).get(TAG_ID).equals(entry.getKey()))
-                            {
-                                PersonnelList.get(i).put("SELECTED", "FALSE");
-                            }
-                        }
-                    }
-                }
-
-                Log.i(" ", String.valueOf(PersonnelList));
-
                 ArrayList<HashMap<String, String>> PersonnelListAppended = new ArrayList<HashMap<String, String>>();
-                for (int i = 0 ; i<PersonnelList.size(); i++)
+                for(HashMap<String,String> line : data)
                 {
-                    if (PersonnelList.get(i).get("SELECTED").equals("TRUE"))
+                    if(line.get(TAG_ENABLED).equals("1"))
                     {
-                        PersonnelListAppended.add(PersonnelList.get(i));
+                        HashMap<String,String> map = new HashMap<String,String>();
+                        map.put(TAG_OP_ID, line.get(TAG_ID));
+                        PersonnelListAppended.add(map);
                     }
                 }
-
-                Log.i(" ", String.valueOf(PersonnelListAppended));
-
                 if(PersonnelListAppended.size()==0)
                 {
                     showErrorAlertDialog(v, "Please select at least 1 personnel");
@@ -175,6 +140,19 @@ public class PersonnelChecklistActivity extends AppCompatActivity {
         });
     }
 
+    private void filter(String text)
+    {
+        ArrayList<HashMap<String,String>> filteredList = new ArrayList<>();
+        for(HashMap<String,String> item : data)
+        {
+            if(item.get(TAG_NAME).toLowerCase().contains(text.toLowerCase()))
+            {
+                filteredList.add(item);
+            }
+        }
+        rvAdapter.filterList(filteredList);
+    }
+
     public void showErrorAlertDialog(View v, String message)
     {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -188,4 +166,23 @@ public class PersonnelChecklistActivity extends AppCompatActivity {
         alert.show();
     }
 
+    @Override
+    public void onItemClick(int position) {
+            Log.i("clickinggggg", String.valueOf(position));
+            if(rvAdapter.data.get(position).get(TAG_ENABLED).equals("1"))
+            {
+                rvAdapter.data.get(position).put(TAG_ENABLED, "0");
+            }
+            else if(rvAdapter.data.get(position).get(TAG_ENABLED).equals("0"))
+            {
+                rvAdapter.data.get(position).put(TAG_ENABLED, "1");
+            }
+            rvAdapter.notifyItemChanged(position);
+
+    }
+
+    @Override
+    public void onLongItemClick(int position) {
+
+    }
 }

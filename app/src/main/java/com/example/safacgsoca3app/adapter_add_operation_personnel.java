@@ -1,6 +1,7 @@
 package com.example.safacgsoca3app;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -86,7 +87,19 @@ public class adapter_add_operation_personnel extends RecyclerView.Adapter<adapte
             }
             else
             {
-                holder.cardView.setCardBackgroundColor(holder.cardView.getContext().getResources().getColor(R.color.personnel_checklist_disabled));
+                int nightModeFlags =
+                        context.getResources().getConfiguration().uiMode &
+                                Configuration.UI_MODE_NIGHT_MASK;
+                switch (nightModeFlags) {
+                    case Configuration.UI_MODE_NIGHT_NO:
+                        holder.cardView.setCardBackgroundColor(holder.cardView.getContext().getResources().getColor(R.color.personnel_checklist_disabledLight));
+                        break;
+
+                    case Configuration.UI_MODE_NIGHT_YES:
+                        holder.cardView.setCardBackgroundColor(holder.cardView.getContext().getResources().getColor(R.color.personnel_checklist_disabledDark));
+                        break;
+                }
+
             }
         }
     }

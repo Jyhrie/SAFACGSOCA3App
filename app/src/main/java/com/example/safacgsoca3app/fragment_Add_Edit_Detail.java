@@ -343,7 +343,6 @@ public class fragment_Add_Edit_Detail extends DialogFragment implements Recycler
             @Override
             public void onClick(DialogInterface dialogInterface, int i){
                 dialogInterface.dismiss();
-                dismiss();
             }});
         alert.show();
     }

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -11,6 +12,8 @@ import android.os.Bundle;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,13 +25,14 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class fragment_Assign_Detail_Personnel extends DialogFragment {
+public class fragment_Assign_Detail_Personnel extends DialogFragment implements RecyclerViewInterface{
 
     private static final String TAG_P_ID = "p_id";
     private static final String TAG_P_NAME = "p_name";
@@ -62,6 +66,10 @@ public class fragment_Assign_Detail_Personnel extends DialogFragment {
     private static final String TAG_KAH = "o_kah";
     private static final String TAG_ANAME = "a_name";
     private static final String TAG_OPID = "op_id";
+    private static final String TAG_ENABLED = "enabled";
+
+    ArrayList<HashMap<String, String>> data;
+    adapter_assign_detail_personnel rvAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -72,17 +80,13 @@ public class fragment_Assign_Detail_Personnel extends DialogFragment {
         Bundle args = getArguments();
 
 
-        int d_id = args.getInt(TAG_D_ID);
         String o_id = args.getString(TAG_O_ID);
-        boolean reset = args.getBoolean("reset");
 
         SQLiteDatabase db;
         db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
 
         Cursor c1 = db.rawQuery("select op.op_id, p.p_rank, p.p_name from operation_personnel op, personnel p where op.d_id is null and p.p_id = op.p_id and op.o_id = " + o_id, null);
-        ArrayList<HashMap<String, String>> personnelList = new ArrayList<HashMap<String, String>>();
-
-
+        data = new ArrayList<HashMap<String, String>>();
 
         while (c1.moveToNext()) {
             Log.i("data found", "test");
@@ -93,36 +97,32 @@ public class fragment_Assign_Detail_Personnel extends DialogFragment {
 
             map.put(TAG_OP_ID, line_id);
             map.put(TAG_P_NAME, line_rank + " " + line_name);
+            map.put(TAG_ENABLED, "0");
 
-            personnelList.add(map);
+            data.add(map);
         }
         db.close();
 
+        RecyclerView rv = v.findViewById(R.id.rv_assign_personnel_to_detail);
+        rvAdapter = new adapter_assign_detail_personnel(
+                context,
+                data,
+                this
+        );
+        rv.setAdapter(rvAdapter);
+        rv.setLayoutManager(new LinearLayoutManager(context));
 
-        ListView lv = v.findViewById(R.id.lv_assign_personnel_to_detail);
-        ListAdapter adapter = new SimpleAdapter(
-                context, //context
-                personnelList, //hashmapdata
-                R.layout.list_assign_detail_personnel, //layout of list
-                new String[]{TAG_OP_ID, TAG_P_NAME}, //from array
-                new int[]{R.id.tv_assign_detail_personnel_id, R.id.tv_assign_detail_personnel_name}); //toarray
-        // updating listview
-        lv.setAdapter(adapter);
-
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        SearchView sv_operation_nominal_roll = (SearchView) v.findViewById(R.id.sv_assign_detail_personnel);
+        sv_operation_nominal_roll.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                TextView tvListPersonnelId = (TextView) view.findViewById(R.id.tv_assign_detail_personnel_id);
-                //toggle and add id to array;
-                CardView layout = (CardView) view.findViewById(R.id.cv_assign_detail_list);
-                CheckBox cb = view.findViewById(R.id.cb_assign_detail_personnel_bool);
-                cb.setChecked(!cb.isChecked());
-                if (cb.isChecked()) {
-                    layout.setCardBackgroundColor(layout.getContext().getResources().getColor(R.color.personnel_checklist_enabled));
-                } else {
-                    layout.setCardBackgroundColor(layout.getContext().getResources().getColor(R.color.personnel_checklist_disabled));
-                }
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String s) {
+                filter(s);
+                return false;
             }
         });
 
@@ -133,25 +133,20 @@ public class fragment_Assign_Detail_Personnel extends DialogFragment {
             public void onClick(View view) {
                 SQLiteDatabase db;
                 db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
-
-                for (int i = 0; i < lv.getCount(); i++) {
-                    View v = lv.getChildAt(i);
-                    if (((CheckBox) v.findViewById(R.id.cb_assign_detail_personnel_bool)).isChecked()) {
-                        String op_id = ((TextView) v.findViewById(R.id.tv_assign_detail_personnel_id)).getText().toString();
-
+                for(HashMap<String,String> item : data)
+                {
+                    if(item.get(TAG_ENABLED).equals("1"))
+                    {
                         ContentValues content = new ContentValues();
                         content.put(TAG_D_ID, -1);
 
                         //update detail
                         //assign d_id as -1 as temp value
-                        db.update("operation_personnel", content, TAG_OP_ID + " = ?", new String[]{op_id});
+                        db.update("operation_personnel", content, TAG_OP_ID + " = ?", new String[]{item.get(TAG_OP_ID)});
                     }
                 }
                 db.close();
-
-                //update prev detail dialog
                 source.refreshFragmentData();
-                //source.showAddEditDetailDialog(d_id, o_id, false);
                 dismiss();
             }
         });
@@ -159,5 +154,35 @@ public class fragment_Assign_Detail_Personnel extends DialogFragment {
         return v;
     }
 
+    private void filter(String text)
+    {
+        ArrayList<HashMap<String,String>> filteredList = new ArrayList<>();
+        for(HashMap<String,String> item : data)
+        {
+            if(item.get(TAG_P_NAME).toLowerCase().contains(text.toLowerCase()))
+            {
+                filteredList.add(item);
+            }
+        }
+        rvAdapter.filterList(filteredList);
+    }
 
+    @Override
+    public void onItemClick(int position) {
+        Log.i("clickinggggg", String.valueOf(position));
+        if(rvAdapter.data.get(position).get(TAG_ENABLED).equals("1"))
+        {
+            rvAdapter.data.get(position).put(TAG_ENABLED, "0");
+        }
+        else if(rvAdapter.data.get(position).get(TAG_ENABLED).equals("0"))
+        {
+            rvAdapter.data.get(position).put(TAG_ENABLED, "1");
+        }
+        rvAdapter.notifyItemChanged(position);
+    }
+
+    @Override
+    public void onLongItemClick(int position) {
+
+    }
 }

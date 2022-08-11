@@ -30,7 +30,9 @@
     <color name="greylight">#d1d1d1</color>
 
     <color name="personnel_checklist_enabled">#FF03DAC5</color>
-    <color name="personnel_checklist_disabled">@color/fauxblanc</color>
+    <color name="personnel_checklist_disabledLight">@color/fauxblanc</color>
+    <color name="personnel_checklist_disabledDark">@color/charbonneux</color>
+    <color name="personnel_checklist_disabled">#FFFFFF</color>
 
 
 
