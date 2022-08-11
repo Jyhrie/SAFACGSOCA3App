@@ -20,18 +20,26 @@
     <color name="charbonneux">#212222</color>
 
 
-    <color name="issue_return_primary">#3ba38a</color>
+    <color name="issue_return_primary">#FF03DAC5</color>
     <color name="issue_return_secondary">#049885</color>
     <color name="issue_return_text_color">#FFFFFF</color>
 
-    <color name="default_listview_item_color">#7dcbdc</color>
-    <color name="default_button_color">#00679f</color>
-    <color name="default_ddl_bg">#e0e0e0</color>
-    <color name="ammo_ddl_bg">#7db9dc</color>
+    <color name="default_listview_item_color">#FF03DAC5</color>
+    <color name="default_button_color">#FF03DAC5</color>
     <color name="greydefault">#7d7d7d</color>
     <color name="greylight">#d1d1d1</color>
 
-    <color name="personnel_checklist_enabled">@color/vertprintemps</color>
+    <color name="personnel_checklist_enabled">#FF03DAC5</color>
     <color name="personnel_checklist_disabled">@color/fauxblanc</color>
+
+
+
+    <color name="primaryLight"></color>
+    <color name="primaryDark"></color>
+    <color name="secondaryLight"></color>
+    <color name="secondaryDark"></color>
+    <color name="textLight">#404040</color>
+    <color name="textDark">#FFFFFF</color>
+    <color name="universalButtonColor">#FF03DAC5</color>
 
 </resources>

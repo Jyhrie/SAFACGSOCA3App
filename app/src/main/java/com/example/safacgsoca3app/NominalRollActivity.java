@@ -94,6 +94,10 @@ public class NominalRollActivity extends AppCompatActivity implements RecyclerVi
 
     private void openAddNominalRollDialog(View view)
     {
+        fragment_add_nominal_roll fragment = new fragment_add_nominal_roll();
+        fragment.show(getSupportFragmentManager(), "fragment_add_nominal_roll");
+
+        /*
         Dialog DialogFragment = new Dialog(NominalRollActivity.this, android.R.style.Theme_Black_NoTitleBar);
         DialogFragment.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
         DialogFragment.setContentView(R.layout.dialog_add_nominal_roll);
@@ -170,10 +174,11 @@ public class NominalRollActivity extends AppCompatActivity implements RecyclerVi
                     data.add(map);
                 }
                 db.close();
-                rvAdapter.notifyItemInserted(rvAdapter.getItemCount());
+
 
             }
         });
+
 
         Button btnInsertNominalRollNoClose = (Button) DialogFragment.findViewById(R.id.btn_insert_personnel_stay_open);
 
@@ -239,7 +244,7 @@ public class NominalRollActivity extends AppCompatActivity implements RecyclerVi
 
                 db.close();
             }
-        });
+        });*/
 
     }
 
@@ -267,7 +272,11 @@ public class NominalRollActivity extends AppCompatActivity implements RecyclerVi
         String remarks = etRemarks.getText().toString();
 
     }*/
-
+    public void updateNominalRollAfterAddedEntry(HashMap<String,String> map)
+    {
+        data.add(map);
+        rvAdapter.notifyItemInserted(rvAdapter.getItemCount());
+    }
 
     public void showErrorAlertDialog(View v, String message)
     {
@@ -332,4 +341,7 @@ public class NominalRollActivity extends AppCompatActivity implements RecyclerVi
         });
         alert.show();
     }
+
+
+
 }

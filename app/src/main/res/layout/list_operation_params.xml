@@ -15,6 +15,15 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="Designation" />
+    <LinearLayout
+        android:layout_width="2px"
+        android:layout_height="match_parent"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="5dp"
+        android:background="@color/greydefault" >
+    </LinearLayout>
 
     <EditText
         android:id="@+id/et_op_param_name"

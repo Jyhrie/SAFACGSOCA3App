@@ -96,6 +96,14 @@ public class AmmunitionActivity extends AppCompatActivity {
 
     private void showAddAmmoDialog(View view, String o_id)
     {
+
+        fragment_add_ammunition fragment = new fragment_add_ammunition();
+        Bundle args = new Bundle();
+        args.putString(TAG_O_ID, o_id);
+        fragment.setArguments(args);
+        fragment.show(getSupportFragmentManager(), "fragment_add_ammunition");
+
+        /*
         EditText tvAmmoDescription;
         EditText tvAmmoQty;
         Button btnInsertAmmo;
@@ -152,6 +160,8 @@ public class AmmunitionActivity extends AppCompatActivity {
                 onResume();
             }
         });
+
+         */
     }
     
     @Override

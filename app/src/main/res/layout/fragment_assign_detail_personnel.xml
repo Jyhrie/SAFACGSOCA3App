@@ -17,7 +17,6 @@
         android:id="@+id/btn_assign_detail_personnel_submit"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:text="Add Personnel"
-        android:theme="@style/Button.Light"/>
+        android:text="Add Personnel" />
 
 </LinearLayout>

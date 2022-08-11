@@ -30,6 +30,13 @@
         android:layout_weight="0.5"
         android:text="TextView"
         android:textSize="24sp" />
+            <LinearLayout
+                android:layout_width="2px"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:background="@color/greydefault" >
+            </LinearLayout>
 
     <TextView
         android:id="@+id/tv_edit_detail_personnel_nric"

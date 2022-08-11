@@ -40,6 +40,15 @@
             android:layout_height="wrap_content"
             android:text="Personnel Ammunition"
             android:textSize="20dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="3dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginBottom="2dp"
+            android:background="@color/greydefault" >
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -69,6 +78,16 @@
             </LinearLayout>
 
             <LinearLayout
+                android:layout_width="2px"
+                android:layout_height="match_parent"
+                android:layout_marginTop="2dp"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
+                android:layout_marginBottom="2dp"
+                android:background="@color/greydefault" >
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -89,7 +108,15 @@
                     android:text="@string/Issued" />
 
             </LinearLayout>
-
+            <LinearLayout
+                android:layout_width="2px"
+                android:layout_height="match_parent"
+                android:layout_marginTop="2dp"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
+                android:layout_marginBottom="2dp"
+                android:background="@color/greydefault" >
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -110,7 +137,15 @@
                     android:textAlignment="center"
                     android:text="@string/Expended" />
             </LinearLayout>
-
+            <LinearLayout
+                android:layout_width="2px"
+                android:layout_height="match_parent"
+                android:layout_marginTop="2dp"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
+                android:layout_marginBottom="2dp"
+                android:background="@color/greydefault" >
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -131,7 +166,15 @@
                     android:textAlignment="center"
                     android:text="@string/Returned" />
             </LinearLayout>
-
+            <LinearLayout
+                android:layout_width="2px"
+                android:layout_height="match_parent"
+                android:layout_marginTop="2dp"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
+                android:layout_marginBottom="2dp"
+                android:background="@color/greydefault" >
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

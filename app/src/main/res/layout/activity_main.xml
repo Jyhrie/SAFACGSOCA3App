@@ -108,8 +108,7 @@
             android:layout_marginTop="3dp"
             android:layout_marginRight="5dp"
             android:layout_marginBottom="3dp"
-            android:text="Unit Nominal Roll"
-            android:theme="@style/Button.Light"/>
+            android:text="Unit Nominal Roll" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -127,8 +126,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginBottom="3dp"
                 android:layout_weight="1"
-                android:text="Export As .csv"
-                android:theme="@style/Button.Light" />
+                android:text="Export As .csv" />
 
             <Button
                 android:id="@+id/btn_view_past_documents"
@@ -139,8 +137,7 @@
                 android:layout_marginTop="3dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginBottom="3dp"
-                android:text="View Past Documents"
-                android:theme="@style/Button.Light" />
+                android:text="View Past Documents" />
         </LinearLayout>
     </LinearLayout>
 

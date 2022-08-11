@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -64,17 +65,16 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
     private static final String TAG_STATE = "state";
     private static final String TAG_PAST_DOC = "past_doc";
 
-    public String Selected_o_id;
-    public String Selected_d_id;
+    public String Selected_o_id = "-1";
+    public String Selected_d_id = "-1";
     public String Selected_d_name;
-
-    private adapter_Personnel_Ammunition assign_personnel_adapter;
 
     fragment_Add_Edit_Detail fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         setContentView(R.layout.activity_view_operation);
 
@@ -162,6 +162,11 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
         Button btnIssue= (Button) findViewById(R.id.btn_Issue);
         btnIssue.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                if(Selected_d_id == "-1")
+                {
+                    showErrorAlertDialog(v, "Please select a detail");
+                    return;
+                }
                 Intent intent = new Intent(ViewOperationActivity.this, PersonnelChecklistActivity.class);
                 intent.putExtra("type", "1");
                 intent.putExtra("o_id", Selected_o_id);
@@ -174,6 +179,11 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
         Button btnRecieve= (Button) findViewById(R.id.btn_Recieve);
         btnRecieve.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                if(Selected_d_id == "-1")
+                {
+                    showErrorAlertDialog(v, "Please select a detail");
+                    return;
+                }
                 showReceiveDialog();
             }
         });
@@ -216,18 +226,8 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
 
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        Intent intent = getIntent();
-        String o_id = intent.getStringExtra(TAG_ID);
 
         refreshPageAfterEditDetail(o_id, -1);
-
-
     }
 
     public void showAddEditDetailDialog(int d_id, String o_id, boolean reset)
@@ -342,36 +342,31 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
         }
 
 
-        Button btn_edit_selected_detail;
+        ImageButton btn_edit_selected_detail;
         btn_edit_selected_detail = findViewById(R.id.btn_edit_selected_detail);
         btn_edit_selected_detail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(detail_list.size()==0)
                 {
-                    showErrorAlertDialog(view, "Please Create a new Detail");
+                    showErrorAlertDialog(view, "Please create a new detail");
                     return;
                 }
                 showAddEditDetailDialog(Integer.parseInt(detail_list.get((int) ddl_select_operation_detail.getSelectedItemId()).get(TAG_D_ID)), o_id, true);
             }
         });
 
-        Button btn_delete_selected_detail;
+        ImageButton btn_delete_selected_detail;
         btn_delete_selected_detail = findViewById(R.id.btn_delete_selected_detail);
         btn_delete_selected_detail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(detail_list.size()==0)
                 {
-                    showErrorAlertDialog(view, "Please Create a new Detail");
+                    showErrorAlertDialog(view, "Please create a new detail");
                     return;
                 }
-                SQLiteDatabase db;
-                db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
-                db.execSQL("DELETE FROM Detail WHERE d_id = "+ detail_list.get((int) ddl_select_operation_detail.getSelectedItemId()).get(TAG_D_ID));
-                db.execSQL("UPDATE Operation_Personnel SET d_id = null WHERE d_id = "+ detail_list.get((int) ddl_select_operation_detail.getSelectedItemId()).get(TAG_D_ID));
-                db.close();
-                refreshPageAfterEditDetail(o_id, 0);
+                checkDeleteDetail(view, "Delete detail?", ddl_select_operation_detail, o_id, detail_list);
             }
         });
     }
@@ -402,13 +397,19 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
             }
 
             c1 = db.rawQuery("select * from detail where d_id = " + search_for_detail_id, null);
-            ArrayList<HashMap<String, String>> detail_list = new ArrayList<HashMap<String, String>>();
-            while (c1.moveToNext()) {
+            //detail_list = new ArrayList<HashMap<String, String>>();
+            if (c1.moveToFirst()) {
                 Selected_d_id = c1.getString(0);
                 Selected_d_name = c1.getString(1);
             }
-
+            else
+            {
+                Selected_d_id = "-1";
+                Selected_d_name = "-1";
+            }
             db.close();
+
+
 
 
             ListView lv = findViewById(R.id.lv_Issue_Detail_Info);
@@ -479,6 +480,29 @@ public class ViewOperationActivity extends AppCompatActivity implements Recycler
         alert.setTitle("Error");
         alert.setMessage(message);
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i){
+                dialogInterface.dismiss();
+            }});
+        alert.show();
+    }
+
+    public void checkDeleteDetail(View v, String message, Spinner ddl_select_operation_detail, String o_id, ArrayList<HashMap<String, String>> detail_list)
+    {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setMessage(message);
+        alert.setPositiveButton("Confirm", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i){
+                SQLiteDatabase db;
+                db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+                db.execSQL("DELETE FROM Detail WHERE d_id = "+ detail_list.get((int) ddl_select_operation_detail.getSelectedItemId()).get(TAG_D_ID));
+                db.execSQL("UPDATE Operation_Personnel SET d_id = null WHERE d_id = "+ detail_list.get((int) ddl_select_operation_detail.getSelectedItemId()).get(TAG_D_ID));
+                db.close();
+                refreshPageAfterEditDetail(o_id, 0);
+                dialogInterface.dismiss();
+            }});
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialogInterface, int i){
                 dialogInterface.dismiss();

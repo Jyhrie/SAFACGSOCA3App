@@ -53,6 +53,16 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="8dp"
                 android:text="Edit Operation Details" />
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="2px"
+                android:layout_marginTop="7dp"
+                android:layout_marginBottom="7dp"
+                android:background="@color/greydefault">
+
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -68,8 +78,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
-                android:text="Exercise Nominal Roll"
-                android:theme="@style/Button.Light" />
+                android:text="Operation Nominal Roll" />
 
             <Button
                 android:id="@+id/btn_view_ammunition"
@@ -78,8 +87,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="10dp"
                 android:layout_weight="1"
-                android:text="Ammunition"
-                android:theme="@style/Button.Light" />
+                android:text="Ammunition" />
         </LinearLayout>
 
 
@@ -89,15 +97,14 @@
             android:layout_height="60dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:text="Create Detail"
-            android:theme="@style/Button.Light" />
+            android:text="Create Detail" />
 
         <LinearLayout
 
             android:layout_width="match_parent"
             android:layout_height="2px"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp"
             android:background="@color/greydefault">
 
         </LinearLayout>
@@ -128,28 +135,57 @@
                     android:id="@+id/ddl_select_operation_detail"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/default_ddl_bg"
-                    android:layout_weight=".25" />
+                    android:layout_weight=".3" />
 
-                <Button
-                    android:id="@+id/btn_edit_selected_detail"
+                <LinearLayout
+
+                    android:layout_width="2px"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="7dp"
+                    android:layout_marginEnd="7dp"
+                    android:background="@color/greydefault"/>
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
-                    android:theme="@style/Button.Light"
-                    android:text="Edit" />
+                    android:gravity="center">
 
-                <Button
-                    android:id="@+id/btn_delete_selected_detail"
+                <ImageButton
+                    android:id="@+id/btn_edit_selected_detail"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="60dp"
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
-                    android:theme="@style/Button.Light"
-                    android:text="Delete" />
+                    android:layout_marginStart="3dp"
+                    android:layout_marginEnd="3dp"
+                    android:backgroundTint="@color/universalButtonColor"
+                    app:srcCompat="@drawable/ic_baseline_edit_24" />
+
+                <ImageButton
+                    android:id="@+id/btn_delete_selected_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginEnd="3dp"
+                    android:backgroundTint="@color/universalButtonColor"
+                    app:srcCompat="@drawable/ic_baseline_delete_24" />
+
+
+                </LinearLayout>
+
             </LinearLayout>
 
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="2px"
+                android:layout_marginTop="7dp"
+                android:layout_marginBottom="7dp"
+                android:background="@color/greydefault">
+
+            </LinearLayout>
 
             <ListView
                 android:id="@+id/lv_Issue_Detail_Info"
@@ -174,8 +210,7 @@
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
                     android:textSize="20dp"
-                    android:text="@string/Issue"
-                    android:theme="@style/Button.Light"/>
+                    android:text="@string/Issue" />
 
                 <Button
                     android:id="@+id/btn_Recieve"
@@ -187,8 +222,7 @@
                     android:layout_marginBottom="3dp"
                     android:layout_weight="1"
                     android:text="Receive"
-                    android:textSize="20dp"
-                    android:theme="@style/Button.Light"/>
+                    android:textSize="20dp" />
 
                 <Button
                     android:id="@+id/btn_generate_documents"
@@ -200,8 +234,7 @@
                     android:layout_marginBottom="3dp"
                     android:layout_weight="1"
                     android:text="GENERATE DOCUMENTS"
-                    android:textSize="20dp"
-                    android:theme="@style/Button.Light"/>
+                    android:textSize="20dp" />
 
             </LinearLayout>
 

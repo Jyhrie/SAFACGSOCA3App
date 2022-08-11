@@ -1,23 +1,26 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Theme.SAFACGSOCA3App" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
     <style name="Theme.SAFACGSOCA3App.NoActionBar">
-        <item name="colorPrimaryDark">@color/bleudepatinir</item>
-        <item name="colorPrimary">@color/blueciel</item>
-        <item name="colorPrimaryVariant">@color/blueciel</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/teal_200</item>
+        <item name="colorPrimaryVariant">@color/teal_200</item>
+        <item name="colorOnPrimary">@color/textLight</item>
+        <item name="android:textColor">@color/textLight</item>
+
+
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
     </style>
 
-    <style name="Theme.SAFACGSOCA3App.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="Theme.SAFACGSOCA3App.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+
 </resources>
