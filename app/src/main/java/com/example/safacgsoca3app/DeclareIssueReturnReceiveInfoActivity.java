@@ -74,10 +74,6 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
     private static final String TAG_PA_ID = "pa_id";
     private static final String TAG_PA_ISSUE_QTY = "pa_issue_qty";
     private static final String TAG_PA_ISSUE_QTY_ORIGINAL = "pa_original_issue_qty";
-    private static final String TAG_PA_ISSUED = "pa_issued";
-    private static final String TAG_PA_RETURNED = "pa_returned";
-    private static final String TAG_PA_EXPENEDED = "pa_expended";
-    private static final String TAG_PA_SPOILED = "pa_spoiled";
 
     private static final String TAG_A_ID = "a_id";
     private static final String TAG_A_NAME = "a_name";
@@ -317,6 +313,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
 
                 }
             }
+            Log.i(map.get(TAG_TD_EXPENDED), "expended");
             rvData.add(map);
         }
 
@@ -610,7 +607,6 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
 
             et_ToIssueOrIssued_Qty.setText(dataset.get(TAG_PA_ISSUE_QTY));
 
-
         } else //issued already
         {
             et_ToIssueOrIssued_Qty.setEnabled(false);
@@ -618,6 +614,8 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
             et_Spoilt_Qty.setEnabled(true);
             et_Returned_Qty.setEnabled(true);
 
+            et_Expended_Qty.setText(dataset.get(TAG_TD_EXPENDED));
+            et_Returned_Qty.setText(dataset.get(TAG_TD_RETURNED));
             et_ToIssueOrIssued_Qty.setText(dataset.get(TAG_PA_ISSUE_QTY));
         }
 
@@ -627,29 +625,36 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
             public void onClick(View view) {
 
                 //do a check here
-
+                boolean pass = true;
                 //save transaction details
                 if(Integer.valueOf(is_ammo_issued) == 1)
                 {
                     if(Float.parseFloat(et_ToIssueOrIssued_Qty.getText().toString()) > Float.parseFloat(dataset.get(TAG_PA_ISSUE_QTY_ORIGINAL)))
                     {
-                        //throw error
+                        pass = false;
                     }
                 }else
                 {
-                    if(Float.parseFloat(et_Expended_Qty.getText().toString()) + Float.parseFloat(et_Returned_Qty.getText().toString()) + Float.parseFloat(et_Spoilt_Qty.getText().toString()) > Float.parseFloat(et_ToIssueOrIssued_Qty.getText().toString()))
+                    if(Float.parseFloat(et_Expended_Qty.getText().toString()) + Float.parseFloat(et_Returned_Qty.getText().toString()) + Float.parseFloat(et_Spoilt_Qty.getText().toString()) != Float.parseFloat(et_ToIssueOrIssued_Qty.getText().toString()))
                     {
-                        //throw error
+                        pass = false;
                     }
                 }
 
-                dataset.put(TAG_PA_ISSUE_QTY, et_ToIssueOrIssued_Qty.getText().toString());
-                dataset.put(TAG_TD_EXPENDED, et_Expended_Qty.getText().toString());
-                dataset.put(TAG_TD_RETURNED, et_Returned_Qty.getText().toString());
-                dataset.put(TAG_TD_SPOILED, et_Spoilt_Qty.getText().toString());
+                if(pass == true) {
+                    dataset.put(TAG_PA_ISSUE_QTY, et_ToIssueOrIssued_Qty.getText().toString());
+                    dataset.put(TAG_TD_EXPENDED, et_Expended_Qty.getText().toString());
+                    dataset.put(TAG_TD_RETURNED, et_Returned_Qty.getText().toString());
+                    dataset.put(TAG_TD_SPOILED, et_Spoilt_Qty.getText().toString());
+                    rvAdapter.notifyItemChanged(position);
+                    EditIssueDialog.dismiss();
+                }
+                else
+                {
+                    showErrorAlertDialog(view, "Please ensure that ammo issued is less that ammo allocated");
+                }
 
-                rvAdapter.notifyItemChanged(position);
-                EditIssueDialog.dismiss();
+
             }
         });
         //EditIssueDialog.dismiss();
