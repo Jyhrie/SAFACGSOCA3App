@@ -1,6 +1,7 @@
 package com.example.safacgsoca3app;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -21,6 +22,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.itextpdf.layout.element.Paragraph;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -65,6 +68,7 @@ public class fragment_Assign_Personnel_Ammunition extends DialogFragment impleme
     private adapter_Personnel_Ammunition assign_personnel_adapter;
 
     private ArrayList<HashMap<String, String>> data;
+    private ArrayList<String> removedData;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -72,6 +76,8 @@ public class fragment_Assign_Personnel_Ammunition extends DialogFragment impleme
         Context context = getContext();
         ViewOperationActivity source = (ViewOperationActivity) getActivity();
 
+
+        removedData = new ArrayList<>();
         Bundle args = getArguments();
         String o_id = args.getString(TAG_O_ID);
         String op_id = args.getString(TAG_OP_ID);
@@ -107,7 +113,6 @@ public class fragment_Assign_Personnel_Ammunition extends DialogFragment impleme
 
         //get all existing ammo personnel is assigned to
         data = getPersonnelAmmo(op_id);
-
         assign_personnel_adapter = new adapter_Personnel_Ammunition(context,
                 data,
                 ammo_list,
@@ -161,49 +166,62 @@ public class fragment_Assign_Personnel_Ammunition extends DialogFragment impleme
                     }
                 }
 
-
                 //get all data stored within adapter
                 ArrayList<HashMap<String, String>> existing_data = data;
-
+                ArrayList databaseInteraction = new ArrayList<>();
+                boolean isOverflow = false;
+                String message = "error";
                 if (all == true) {
+
                     for(String op_id_from_arr : op_id_list) {
                         for (HashMap<String, String> entry : existing_data) {
-                            //check if TAG_PA_ID is new/old
-                            Log.i(entry.get(TAG_PA_ID), "paid");
+                            if(isOverflow == true)
+                            {
+                                break;
+                            }
                             if (entry.get(TAG_PA_ID).equals("-1")) {
+
+                                HashMap databaseEntry = new HashMap<>();
+                                //do a check if updated ammo exceeds the allocated ammo
+                                SQLiteDatabase db;
+                                db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
+                                Cursor c1 = db.rawQuery("select case when (select sum(a_qty) from ammunition where a_id = ?) > (select sum(pa_issue_qty) from personnel_ammunition where a_id = ?) + ? then 'false' else 'true' end as overflowCheck", new String[]{entry.get(TAG_A_ID), entry.get(TAG_A_ID),String.valueOf(Float.parseFloat(entry.get(TAG_PA_ISSUE_QTY))* op_id_list.size())});
+                                if(c1.moveToFirst())
+                                {
+                                    Cursor c2 = db.rawQuery("select a_name from ammunition where a_id = ?", new String[]{entry.get(TAG_A_ID)});
+                                    if(c2.moveToFirst())
+                                    {
+                                        message = "Quantity of " + c2.getString(0) + " exceeds allocated amount";
+                                    }
+                                    isOverflow = Boolean.parseBoolean(c1.getString(0));
+                                }
+                                db.close();
                                 //new entry
                                 ContentValues content = new ContentValues();
                                 content.put(TAG_OP_ID, op_id_from_arr);
                                 content.put(TAG_A_ID, entry.get(TAG_A_ID));
                                 content.put(TAG_PA_ISSUE_QTY, entry.get(TAG_PA_ISSUE_QTY));
 
-                                SQLiteDatabase db;
-                                db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
-                                db.insert("personnel_ammunition", null, content);
-                                db.close();
-                            } else {
-                                ContentValues content = new ContentValues();
-                                content.put(TAG_A_ID, entry.get(TAG_A_ID));
-                                content.put(TAG_PA_ISSUE_QTY, entry.get(TAG_PA_ISSUE_QTY));
+                                databaseEntry.put("isNew", true);
+                                databaseEntry.put("content", content);
 
-                                SQLiteDatabase db;
-                                db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
-                                db.update("personnel_ammunition", content, "pa_id = ?", new String[]{entry.get(TAG_PA_ID)});
-                                db.close();
+                                databaseInteraction.add(databaseEntry);
                             }
-
-
-                            //check if existing TAG_PA_IDs have been removed
-                            Log.i(entry.get(TAG_A_ID) + "AID", entry.get(TAG_PA_ISSUE_QTY) + "AQTY");
                         }
                     }
-                    dismiss();
-
                 } else {
                     for (HashMap<String, String> entry : existing_data) {
+                        if(isOverflow == true)
+                        {
+                            break;
+                        }
                         //check if TAG_PA_ID is new/old
+
                         Log.i(entry.get(TAG_PA_ID), "paid");
                         if (entry.get(TAG_PA_ID).equals("-1")) {
+
+                            //do a check if updated ammo exceeds the allocated ammo
+                            HashMap databaseEntry = new HashMap<>();
                             //new entry
                             ContentValues content = new ContentValues();
                             content.put(TAG_OP_ID, String.valueOf(op_id));
@@ -211,25 +229,92 @@ public class fragment_Assign_Personnel_Ammunition extends DialogFragment impleme
                             content.put(TAG_PA_ISSUE_QTY, entry.get(TAG_PA_ISSUE_QTY));
 
                             SQLiteDatabase db;
+                            //do a check if updated ammo exceeds the allocated ammo
                             db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
-                            db.insert("personnel_ammunition", null, content);
+                            Cursor c1 = db.rawQuery("select case when (select sum(a_qty) from ammunition where a_id = ?) > (select sum(pa_issue_qty) from personnel_ammunition where a_id = ?) + ? then 'false' else 'true' end as overflowCheck", new String[]{entry.get(TAG_A_ID), entry.get(TAG_A_ID),entry.get(TAG_PA_ISSUE_QTY)});
+                            Log.i(entry.get(TAG_A_ID),entry.get(TAG_PA_ISSUE_QTY));
+                            if(c1.moveToFirst())
+                            {
+                                Cursor c2 = db.rawQuery("select a_name from ammunition where a_id = ?", new String[]{entry.get(TAG_A_ID)});
+                                if(c2.moveToFirst())
+                                {
+                                    message = "Quantity of " + c2.getString(0) + " exceeds allocated amount";
+                                }
+                                isOverflow = Boolean.parseBoolean(c1.getString(0));
+                            }
                             db.close();
+
+
+                            databaseEntry.put("isNew", true);
+                            databaseEntry.put("content", content);
+
+                            databaseInteraction.add(databaseEntry);
+
+                            /*db.insert("personnel_ammunition", null, content);*/
                         } else {
                             ContentValues content = new ContentValues();
                             content.put(TAG_A_ID, entry.get(TAG_A_ID));
                             content.put(TAG_PA_ISSUE_QTY, entry.get(TAG_PA_ISSUE_QTY));
 
-                            SQLiteDatabase db;
-                            db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
-                            db.update("personnel_ammunition", content, "pa_id = ?", new String[]{entry.get(TAG_PA_ID)});
-                            db.close();
-                        }
+                            HashMap databaseEntry = new HashMap<>();
 
+                            SQLiteDatabase db;
+                            //do a check if updated ammo exceeds the allocated ammo
+                            db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
+                            Cursor c1 = db.rawQuery("select case when (select sum(a_qty) from ammunition where a_id = ?) > (select sum(pa_issue_qty) from personnel_ammunition where a_id = ? and pa_id != ?) + ? then 'false' else 'true' end as overflowCheck", new String[]{entry.get(TAG_A_ID), entry.get(TAG_A_ID), entry.get(TAG_PA_ID),entry.get(TAG_PA_ISSUE_QTY)});
+                            Log.i(entry.get(TAG_A_ID),entry.get(TAG_PA_ISSUE_QTY));
+                            if(c1.moveToFirst())
+                            {
+                                Cursor c2 = db.rawQuery("select a_name from ammunition where a_id = ?", new String[]{entry.get(TAG_A_ID)});
+                                if(c2.moveToFirst())
+                                {
+                                    message = "Quantity of " + c2.getString(0) + " exceeds allocated amount";
+                                }
+                                isOverflow = Boolean.parseBoolean(c1.getString(0));
+                            }
+                            db.close();
+                            databaseEntry.put("isNew", false);
+                            databaseEntry.put("content", content);
+                            databaseEntry.put("pa_id", entry.get(TAG_PA_ID));
+
+                            databaseInteraction.add(databaseEntry);
+                        }
 
                         //check if existing TAG_PA_IDs have been removed
                         Log.i(entry.get(TAG_A_ID) + "AID", entry.get(TAG_PA_ISSUE_QTY) + "AQTY");
                     }
+                }
+                if(isOverflow != true) {
+                    SQLiteDatabase db;
+                    //do a check if updated ammo exceeds the allocated ammo
+                    db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
+                    for(int i = 0; i < databaseInteraction.size(); i++)
+                    {
+                        HashMap databaseEntry = (HashMap) databaseInteraction.get(i);
+                        ContentValues content = (ContentValues) databaseEntry.get("content");
+                        if(!(Boolean) databaseEntry.get("isNew"))
+                        {
+                            String pa_id = (String) databaseEntry.get("pa_id");
+                            db.update("personnel_ammunition", content, "pa_id = ?", new String[]{pa_id});
+                        }
+                        else
+                        {
+                            db.insert("personnel_ammunition", null, content);
+                        }
+                    }
+                    //do check if any entry removed
+                    for(String removed : removedData)
+                    {
+                        db.delete("personnel_ammunition", "pa_id = ?", new String[]{removed});
+                    }
+
                     dismiss();
+                }
+                else
+                {
+                    showOverflowAlertDialog(message);
+                    Log.i("CHECK FAILED", "CHECK FAILED");
+                    //prompt user.
                 }
             }
         });
@@ -306,7 +391,6 @@ public class fragment_Assign_Personnel_Ammunition extends DialogFragment impleme
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
             int position = viewHolder.getAdapterPosition();
-
             switch(direction){
                 case ItemTouchHelper.LEFT:
                     showErrorAlertDialog("Are you sure you want to remove this ammunition", position);
@@ -334,6 +418,7 @@ public class fragment_Assign_Personnel_Ammunition extends DialogFragment impleme
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialogInterface, int i){
+                removedData.add(data.get(position).get(TAG_PA_ID));
                 data.remove(position);
                 assign_personnel_adapter.notifyItemRemoved(position);
             }});
@@ -344,7 +429,28 @@ public class fragment_Assign_Personnel_Ammunition extends DialogFragment impleme
                 dialogInterface.dismiss();
             }
         });
+        alert.setOnCancelListener(new DialogInterface.OnCancelListener()
+        {
+            @Override
+            public void onCancel(DialogInterface dialogInterface)
+            {
+                assign_personnel_adapter.notifyItemChanged(position);
+            }
+        });
         alert.show();
     }
+
+    public void showOverflowAlertDialog(String message)
+    {
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+        alert.setMessage(message);
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i){
+                dialogInterface.dismiss();
+            }});
+        alert.show();
+    }
+
 
 }

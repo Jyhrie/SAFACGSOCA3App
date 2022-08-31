@@ -38,6 +38,7 @@ public class ViewLoadoutActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        /*
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_loadout);
 
@@ -96,7 +97,7 @@ public class ViewLoadoutActivity extends AppCompatActivity {
         DialogFragment.setCancelable(true);
         DialogFragment.show();
 
-        Button btn_view_loadout_save_changes = (Button) DialogFragment.findViewById(R.id.btn_view_loadout_save_changes);
+        Button btn_view_loadout_save_changes = (Button) DialogFragment.findViewById(R.id .btn_view_loadout_save_changes);
         ListView lv_view_loadout_ammunition_list = (ListView) DialogFragment.findViewById(R.id.lv_view_loadout_ammunition_list);
 
 
@@ -239,5 +240,7 @@ public class ViewLoadoutActivity extends AppCompatActivity {
 
 
 
+
+         */
     }
 }

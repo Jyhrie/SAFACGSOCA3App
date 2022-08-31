@@ -73,6 +73,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
 
     private static final String TAG_PA_ID = "pa_id";
     private static final String TAG_PA_ISSUE_QTY = "pa_issue_qty";
+    private static final String TAG_PA_ISSUE_QTY_ORIGINAL = "pa_original_issue_qty";
     private static final String TAG_PA_ISSUED = "pa_issued";
     private static final String TAG_PA_RETURNED = "pa_returned";
     private static final String TAG_PA_EXPENEDED = "pa_expended";
@@ -284,6 +285,7 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
                 map.put(TAG_TD_ID, current_td_id);
                 c1 = db.rawQuery("select a.a_name, pa.pa_issue_qty from personnel_ammunition pa, ammunition a where a.a_id = pa.a_id and pa.pa_id = " + current_pa_id, null);
                 if (c1.moveToFirst()) {
+                    map.put(TAG_PA_ISSUE_QTY_ORIGINAL, c1.getString(1));
                     map.put(TAG_A_NAME, c1.getString(0));
                     map.put(TAG_PA_ISSUE_QTY, c1.getString(1));
                 }
@@ -623,7 +625,24 @@ public class DeclareIssueReturnReceiveInfoActivity extends AppCompatActivity imp
         btn_EditQty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                //do a check here
+
                 //save transaction details
+                if(Integer.valueOf(is_ammo_issued) == 1)
+                {
+                    if(Float.parseFloat(et_ToIssueOrIssued_Qty.getText().toString()) > Float.parseFloat(dataset.get(TAG_PA_ISSUE_QTY_ORIGINAL)))
+                    {
+                        //throw error
+                    }
+                }else
+                {
+                    if(Float.parseFloat(et_Expended_Qty.getText().toString()) + Float.parseFloat(et_Returned_Qty.getText().toString()) + Float.parseFloat(et_Spoilt_Qty.getText().toString()) > Float.parseFloat(et_ToIssueOrIssued_Qty.getText().toString()))
+                    {
+                        //throw error
+                    }
+                }
+
                 dataset.put(TAG_PA_ISSUE_QTY, et_ToIssueOrIssued_Qty.getText().toString());
                 dataset.put(TAG_TD_EXPENDED, et_Expended_Qty.getText().toString());
                 dataset.put(TAG_TD_RETURNED, et_Returned_Qty.getText().toString());

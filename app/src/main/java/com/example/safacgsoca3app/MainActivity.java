@@ -304,6 +304,10 @@ public class MainActivity extends AppCompatActivity {
             db.execSQL("DELETE FROM sqlite_sequence");
         }
 
+        db.execSQL("CREATE TABLE IF NOT EXISTS ddl_ammo (ddl_ammo_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, ddl_ammo_name varchar(255) NOT NULL)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS ddl_rank (ddl_rank_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, ddl_rank_hierarchy number NOT NULL, ddl_rank_name varchar(255) NOT NULL)");
+
+
         db.execSQL("CREATE TABLE IF NOT EXISTS personnel (p_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, p_rank varchar(255) NOT NULL, p_name varchar(255) NOT NULL, p_nric text)");
         db.execSQL("CREATE TABLE IF NOT EXISTS operation (o_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_name varchar(255) NOT NULL, o_kah text NOT NULL, o_unit text, o_date text, o_loc text, o_ops bool)");
         db.execSQL("CREATE TABLE IF NOT EXISTS operation_personnel (op_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, p_id integer NOT NULL, o_id integer NOT NULL, d_id integer)");
@@ -338,7 +342,7 @@ public class MainActivity extends AppCompatActivity {
                 "td_exported bool DEFAULT 0 NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS document (doc_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, d_name text NOT NULL, o_name text NOT NULL, o_unit text NOT NULL, doc_date text, doc_closed bool DEFAULT 0 NOT NULL )");
 
-
+        //add_ddl_ammo();
         /*
         if(reset == true) {
             addexampleOperation();
@@ -352,8 +356,8 @@ public class MainActivity extends AppCompatActivity {
         db.close();
     }
 
-    private void DeleteDialog(String oid) {
 
+    private void DeleteDialog(String oid) {
 
         String OperationName = null;
 
@@ -381,6 +385,150 @@ public class MainActivity extends AppCompatActivity {
             }});
         alert.show();
 
+    }
+
+    private void add_ddl_ammo()
+    {
+        ContentValues content = new ContentValues();
+        SQLiteDatabase db;
+        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+
+        content.put("ddl_ammo_name", "5.56MM BALL IN M2A1 BOX, CBC");
+        db.insert("ddl_ammo", null, content);
+
+        content.put("ddl_ammo_name", "5.56MM TRACER IN M2A1 BOX");
+        db.insert("ddl_ammo", null, content);
+
+        content.put("ddl_ammo_name", "CART .50");
+        db.insert("ddl_ammo", null, content);
+
+        content.put("ddl_ammo_name", "5.56MM BLANK");
+        db.insert("ddl_ammo", null, content);
+
+        content.put("ddl_ammo_name", "7.62MM 4B1T");
+        db.insert("ddl_ammo", null, content);
+        db.close();
+    }
+
+    private void add_ddl_ranks()
+    {
+        ContentValues content = new ContentValues();
+        SQLiteDatabase db;
+        db = openOrCreateDatabase("A3App.db", MODE_PRIVATE, null);
+
+        content.put("ddl_rank_hierarchy", "0");
+        content.put("ddl_rank_name", "REC");
+        db.insert("ddl_rank", null, content);
+
+        content.put("ddl_rank_hierarchy", "1");
+        content.put("ddl_rank_name", "PTE");
+        db.insert("ddl_rank", null, content);
+
+        content.put("ddl_rank_hierarchy", "2");
+        content.put("ddl_rank_name", "LCP");
+        db.insert("ddl_rank", null, content);
+
+        content.put("ddl_rank_hierarchy", "3");
+        content.put("ddl_rank_name", "CPL");
+        db.insert("ddl_rank", null, content);
+
+        content.put("ddl_rank_hierarchy", "4");
+        content.put("ddl_rank_name", "3SG");
+        db.insert("ddl_rank", null, content);
+
+        content.put("ddl_rank_hierarchy", "5");
+        content.put("ddl_rank_name", "2SG");
+        db.insert("ddl_rank", null, content);
+
+        content.put("ddl_rank_hierarchy", "6");
+        content.put("ddl_rank_name", "1SG");
+        db.insert("ddl_rank", null, content);
+
+        content.put("ddl_rank_hierarchy", "7");
+        content.put("ddl_rank_name", "SSG");
+        db.insert("ddl_rank", null, content);
+
+        content.put("ddl_rank_hierarchy", "8");
+        content.put("ddl_rank_name", "MSG");
+        db.insert("ddl_rank", null, content);
+
+        content.put("ddl_rank_hierarchy", "9");
+        content.put("ddl_rank_name", "3WO");
+        db.insert("ddl_rank", null, content);
+
+        content.put("ddl_rank_hierarchy", "10");
+        content.put("ddl_rank_name", "2WO");
+        db.insert("ddl_rank", null, content);
+
+        content.put("ddl_rank_hierarchy", "11");
+        content.put("ddl_rank_name", "1WO");
+        db.insert("ddl_rank", null, content);
+
+        content.put("ddl_rank_hierarchy", "12");
+        content.put("ddl_rank_name", "MWO");
+        db.insert("ddl_rank", null, content);
+
+        content.put("ddl_rank_hierarchy", "13");
+        content.put("ddl_rank_name", "SWO");
+        db.insert("ddl_rank", null, content);
+
+        content.put("ddl_rank_hierarchy", "14");
+        content.put("ddl_rank_name", "CWO");
+        db.insert("ddl_rank", null, content);
+
+        content.put("ddl_rank_hierarchy", "15");
+        content.put("ddl_rank_name", "2LT");
+        db.insert("ddl_rank", null, content);
+
+        content.put("ddl_rank_hierarchy", "16");
+        content.put("ddl_rank_name", "LTA");
+        db.insert("ddl_rank", null, content);
+
+        content.put("ddl_rank_hierarchy", "17");
+        content.put("ddl_rank_name", "CPT");
+        db.insert("ddl_rank", null, content);
+
+        content.put("ddl_rank_hierarchy", "18");
+        content.put("ddl_rank_name", "MAJ");
+        db.insert("ddl_rank", null, content);
+
+        content.put("ddl_rank_hierarchy", "19");
+        content.put("ddl_rank_name", "LTC");
+        db.insert("ddl_rank", null, content);
+
+        content.put("ddl_rank_hierarchy", "20");
+        content.put("ddl_rank_name", "SLTC");
+        db.insert("ddl_rank", null, content);
+
+        content.put("ddl_rank_hierarchy", "21");
+        content.put("ddl_rank_name", "COL");
+        db.insert("ddl_rank", null, content);
+
+        content.put("ddl_rank_hierarchy", "22");
+        content.put("ddl_rank_name", "BG");
+        db.insert("ddl_rank", null, content);
+
+        content.put("ddl_rank_hierarchy", "22");
+        content.put("ddl_rank_name", "RADM(1)");
+        db.insert("ddl_rank", null, content);
+
+        content.put("ddl_rank_hierarchy", "23");
+        content.put("ddl_rank_name", "MG");
+        db.insert("ddl_rank", null, content);
+
+        content.put("ddl_rank_hierarchy", "23");
+        content.put("ddl_rank_name", "RADM(2)");
+        db.insert("ddl_rank", null, content);
+
+        content.put("ddl_rank_hierarchy", "24");
+        content.put("ddl_rank_name", "LG");
+        db.insert("ddl_rank", null, content);
+
+        content.put("ddl_rank_hierarchy", "24");
+        content.put("ddl_rank_name", "VADM");
+        db.insert("ddl_rank", null, content);
+
+        db.close();
     }
 
     private void addexampleOperation(){

@@ -50,6 +50,7 @@
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/dialog_editdelete_nominal_roll.xml" value="0.3009833262077811" />
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/dialog_receive.xml" value="0.3009833262077811" />
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/dialog_view_ammunition.xml" value="0.3009833262077811" />
+        <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/dialog_view_loadout.xml" value="0.3009833262077811" />
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/dialog_warning.xml" value="0.3009833262077811" />
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/fragment__add__operation.xml" value="0.15647712697734073" />
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/fragment_add_ammunition.xml" value="0.3009833262077811" />
@@ -61,6 +62,7 @@
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/fragment_assign_personnel_ammunition.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/fragment_blank.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/fragment_document_summary.xml" value="0.3009833262077811" />
+        <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/fragment_show_ammo_details.xml" value="0.5" />
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_add_issuing_detail_personnel.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_add_operation_personnel.xml" value="0.3009833262077811" />
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_ammunition.xml" value="0.5" />
@@ -79,6 +81,7 @@
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_view_all_documents.xml" value="0.5" />
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_view_detail_personnel.xml" value="0.25" />
         <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/list_view_loadout_ammunition.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Admin/Documents/GitHub/SAFACGSOCA3App/app/src/main/res/layout/spinner_add_ammunition.xml" value="0.3009833262077811" />
         <entry key="..\:/Users/Tan Jun Hao/AndroidStudioProjects/SAFACGSOCA3App/app/src/main/res/layout/activity_ammunition.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/Tan Jun Hao/AndroidStudioProjects/SAFACGSOCA3App/app/src/main/res/layout/activity_main.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/Tan Jun Hao/AndroidStudioProjects/SAFACGSOCA3App/app/src/main/res/layout/activity_view_exercise.xml" value="0.16666666666666666" />

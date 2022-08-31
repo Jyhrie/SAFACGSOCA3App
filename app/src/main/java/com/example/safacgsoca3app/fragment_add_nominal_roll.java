@@ -13,12 +13,14 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -31,6 +33,8 @@ public class fragment_add_nominal_roll extends DialogFragment {
     public static final String TAG_P_NAME = "p_name";
     public static final String TAG_REMARKS = "p_remarks";
     public static final String TAG_P_NRIC = "p_nric";
+    public static final String TAG_DDL_RANK_NAME = "ddl_rank_name";
+    public static final String TAG_DDL_RANK_ID = "ddl_rank_id";
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -42,9 +46,32 @@ public class fragment_add_nominal_roll extends DialogFragment {
         Spinner dropdownRank = (Spinner) v.findViewById(R.id.dropdownRank);
 
         //populate dropdown
+
+        //get dropdown from database
+        SQLiteDatabase db;
+        ArrayList<HashMap<String,String>> ddlData= new ArrayList<>();
+        db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
+        Cursor c1 = db.rawQuery("SELECT ddl_rank_id, ddl_rank_name FROM ddl_rank ORDER BY ddl_rank_hierarchy ASC", null);
+        while(c1.moveToNext())
+        {
+            HashMap<String,String> map = new HashMap<>();
+            map.put(TAG_DDL_RANK_ID, c1.getString(0));
+            map.put(TAG_DDL_RANK_NAME, c1.getString(1));
+            ddlData.add(map);
+        }
+
+        SimpleAdapter ddlAdapter = new SimpleAdapter(context,
+                ddlData,
+                android.R.layout.simple_spinner_dropdown_item,
+                new String[]{TAG_DDL_RANK_NAME},
+                new int[]{android.R.id.text1});
+        dropdownRank.setAdapter(ddlAdapter);
+
+        /*
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context, R.array.ranks, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dropdownRank.setAdapter(adapter);
+        */
 
         Button btnInsertNominalRoll = (Button) v.findViewById(R.id.btn_insert_personnel_close);
         EditText etName = (EditText) v.findViewById(R.id.et_personnel_name);
