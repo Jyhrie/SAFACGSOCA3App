@@ -185,15 +185,34 @@ public class fragment_Assign_Personnel_Ammunition extends DialogFragment impleme
                                 //do a check if updated ammo exceeds the allocated ammo
                                 SQLiteDatabase db;
                                 db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
-                                Cursor c1 = db.rawQuery("select case when (select sum(a_qty) from ammunition where a_id = ?) > (select sum(pa_issue_qty) from personnel_ammunition where a_id = ?) + ? then 'false' else 'true' end as overflowCheck", new String[]{entry.get(TAG_A_ID), entry.get(TAG_A_ID),String.valueOf(Float.parseFloat(entry.get(TAG_PA_ISSUE_QTY))* op_id_list.size())});
-                                if(c1.moveToFirst())
-                                {
-                                    Cursor c2 = db.rawQuery("select a_name from ammunition where a_id = ?", new String[]{entry.get(TAG_A_ID)});
-                                    if(c2.moveToFirst())
-                                    {
-                                        message = "Quantity of " + c2.getString(0) + " exceeds allocated amount";
+                                //check which query to use
+                                Cursor c1 = db.rawQuery("select pa_issue_qty from personnel_ammunition where a_id = ?", new String[]{entry.get(TAG_A_ID)});
+                                if(c1.moveToFirst()) {
+                                    Log.i("FOUND THAT ENTRY EXISTS", "tag");
+                                    c1 = db.rawQuery("select case when (select sum(a_qty) from ammunition where a_id = ?) >= (select sum(pa_issue_qty) from personnel_ammunition where a_id = ?) + cast(? as float) then 'false' else 'true' end as overflowCheck", new String[]{entry.get(TAG_A_ID), entry.get(TAG_A_ID), String.valueOf(Float.parseFloat(entry.get(TAG_PA_ISSUE_QTY)) * op_id_list.size())});
+                                    c1.moveToFirst();
+                                    if (Boolean.parseBoolean(c1.getString(0))) {
+                                        Cursor c2 = db.rawQuery("select a_name from ammunition where a_id = ?", new String[]{entry.get(TAG_A_ID)});
+                                        if (c2.moveToFirst()) {
+                                            message = "Quantity of " + c2.getString(0) + " exceeds allocated amount";
+                                        }
+                                        isOverflow = Boolean.parseBoolean(c1.getString(0));
                                     }
-                                    isOverflow = Boolean.parseBoolean(c1.getString(0));
+                                }
+                                else
+                                {
+                                    Log.i("FOUND THAT NO ENTRY EXISTS", "tag");
+                                    Log.i(String.valueOf(Float.parseFloat(entry.get(TAG_PA_ISSUE_QTY)) * op_id_list.size()), "tag2");
+                                    c1 = db.rawQuery("select case when (select sum(a_qty) from ammunition where a_id = ?) >= cast(? as float) then 'false' else 'true' end as overflowCheck", new String[]{entry.get(TAG_A_ID), String.valueOf(Float.parseFloat(entry.get(TAG_PA_ISSUE_QTY)) * op_id_list.size())});
+                                    c1.moveToFirst();
+                                    Log.i(c1.getString(0), "check");
+                                    if (Boolean.parseBoolean(c1.getString(0))) {
+                                        Cursor c2 = db.rawQuery("select a_name from ammunition where a_id = ?", new String[]{entry.get(TAG_A_ID)});
+                                        if (c2.moveToFirst()) {
+                                            message = "Quantity of " + c2.getString(0) + " exceeds allocated amount";
+                                        }
+                                        isOverflow = Boolean.parseBoolean(c1.getString(0));
+                                    }
                                 }
                                 db.close();
                                 //new entry
@@ -231,16 +250,29 @@ public class fragment_Assign_Personnel_Ammunition extends DialogFragment impleme
                             SQLiteDatabase db;
                             //do a check if updated ammo exceeds the allocated ammo
                             db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
-                            Cursor c1 = db.rawQuery("select case when (select sum(a_qty) from ammunition where a_id = ?) > (select sum(pa_issue_qty) from personnel_ammunition where a_id = ?) + ? then 'false' else 'true' end as overflowCheck", new String[]{entry.get(TAG_A_ID), entry.get(TAG_A_ID),entry.get(TAG_PA_ISSUE_QTY)});
-                            Log.i(entry.get(TAG_A_ID),entry.get(TAG_PA_ISSUE_QTY));
-                            if(c1.moveToFirst())
-                            {
-                                Cursor c2 = db.rawQuery("select a_name from ammunition where a_id = ?", new String[]{entry.get(TAG_A_ID)});
-                                if(c2.moveToFirst())
-                                {
-                                    message = "Quantity of " + c2.getString(0) + " exceeds allocated amount";
+                            Cursor c1 = db.rawQuery("select pa_issue_qty from personnel_ammunition where a_id = ?", new String[]{entry.get(TAG_A_ID)});
+                            if(c1.moveToFirst()) {
+                                c1 = db.rawQuery("select case when (select sum(a_qty) from ammunition where a_id = ?) >= (select sum(pa_issue_qty) from personnel_ammunition where a_id = ?) + cast(? as float) then 'false' else 'true' end as overflowCheck", new String[]{entry.get(TAG_A_ID), entry.get(TAG_A_ID), entry.get(TAG_PA_ISSUE_QTY)});
+                                c1.moveToFirst();
+                                if (Boolean.parseBoolean(c1.getString(0))) {
+                                    Cursor c2 = db.rawQuery("select a_name from ammunition where a_id = ?", new String[]{entry.get(TAG_A_ID)});
+                                    if (c2.moveToFirst()) {
+                                        message = "Quantity of " + c2.getString(0) + " exceeds allocated amount";
+                                    }
+                                    isOverflow = Boolean.parseBoolean(c1.getString(0));
                                 }
-                                isOverflow = Boolean.parseBoolean(c1.getString(0));
+                            }
+                            else
+                            {
+                                c1 = db.rawQuery("select case when (select sum(a_qty) from ammunition where a_id = ?) >= cast(? as float) then 'false' else 'true' end as overflowCheck", new String[]{entry.get(TAG_A_ID), entry.get(TAG_PA_ISSUE_QTY)});
+                                c1.moveToFirst();
+                                if (Boolean.parseBoolean(c1.getString(0))) {
+                                    Cursor c2 = db.rawQuery("select a_name from ammunition where a_id = ?", new String[]{entry.get(TAG_A_ID)});
+                                    if (c2.moveToFirst()) {
+                                        message = "Quantity of " + c2.getString(0) + " exceeds allocated amount";
+                                    }
+                                    isOverflow = Boolean.parseBoolean(c1.getString(0));
+                                }
                             }
                             db.close();
 
@@ -261,16 +293,29 @@ public class fragment_Assign_Personnel_Ammunition extends DialogFragment impleme
                             SQLiteDatabase db;
                             //do a check if updated ammo exceeds the allocated ammo
                             db = context.openOrCreateDatabase("A3App.db", Context.MODE_PRIVATE, null);
-                            Cursor c1 = db.rawQuery("select case when (select sum(a_qty) from ammunition where a_id = ?) > (select sum(pa_issue_qty) from personnel_ammunition where a_id = ? and pa_id != ?) + ? then 'false' else 'true' end as overflowCheck", new String[]{entry.get(TAG_A_ID), entry.get(TAG_A_ID), entry.get(TAG_PA_ID),entry.get(TAG_PA_ISSUE_QTY)});
-                            Log.i(entry.get(TAG_A_ID),entry.get(TAG_PA_ISSUE_QTY));
-                            if(c1.moveToFirst())
-                            {
-                                Cursor c2 = db.rawQuery("select a_name from ammunition where a_id = ?", new String[]{entry.get(TAG_A_ID)});
-                                if(c2.moveToFirst())
-                                {
-                                    message = "Quantity of " + c2.getString(0) + " exceeds allocated amount";
+                            Cursor c1 = db.rawQuery("select pa_issue_qty from personnel_ammunition where a_id = ?", new String[]{entry.get(TAG_A_ID)});
+                            if(c1.moveToFirst()) {
+                                c1 = db.rawQuery("select case when (select sum(a_qty) from ammunition where a_id = ?) >= (select sum(pa_issue_qty) from personnel_ammunition where a_id = ? and pa_id != ?) + cast(? as float) then 'false' else 'true' end as overflowCheck", new String[]{entry.get(TAG_A_ID), entry.get(TAG_A_ID), entry.get(TAG_PA_ID), entry.get(TAG_PA_ISSUE_QTY)});
+                                c1.moveToFirst();
+                                if (Boolean.parseBoolean(c1.getString(0))) {
+                                    Cursor c2 = db.rawQuery("select a_name from ammunition where a_id = ?", new String[]{entry.get(TAG_A_ID)});
+                                    if (c2.moveToFirst()) {
+                                        message = "Quantity of " + c2.getString(0) + " exceeds allocated amount";
+                                    }
+                                    isOverflow = Boolean.parseBoolean(c1.getString(0));
                                 }
-                                isOverflow = Boolean.parseBoolean(c1.getString(0));
+                            }
+                            else
+                            {
+                                c1 = db.rawQuery("select case when (select sum(a_qty) from ammunition where a_id = ?) >= cast(? as float) then 'false' else 'true' end as overflowCheck", new String[]{entry.get(TAG_A_ID), entry.get(TAG_A_ID), entry.get(TAG_PA_ID), entry.get(TAG_PA_ISSUE_QTY)});
+                                c1.moveToFirst();
+                                if (Boolean.parseBoolean(c1.getString(0))) {
+                                    Cursor c2 = db.rawQuery("select a_name from ammunition where a_id = ?", new String[]{entry.get(TAG_A_ID)});
+                                    if (c2.moveToFirst()) {
+                                        message = "Quantity of " + c2.getString(0) + " exceeds allocated amount";
+                                    }
+                                    isOverflow = Boolean.parseBoolean(c1.getString(0));
+                                }
                             }
                             db.close();
                             databaseEntry.put("isNew", false);

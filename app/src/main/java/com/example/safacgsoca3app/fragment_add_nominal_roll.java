@@ -80,7 +80,7 @@ public class fragment_add_nominal_roll extends DialogFragment {
         btnInsertNominalRoll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String rank = dropdownRank.getSelectedItem().toString();
+                String rank = ddlData.get(dropdownRank.getSelectedItemPosition()).get(TAG_DDL_RANK_NAME);
                 String name = etName.getText().toString();
                 String nric = etRemarks.getText().toString();
 

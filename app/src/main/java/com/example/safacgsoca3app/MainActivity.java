@@ -87,8 +87,12 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG_STATE = "state";
 
-
-
+    //PROJECT DONE BY PYAD 2022
+    //PROJECT OIC: ME4 KHOO WEI LIANG
+    //PROJECT IC: ME2 FUNG XUE MING
+    //PROJECT MANAGER: CPL DAVIN POOK
+    //LEAD DEVELOPER: PTE JUN HAO
+    //DEVELOPER: LCP ZACKERMAX
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -307,7 +311,6 @@ public class MainActivity extends AppCompatActivity {
         db.execSQL("CREATE TABLE IF NOT EXISTS ddl_ammo (ddl_ammo_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, ddl_ammo_name varchar(255) NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS ddl_rank (ddl_rank_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, ddl_rank_hierarchy number NOT NULL, ddl_rank_name varchar(255) NOT NULL)");
 
-
         db.execSQL("CREATE TABLE IF NOT EXISTS personnel (p_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, p_rank varchar(255) NOT NULL, p_name varchar(255) NOT NULL, p_nric text)");
         db.execSQL("CREATE TABLE IF NOT EXISTS operation (o_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, o_name varchar(255) NOT NULL, o_kah text NOT NULL, o_unit text, o_date text, o_loc text, o_ops bool)");
         db.execSQL("CREATE TABLE IF NOT EXISTS operation_personnel (op_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, p_id integer NOT NULL, o_id integer NOT NULL, d_id integer)");
@@ -342,7 +345,11 @@ public class MainActivity extends AppCompatActivity {
                 "td_exported bool DEFAULT 0 NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS document (doc_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, d_name text NOT NULL, o_name text NOT NULL, o_unit text NOT NULL, doc_date text, doc_closed bool DEFAULT 0 NOT NULL )");
 
-        //add_ddl_ammo();
+        db.execSQL("DELETE FROM ddl_ammo");
+        db.execSQL("DELETE FROM ddl_rank");
+
+        add_ddl_ammo();
+        add_ddl_ranks();
         /*
         if(reset == true) {
             addexampleOperation();
@@ -406,6 +413,12 @@ public class MainActivity extends AppCompatActivity {
         db.insert("ddl_ammo", null, content);
 
         content.put("ddl_ammo_name", "7.62MM 4B1T");
+        db.insert("ddl_ammo", null, content);
+
+        content.put("ddl_ammo_name", "LNCHR & CART HEAT MATADOR A1");
+        db.insert("ddl_ammo", null, content);
+
+        content.put("ddl_ammo_name", "SFG 87");
         db.insert("ddl_ammo", null, content);
         db.close();
     }
